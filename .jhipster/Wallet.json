@@ -1,0 +1,41 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "balance",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "ticket",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "integral",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "userid",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createTime",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "updatedTime",
+            "fieldType": "Instant"
+        }
+    ],
+    "changelogDate": "20180326022747",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "wallet",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
+    "microserviceName": "wallet",
+    "searchEngine": false
+}

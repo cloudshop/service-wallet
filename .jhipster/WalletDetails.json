@@ -1,0 +1,60 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "userid",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "walletId",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "ticket",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "integral",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "payPrice",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "orderId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "createdTime",
+            "fieldType": "Instant"
+        }
+    ],
+    "changelogDate": "20180326031236",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "wallet_details",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
+    "microserviceName": "wallet",
+    "searchEngine": false
+}
