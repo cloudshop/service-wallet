@@ -7,9 +7,8 @@ import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
+import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.service.WalletQueryService;
-
-import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +103,7 @@ public class WalletResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/wallets");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-    
+
     /**
      * GET  /wallets/:id : get the "id" wallet.
      *
@@ -124,6 +123,7 @@ public class WalletResource {
      *
      * @param id the id of the walletDTO to delete
      * @return the ResponseEntity with status 200 (OK)
+      
     @DeleteMapping("/wallets/{id}")
     @Timed
     public ResponseEntity<Void> deleteWallet(@PathVariable Long id) {
@@ -132,4 +132,10 @@ public class WalletResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
      */
+    
+    @PutMapping("/wallet/balance")
+    public void fun1(@RequestBody BalanceDTO balanceDTO) {
+    	walletService.updateBalance(balanceDTO);
+    }
+    
 }

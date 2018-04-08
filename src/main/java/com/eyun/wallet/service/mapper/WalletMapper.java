@@ -12,6 +12,8 @@ import org.mapstruct.*;
 public interface WalletMapper extends EntityMapper<WalletDTO, Wallet> {
 
 
+    @Mapping(target = "walletDetails", ignore = true)
+    Wallet toEntity(WalletDTO walletDTO);
 
     default Wallet fromId(Long id) {
         if (id == null) {

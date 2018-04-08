@@ -1,10 +1,18 @@
 package com.eyun.wallet.service.impl;
 
 import com.eyun.wallet.service.WalletService;
+import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.domain.WalletDetails;
+import com.eyun.wallet.repository.WalletDetailsRepository;
 import com.eyun.wallet.repository.WalletRepository;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,11 +30,14 @@ public class WalletServiceImpl implements WalletService {
 
     private final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
 
+    private final WalletDetailsRepository walletDetailsRepository;
+    
     private final WalletRepository walletRepository;
 
     private final WalletMapper walletMapper;
 
-    public WalletServiceImpl(WalletRepository walletRepository, WalletMapper walletMapper) {
+    public WalletServiceImpl(WalletRepository walletRepository, WalletMapper walletMapper, WalletDetailsRepository walletDetailsRepository) {
+    	this.walletDetailsRepository = walletDetailsRepository;
         this.walletRepository = walletRepository;
         this.walletMapper = walletMapper;
     }
@@ -83,4 +94,24 @@ public class WalletServiceImpl implements WalletService {
         log.debug("Request to delete Wallet : {}", id);
         walletRepository.delete(id);
     }
+
+	@Override
+	public void updateBalance(BalanceDTO balanceDTO) {
+		Wallet wallet = walletRepository.findByUserid(balanceDTO.getUserid());
+		BigDecimal balance = wallet.getBalance();//获取当前账户余额
+		BigDecimal balance1 = balance.add(balanceDTO.getMoney());//添加金额
+		wallet.setBalance(balance1);
+		wallet.setUpdatedTime(Instant.now());
+		wallet.setVersion(wallet.getVersion()+1);
+		walletRepository.save(wallet);
+		//添加账户明细
+		WalletDetails wd = new WalletDetails();
+		wd.setUserid(wallet.getUserid());
+		wd.setType(1);//1:充值
+		wd.setCreatedTime(Instant.now());
+		wd.setBalance(balanceDTO.getMoney());
+		// TODO wd.setOrderId(balanceDTO.getOrderNo());
+		wd.setWallet(wallet);
+		walletDetailsRepository.save(wd);
+	}
 }

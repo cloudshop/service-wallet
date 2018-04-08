@@ -26,10 +26,6 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="wallet_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-
             <column name="amount" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -38,27 +34,31 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="balance" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="ticket" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="integral" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="pay_price" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="order_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
             <column name="created_time" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="balance" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="ticket" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="integral" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="pay_price" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="wallet_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

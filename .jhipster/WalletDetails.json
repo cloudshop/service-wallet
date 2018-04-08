@@ -1,16 +1,16 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "wallet",
+            "otherEntityName": "wallet",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
     "fields": [
         {
             "fieldName": "userid",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "walletId",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "required"
@@ -25,28 +25,28 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "balance",
-            "fieldType": "Long"
-        },
-        {
-            "fieldName": "ticket",
-            "fieldType": "Long"
-        },
-        {
-            "fieldName": "integral",
-            "fieldType": "Long"
-        },
-        {
-            "fieldName": "payPrice",
-            "fieldType": "Long"
-        },
-        {
             "fieldName": "orderId",
             "fieldType": "Long"
         },
         {
             "fieldName": "createdTime",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "ticket",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "integral",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "pay_price",
+            "fieldType": "BigDecimal"
         }
     ],
     "changelogDate": "20180326031236",

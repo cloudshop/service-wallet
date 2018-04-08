@@ -5,6 +5,7 @@ import com.eyun.wallet.WalletApp;
 import com.eyun.wallet.config.SecurityBeanOverrideConfiguration;
 
 import com.eyun.wallet.domain.WalletDetails;
+import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.repository.WalletDetailsRepository;
 import com.eyun.wallet.service.WalletDetailsService;
 import com.eyun.wallet.service.dto.WalletDetailsDTO;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -50,32 +52,29 @@ public class WalletDetailsResourceIntTest {
     private static final Long DEFAULT_USERID = 1L;
     private static final Long UPDATED_USERID = 2L;
 
-    private static final Long DEFAULT_WALLET_ID = 1L;
-    private static final Long UPDATED_WALLET_ID = 2L;
-
     private static final Long DEFAULT_AMOUNT = 1L;
     private static final Long UPDATED_AMOUNT = 2L;
 
     private static final Integer DEFAULT_TYPE = 1;
     private static final Integer UPDATED_TYPE = 2;
 
-    private static final Long DEFAULT_BALANCE = 1L;
-    private static final Long UPDATED_BALANCE = 2L;
-
-    private static final Long DEFAULT_TICKET = 1L;
-    private static final Long UPDATED_TICKET = 2L;
-
-    private static final Long DEFAULT_INTEGRAL = 1L;
-    private static final Long UPDATED_INTEGRAL = 2L;
-
-    private static final Long DEFAULT_PAY_PRICE = 1L;
-    private static final Long UPDATED_PAY_PRICE = 2L;
-
     private static final Long DEFAULT_ORDER_ID = 1L;
     private static final Long UPDATED_ORDER_ID = 2L;
 
     private static final Instant DEFAULT_CREATED_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final BigDecimal DEFAULT_BALANCE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_BALANCE = new BigDecimal(2);
+
+    private static final BigDecimal DEFAULT_TICKET = new BigDecimal(1);
+    private static final BigDecimal UPDATED_TICKET = new BigDecimal(2);
+
+    private static final BigDecimal DEFAULT_INTEGRAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_INTEGRAL = new BigDecimal(2);
+
+    private static final BigDecimal DEFAULT_PAY_PRICE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PAY_PRICE = new BigDecimal(2);
 
     @Autowired
     private WalletDetailsRepository walletDetailsRepository;
@@ -125,15 +124,14 @@ public class WalletDetailsResourceIntTest {
     public static WalletDetails createEntity(EntityManager em) {
         WalletDetails walletDetails = new WalletDetails()
             .userid(DEFAULT_USERID)
-            .walletId(DEFAULT_WALLET_ID)
             .amount(DEFAULT_AMOUNT)
             .type(DEFAULT_TYPE)
+            .orderId(DEFAULT_ORDER_ID)
+            .createdTime(DEFAULT_CREATED_TIME)
             .balance(DEFAULT_BALANCE)
             .ticket(DEFAULT_TICKET)
             .integral(DEFAULT_INTEGRAL)
-            .payPrice(DEFAULT_PAY_PRICE)
-            .orderId(DEFAULT_ORDER_ID)
-            .createdTime(DEFAULT_CREATED_TIME);
+            .pay_price(DEFAULT_PAY_PRICE);
         return walletDetails;
     }
 
@@ -159,15 +157,14 @@ public class WalletDetailsResourceIntTest {
         assertThat(walletDetailsList).hasSize(databaseSizeBeforeCreate + 1);
         WalletDetails testWalletDetails = walletDetailsList.get(walletDetailsList.size() - 1);
         assertThat(testWalletDetails.getUserid()).isEqualTo(DEFAULT_USERID);
-        assertThat(testWalletDetails.getWalletId()).isEqualTo(DEFAULT_WALLET_ID);
         assertThat(testWalletDetails.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testWalletDetails.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testWalletDetails.getOrderId()).isEqualTo(DEFAULT_ORDER_ID);
+        assertThat(testWalletDetails.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
         assertThat(testWalletDetails.getBalance()).isEqualTo(DEFAULT_BALANCE);
         assertThat(testWalletDetails.getTicket()).isEqualTo(DEFAULT_TICKET);
         assertThat(testWalletDetails.getIntegral()).isEqualTo(DEFAULT_INTEGRAL);
-        assertThat(testWalletDetails.getPayPrice()).isEqualTo(DEFAULT_PAY_PRICE);
-        assertThat(testWalletDetails.getOrderId()).isEqualTo(DEFAULT_ORDER_ID);
-        assertThat(testWalletDetails.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
+        assertThat(testWalletDetails.getPay_price()).isEqualTo(DEFAULT_PAY_PRICE);
     }
 
     @Test
@@ -211,25 +208,6 @@ public class WalletDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void checkWalletIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = walletDetailsRepository.findAll().size();
-        // set the field null
-        walletDetails.setWalletId(null);
-
-        // Create the WalletDetails, which fails.
-        WalletDetailsDTO walletDetailsDTO = walletDetailsMapper.toDto(walletDetails);
-
-        restWalletDetailsMockMvc.perform(post("/api/wallet-details")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(walletDetailsDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<WalletDetails> walletDetailsList = walletDetailsRepository.findAll();
-        assertThat(walletDetailsList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllWalletDetails() throws Exception {
         // Initialize the database
         walletDetailsRepository.saveAndFlush(walletDetails);
@@ -240,15 +218,14 @@ public class WalletDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(walletDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].walletId").value(hasItem(DEFAULT_WALLET_ID.intValue())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].orderId").value(hasItem(DEFAULT_ORDER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
             .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
             .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
-            .andExpect(jsonPath("$.[*].payPrice").value(hasItem(DEFAULT_PAY_PRICE.intValue())))
-            .andExpect(jsonPath("$.[*].orderId").value(hasItem(DEFAULT_ORDER_ID.intValue())))
-            .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())));
+            .andExpect(jsonPath("$.[*].pay_price").value(hasItem(DEFAULT_PAY_PRICE.intValue())));
     }
 
     @Test
@@ -263,15 +240,14 @@ public class WalletDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(walletDetails.getId().intValue()))
             .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
-            .andExpect(jsonPath("$.walletId").value(DEFAULT_WALLET_ID.intValue()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
+            .andExpect(jsonPath("$.orderId").value(DEFAULT_ORDER_ID.intValue()))
+            .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()))
             .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.intValue()))
             .andExpect(jsonPath("$.ticket").value(DEFAULT_TICKET.intValue()))
             .andExpect(jsonPath("$.integral").value(DEFAULT_INTEGRAL.intValue()))
-            .andExpect(jsonPath("$.payPrice").value(DEFAULT_PAY_PRICE.intValue()))
-            .andExpect(jsonPath("$.orderId").value(DEFAULT_ORDER_ID.intValue()))
-            .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()));
+            .andExpect(jsonPath("$.pay_price").value(DEFAULT_PAY_PRICE.intValue()));
     }
 
     @Test
@@ -337,72 +313,6 @@ public class WalletDetailsResourceIntTest {
 
         // Get all the walletDetailsList where userid less than or equals to UPDATED_USERID
         defaultWalletDetailsShouldBeFound("userid.lessThan=" + UPDATED_USERID);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByWalletIdIsEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where walletId equals to DEFAULT_WALLET_ID
-        defaultWalletDetailsShouldBeFound("walletId.equals=" + DEFAULT_WALLET_ID);
-
-        // Get all the walletDetailsList where walletId equals to UPDATED_WALLET_ID
-        defaultWalletDetailsShouldNotBeFound("walletId.equals=" + UPDATED_WALLET_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByWalletIdIsInShouldWork() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where walletId in DEFAULT_WALLET_ID or UPDATED_WALLET_ID
-        defaultWalletDetailsShouldBeFound("walletId.in=" + DEFAULT_WALLET_ID + "," + UPDATED_WALLET_ID);
-
-        // Get all the walletDetailsList where walletId equals to UPDATED_WALLET_ID
-        defaultWalletDetailsShouldNotBeFound("walletId.in=" + UPDATED_WALLET_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByWalletIdIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where walletId is not null
-        defaultWalletDetailsShouldBeFound("walletId.specified=true");
-
-        // Get all the walletDetailsList where walletId is null
-        defaultWalletDetailsShouldNotBeFound("walletId.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByWalletIdIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where walletId greater than or equals to DEFAULT_WALLET_ID
-        defaultWalletDetailsShouldBeFound("walletId.greaterOrEqualThan=" + DEFAULT_WALLET_ID);
-
-        // Get all the walletDetailsList where walletId greater than or equals to UPDATED_WALLET_ID
-        defaultWalletDetailsShouldNotBeFound("walletId.greaterOrEqualThan=" + UPDATED_WALLET_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByWalletIdIsLessThanSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where walletId less than or equals to DEFAULT_WALLET_ID
-        defaultWalletDetailsShouldNotBeFound("walletId.lessThan=" + DEFAULT_WALLET_ID);
-
-        // Get all the walletDetailsList where walletId less than or equals to UPDATED_WALLET_ID
-        defaultWalletDetailsShouldBeFound("walletId.lessThan=" + UPDATED_WALLET_ID);
     }
 
 
@@ -540,270 +450,6 @@ public class WalletDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllWalletDetailsByBalanceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where balance equals to DEFAULT_BALANCE
-        defaultWalletDetailsShouldBeFound("balance.equals=" + DEFAULT_BALANCE);
-
-        // Get all the walletDetailsList where balance equals to UPDATED_BALANCE
-        defaultWalletDetailsShouldNotBeFound("balance.equals=" + UPDATED_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByBalanceIsInShouldWork() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where balance in DEFAULT_BALANCE or UPDATED_BALANCE
-        defaultWalletDetailsShouldBeFound("balance.in=" + DEFAULT_BALANCE + "," + UPDATED_BALANCE);
-
-        // Get all the walletDetailsList where balance equals to UPDATED_BALANCE
-        defaultWalletDetailsShouldNotBeFound("balance.in=" + UPDATED_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByBalanceIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where balance is not null
-        defaultWalletDetailsShouldBeFound("balance.specified=true");
-
-        // Get all the walletDetailsList where balance is null
-        defaultWalletDetailsShouldNotBeFound("balance.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByBalanceIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where balance greater than or equals to DEFAULT_BALANCE
-        defaultWalletDetailsShouldBeFound("balance.greaterOrEqualThan=" + DEFAULT_BALANCE);
-
-        // Get all the walletDetailsList where balance greater than or equals to UPDATED_BALANCE
-        defaultWalletDetailsShouldNotBeFound("balance.greaterOrEqualThan=" + UPDATED_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByBalanceIsLessThanSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where balance less than or equals to DEFAULT_BALANCE
-        defaultWalletDetailsShouldNotBeFound("balance.lessThan=" + DEFAULT_BALANCE);
-
-        // Get all the walletDetailsList where balance less than or equals to UPDATED_BALANCE
-        defaultWalletDetailsShouldBeFound("balance.lessThan=" + UPDATED_BALANCE);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByTicketIsEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where ticket equals to DEFAULT_TICKET
-        defaultWalletDetailsShouldBeFound("ticket.equals=" + DEFAULT_TICKET);
-
-        // Get all the walletDetailsList where ticket equals to UPDATED_TICKET
-        defaultWalletDetailsShouldNotBeFound("ticket.equals=" + UPDATED_TICKET);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByTicketIsInShouldWork() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where ticket in DEFAULT_TICKET or UPDATED_TICKET
-        defaultWalletDetailsShouldBeFound("ticket.in=" + DEFAULT_TICKET + "," + UPDATED_TICKET);
-
-        // Get all the walletDetailsList where ticket equals to UPDATED_TICKET
-        defaultWalletDetailsShouldNotBeFound("ticket.in=" + UPDATED_TICKET);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByTicketIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where ticket is not null
-        defaultWalletDetailsShouldBeFound("ticket.specified=true");
-
-        // Get all the walletDetailsList where ticket is null
-        defaultWalletDetailsShouldNotBeFound("ticket.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByTicketIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where ticket greater than or equals to DEFAULT_TICKET
-        defaultWalletDetailsShouldBeFound("ticket.greaterOrEqualThan=" + DEFAULT_TICKET);
-
-        // Get all the walletDetailsList where ticket greater than or equals to UPDATED_TICKET
-        defaultWalletDetailsShouldNotBeFound("ticket.greaterOrEqualThan=" + UPDATED_TICKET);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByTicketIsLessThanSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where ticket less than or equals to DEFAULT_TICKET
-        defaultWalletDetailsShouldNotBeFound("ticket.lessThan=" + DEFAULT_TICKET);
-
-        // Get all the walletDetailsList where ticket less than or equals to UPDATED_TICKET
-        defaultWalletDetailsShouldBeFound("ticket.lessThan=" + UPDATED_TICKET);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByIntegralIsEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where integral equals to DEFAULT_INTEGRAL
-        defaultWalletDetailsShouldBeFound("integral.equals=" + DEFAULT_INTEGRAL);
-
-        // Get all the walletDetailsList where integral equals to UPDATED_INTEGRAL
-        defaultWalletDetailsShouldNotBeFound("integral.equals=" + UPDATED_INTEGRAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByIntegralIsInShouldWork() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where integral in DEFAULT_INTEGRAL or UPDATED_INTEGRAL
-        defaultWalletDetailsShouldBeFound("integral.in=" + DEFAULT_INTEGRAL + "," + UPDATED_INTEGRAL);
-
-        // Get all the walletDetailsList where integral equals to UPDATED_INTEGRAL
-        defaultWalletDetailsShouldNotBeFound("integral.in=" + UPDATED_INTEGRAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByIntegralIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where integral is not null
-        defaultWalletDetailsShouldBeFound("integral.specified=true");
-
-        // Get all the walletDetailsList where integral is null
-        defaultWalletDetailsShouldNotBeFound("integral.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByIntegralIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where integral greater than or equals to DEFAULT_INTEGRAL
-        defaultWalletDetailsShouldBeFound("integral.greaterOrEqualThan=" + DEFAULT_INTEGRAL);
-
-        // Get all the walletDetailsList where integral greater than or equals to UPDATED_INTEGRAL
-        defaultWalletDetailsShouldNotBeFound("integral.greaterOrEqualThan=" + UPDATED_INTEGRAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByIntegralIsLessThanSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where integral less than or equals to DEFAULT_INTEGRAL
-        defaultWalletDetailsShouldNotBeFound("integral.lessThan=" + DEFAULT_INTEGRAL);
-
-        // Get all the walletDetailsList where integral less than or equals to UPDATED_INTEGRAL
-        defaultWalletDetailsShouldBeFound("integral.lessThan=" + UPDATED_INTEGRAL);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByPayPriceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where payPrice equals to DEFAULT_PAY_PRICE
-        defaultWalletDetailsShouldBeFound("payPrice.equals=" + DEFAULT_PAY_PRICE);
-
-        // Get all the walletDetailsList where payPrice equals to UPDATED_PAY_PRICE
-        defaultWalletDetailsShouldNotBeFound("payPrice.equals=" + UPDATED_PAY_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByPayPriceIsInShouldWork() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where payPrice in DEFAULT_PAY_PRICE or UPDATED_PAY_PRICE
-        defaultWalletDetailsShouldBeFound("payPrice.in=" + DEFAULT_PAY_PRICE + "," + UPDATED_PAY_PRICE);
-
-        // Get all the walletDetailsList where payPrice equals to UPDATED_PAY_PRICE
-        defaultWalletDetailsShouldNotBeFound("payPrice.in=" + UPDATED_PAY_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByPayPriceIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where payPrice is not null
-        defaultWalletDetailsShouldBeFound("payPrice.specified=true");
-
-        // Get all the walletDetailsList where payPrice is null
-        defaultWalletDetailsShouldNotBeFound("payPrice.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByPayPriceIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where payPrice greater than or equals to DEFAULT_PAY_PRICE
-        defaultWalletDetailsShouldBeFound("payPrice.greaterOrEqualThan=" + DEFAULT_PAY_PRICE);
-
-        // Get all the walletDetailsList where payPrice greater than or equals to UPDATED_PAY_PRICE
-        defaultWalletDetailsShouldNotBeFound("payPrice.greaterOrEqualThan=" + UPDATED_PAY_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByPayPriceIsLessThanSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where payPrice less than or equals to DEFAULT_PAY_PRICE
-        defaultWalletDetailsShouldNotBeFound("payPrice.lessThan=" + DEFAULT_PAY_PRICE);
-
-        // Get all the walletDetailsList where payPrice less than or equals to UPDATED_PAY_PRICE
-        defaultWalletDetailsShouldBeFound("payPrice.lessThan=" + UPDATED_PAY_PRICE);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllWalletDetailsByOrderIdIsEqualToSomething() throws Exception {
         // Initialize the database
         walletDetailsRepository.saveAndFlush(walletDetails);
@@ -906,6 +552,181 @@ public class WalletDetailsResourceIntTest {
         // Get all the walletDetailsList where createdTime is null
         defaultWalletDetailsShouldNotBeFound("createdTime.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByBalanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where balance equals to DEFAULT_BALANCE
+        defaultWalletDetailsShouldBeFound("balance.equals=" + DEFAULT_BALANCE);
+
+        // Get all the walletDetailsList where balance equals to UPDATED_BALANCE
+        defaultWalletDetailsShouldNotBeFound("balance.equals=" + UPDATED_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByBalanceIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where balance in DEFAULT_BALANCE or UPDATED_BALANCE
+        defaultWalletDetailsShouldBeFound("balance.in=" + DEFAULT_BALANCE + "," + UPDATED_BALANCE);
+
+        // Get all the walletDetailsList where balance equals to UPDATED_BALANCE
+        defaultWalletDetailsShouldNotBeFound("balance.in=" + UPDATED_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByBalanceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where balance is not null
+        defaultWalletDetailsShouldBeFound("balance.specified=true");
+
+        // Get all the walletDetailsList where balance is null
+        defaultWalletDetailsShouldNotBeFound("balance.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByTicketIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where ticket equals to DEFAULT_TICKET
+        defaultWalletDetailsShouldBeFound("ticket.equals=" + DEFAULT_TICKET);
+
+        // Get all the walletDetailsList where ticket equals to UPDATED_TICKET
+        defaultWalletDetailsShouldNotBeFound("ticket.equals=" + UPDATED_TICKET);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByTicketIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where ticket in DEFAULT_TICKET or UPDATED_TICKET
+        defaultWalletDetailsShouldBeFound("ticket.in=" + DEFAULT_TICKET + "," + UPDATED_TICKET);
+
+        // Get all the walletDetailsList where ticket equals to UPDATED_TICKET
+        defaultWalletDetailsShouldNotBeFound("ticket.in=" + UPDATED_TICKET);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByTicketIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where ticket is not null
+        defaultWalletDetailsShouldBeFound("ticket.specified=true");
+
+        // Get all the walletDetailsList where ticket is null
+        defaultWalletDetailsShouldNotBeFound("ticket.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByIntegralIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where integral equals to DEFAULT_INTEGRAL
+        defaultWalletDetailsShouldBeFound("integral.equals=" + DEFAULT_INTEGRAL);
+
+        // Get all the walletDetailsList where integral equals to UPDATED_INTEGRAL
+        defaultWalletDetailsShouldNotBeFound("integral.equals=" + UPDATED_INTEGRAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByIntegralIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where integral in DEFAULT_INTEGRAL or UPDATED_INTEGRAL
+        defaultWalletDetailsShouldBeFound("integral.in=" + DEFAULT_INTEGRAL + "," + UPDATED_INTEGRAL);
+
+        // Get all the walletDetailsList where integral equals to UPDATED_INTEGRAL
+        defaultWalletDetailsShouldNotBeFound("integral.in=" + UPDATED_INTEGRAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByIntegralIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where integral is not null
+        defaultWalletDetailsShouldBeFound("integral.specified=true");
+
+        // Get all the walletDetailsList where integral is null
+        defaultWalletDetailsShouldNotBeFound("integral.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByPay_priceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where pay_price equals to DEFAULT_PAY_PRICE
+        defaultWalletDetailsShouldBeFound("pay_price.equals=" + DEFAULT_PAY_PRICE);
+
+        // Get all the walletDetailsList where pay_price equals to UPDATED_PAY_PRICE
+        defaultWalletDetailsShouldNotBeFound("pay_price.equals=" + UPDATED_PAY_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByPay_priceIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where pay_price in DEFAULT_PAY_PRICE or UPDATED_PAY_PRICE
+        defaultWalletDetailsShouldBeFound("pay_price.in=" + DEFAULT_PAY_PRICE + "," + UPDATED_PAY_PRICE);
+
+        // Get all the walletDetailsList where pay_price equals to UPDATED_PAY_PRICE
+        defaultWalletDetailsShouldNotBeFound("pay_price.in=" + UPDATED_PAY_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByPay_priceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where pay_price is not null
+        defaultWalletDetailsShouldBeFound("pay_price.specified=true");
+
+        // Get all the walletDetailsList where pay_price is null
+        defaultWalletDetailsShouldNotBeFound("pay_price.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByWalletIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Wallet wallet = WalletResourceIntTest.createEntity(em);
+        em.persist(wallet);
+        em.flush();
+        walletDetails.setWallet(wallet);
+        walletDetailsRepository.saveAndFlush(walletDetails);
+        Long walletId = wallet.getId();
+
+        // Get all the walletDetailsList where wallet equals to walletId
+        defaultWalletDetailsShouldBeFound("walletId.equals=" + walletId);
+
+        // Get all the walletDetailsList where wallet equals to walletId + 1
+        defaultWalletDetailsShouldNotBeFound("walletId.equals=" + (walletId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -915,15 +736,14 @@ public class WalletDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(walletDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].walletId").value(hasItem(DEFAULT_WALLET_ID.intValue())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].orderId").value(hasItem(DEFAULT_ORDER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
             .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
             .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
-            .andExpect(jsonPath("$.[*].payPrice").value(hasItem(DEFAULT_PAY_PRICE.intValue())))
-            .andExpect(jsonPath("$.[*].orderId").value(hasItem(DEFAULT_ORDER_ID.intValue())))
-            .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())));
+            .andExpect(jsonPath("$.[*].pay_price").value(hasItem(DEFAULT_PAY_PRICE.intValue())));
     }
 
     /**
@@ -959,15 +779,14 @@ public class WalletDetailsResourceIntTest {
         em.detach(updatedWalletDetails);
         updatedWalletDetails
             .userid(UPDATED_USERID)
-            .walletId(UPDATED_WALLET_ID)
             .amount(UPDATED_AMOUNT)
             .type(UPDATED_TYPE)
+            .orderId(UPDATED_ORDER_ID)
+            .createdTime(UPDATED_CREATED_TIME)
             .balance(UPDATED_BALANCE)
             .ticket(UPDATED_TICKET)
             .integral(UPDATED_INTEGRAL)
-            .payPrice(UPDATED_PAY_PRICE)
-            .orderId(UPDATED_ORDER_ID)
-            .createdTime(UPDATED_CREATED_TIME);
+            .pay_price(UPDATED_PAY_PRICE);
         WalletDetailsDTO walletDetailsDTO = walletDetailsMapper.toDto(updatedWalletDetails);
 
         restWalletDetailsMockMvc.perform(put("/api/wallet-details")
@@ -980,15 +799,14 @@ public class WalletDetailsResourceIntTest {
         assertThat(walletDetailsList).hasSize(databaseSizeBeforeUpdate);
         WalletDetails testWalletDetails = walletDetailsList.get(walletDetailsList.size() - 1);
         assertThat(testWalletDetails.getUserid()).isEqualTo(UPDATED_USERID);
-        assertThat(testWalletDetails.getWalletId()).isEqualTo(UPDATED_WALLET_ID);
         assertThat(testWalletDetails.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testWalletDetails.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testWalletDetails.getOrderId()).isEqualTo(UPDATED_ORDER_ID);
+        assertThat(testWalletDetails.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
         assertThat(testWalletDetails.getBalance()).isEqualTo(UPDATED_BALANCE);
         assertThat(testWalletDetails.getTicket()).isEqualTo(UPDATED_TICKET);
         assertThat(testWalletDetails.getIntegral()).isEqualTo(UPDATED_INTEGRAL);
-        assertThat(testWalletDetails.getPayPrice()).isEqualTo(UPDATED_PAY_PRICE);
-        assertThat(testWalletDetails.getOrderId()).isEqualTo(UPDATED_ORDER_ID);
-        assertThat(testWalletDetails.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
+        assertThat(testWalletDetails.getPay_price()).isEqualTo(UPDATED_PAY_PRICE);
     }
 
     @Test

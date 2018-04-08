@@ -1,6 +1,7 @@
 package com.eyun.wallet.service;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -78,6 +79,18 @@ public class WalletQueryService extends QueryService<Wallet> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildSpecification(criteria.getId(), Wallet_.id));
             }
+            if (criteria.getUserid() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getUserid(), Wallet_.userid));
+            }
+            if (criteria.getCreateTime() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCreateTime(), Wallet_.createTime));
+            }
+            if (criteria.getUpdatedTime() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getUpdatedTime(), Wallet_.updatedTime));
+            }
+            if (criteria.getVersion() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getVersion(), Wallet_.version));
+            }
             if (criteria.getBalance() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getBalance(), Wallet_.balance));
             }
@@ -87,14 +100,8 @@ public class WalletQueryService extends QueryService<Wallet> {
             if (criteria.getIntegral() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getIntegral(), Wallet_.integral));
             }
-            if (criteria.getUserid() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getUserid(), Wallet_.userid));
-            }
-            if (criteria.getCreateTime() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getCreateTime(), Wallet_.createTime));
-            }
-            if (criteria.getUpdatedTime() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getUpdatedTime(), Wallet_.updatedTime));
+            if (criteria.getWalletDetailsId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getWalletDetailsId(), Wallet_.walletDetails, WalletDetails_.id));
             }
         }
         return specification;

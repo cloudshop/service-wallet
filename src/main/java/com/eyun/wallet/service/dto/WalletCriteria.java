@@ -8,7 +8,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.InstantFilter;
 
 
@@ -28,17 +28,21 @@ public class WalletCriteria implements Serializable {
 
     private LongFilter id;
 
-    private LongFilter balance;
-
-    private LongFilter ticket;
-
-    private LongFilter integral;
-
     private LongFilter userid;
 
     private InstantFilter createTime;
 
     private InstantFilter updatedTime;
+
+    private IntegerFilter version;
+
+    private BigDecimalFilter balance;
+
+    private BigDecimalFilter ticket;
+
+    private BigDecimalFilter integral;
+
+    private LongFilter walletDetailsId;
 
     public WalletCriteria() {
     }
@@ -49,30 +53,6 @@ public class WalletCriteria implements Serializable {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public LongFilter getBalance() {
-        return balance;
-    }
-
-    public void setBalance(LongFilter balance) {
-        this.balance = balance;
-    }
-
-    public LongFilter getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(LongFilter ticket) {
-        this.ticket = ticket;
-    }
-
-    public LongFilter getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(LongFilter integral) {
-        this.integral = integral;
     }
 
     public LongFilter getUserid() {
@@ -99,16 +79,58 @@ public class WalletCriteria implements Serializable {
         this.updatedTime = updatedTime;
     }
 
+    public IntegerFilter getVersion() {
+        return version;
+    }
+
+    public void setVersion(IntegerFilter version) {
+        this.version = version;
+    }
+
+    public BigDecimalFilter getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimalFilter balance) {
+        this.balance = balance;
+    }
+
+    public BigDecimalFilter getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(BigDecimalFilter ticket) {
+        this.ticket = ticket;
+    }
+
+    public BigDecimalFilter getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(BigDecimalFilter integral) {
+        this.integral = integral;
+    }
+
+    public LongFilter getWalletDetailsId() {
+        return walletDetailsId;
+    }
+
+    public void setWalletDetailsId(LongFilter walletDetailsId) {
+        this.walletDetailsId = walletDetailsId;
+    }
+
     @Override
     public String toString() {
         return "WalletCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (balance != null ? "balance=" + balance + ", " : "") +
-                (ticket != null ? "ticket=" + ticket + ", " : "") +
-                (integral != null ? "integral=" + integral + ", " : "") +
                 (userid != null ? "userid=" + userid + ", " : "") +
                 (createTime != null ? "createTime=" + createTime + ", " : "") +
                 (updatedTime != null ? "updatedTime=" + updatedTime + ", " : "") +
+                (version != null ? "version=" + version + ", " : "") +
+                (balance != null ? "balance=" + balance + ", " : "") +
+                (ticket != null ? "ticket=" + ticket + ", " : "") +
+                (integral != null ? "integral=" + integral + ", " : "") +
+                (walletDetailsId != null ? "walletDetailsId=" + walletDetailsId + ", " : "") +
             "}";
     }
 

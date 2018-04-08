@@ -4,6 +4,9 @@ package com.eyun.wallet.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -13,12 +16,6 @@ public class WalletDTO implements Serializable {
 
     private Long id;
 
-    private Long balance;
-
-    private Long ticket;
-
-    private Long integral;
-
     @NotNull
     private Long userid;
 
@@ -26,36 +23,20 @@ public class WalletDTO implements Serializable {
 
     private Instant updatedTime;
 
+    private Integer version;
+
+    private BigDecimal balance;
+
+    private BigDecimal ticket;
+
+    private BigDecimal integral;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Long balance) {
-        this.balance = balance;
-    }
-
-    public Long getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Long ticket) {
-        this.ticket = ticket;
-    }
-
-    public Long getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(Long integral) {
-        this.integral = integral;
     }
 
     public Long getUserid() {
@@ -80,6 +61,38 @@ public class WalletDTO implements Serializable {
 
     public void setUpdatedTime(Instant updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public BigDecimal getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(BigDecimal ticket) {
+        this.ticket = ticket;
+    }
+
+    public BigDecimal getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(BigDecimal integral) {
+        this.integral = integral;
     }
 
     @Override
@@ -107,12 +120,13 @@ public class WalletDTO implements Serializable {
     public String toString() {
         return "WalletDTO{" +
             "id=" + getId() +
-            ", balance=" + getBalance() +
-            ", ticket=" + getTicket() +
-            ", integral=" + getIntegral() +
             ", userid=" + getUserid() +
             ", createTime='" + getCreateTime() + "'" +
             ", updatedTime='" + getUpdatedTime() + "'" +
+            ", version=" + getVersion() +
+            ", balance=" + getBalance() +
+            ", ticket=" + getTicket() +
+            ", integral=" + getIntegral() +
             "}";
     }
 }

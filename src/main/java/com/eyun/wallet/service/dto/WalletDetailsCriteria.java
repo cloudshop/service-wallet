@@ -8,7 +8,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.InstantFilter;
 
 
@@ -30,23 +30,23 @@ public class WalletDetailsCriteria implements Serializable {
 
     private LongFilter userid;
 
-    private LongFilter walletId;
-
     private LongFilter amount;
 
     private IntegerFilter type;
 
-    private LongFilter balance;
-
-    private LongFilter ticket;
-
-    private LongFilter integral;
-
-    private LongFilter payPrice;
-
     private LongFilter orderId;
 
     private InstantFilter createdTime;
+
+    private BigDecimalFilter balance;
+
+    private BigDecimalFilter ticket;
+
+    private BigDecimalFilter integral;
+
+    private BigDecimalFilter pay_price;
+
+    private LongFilter walletId;
 
     public WalletDetailsCriteria() {
     }
@@ -67,14 +67,6 @@ public class WalletDetailsCriteria implements Serializable {
         this.userid = userid;
     }
 
-    public LongFilter getWalletId() {
-        return walletId;
-    }
-
-    public void setWalletId(LongFilter walletId) {
-        this.walletId = walletId;
-    }
-
     public LongFilter getAmount() {
         return amount;
     }
@@ -89,38 +81,6 @@ public class WalletDetailsCriteria implements Serializable {
 
     public void setType(IntegerFilter type) {
         this.type = type;
-    }
-
-    public LongFilter getBalance() {
-        return balance;
-    }
-
-    public void setBalance(LongFilter balance) {
-        this.balance = balance;
-    }
-
-    public LongFilter getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(LongFilter ticket) {
-        this.ticket = ticket;
-    }
-
-    public LongFilter getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(LongFilter integral) {
-        this.integral = integral;
-    }
-
-    public LongFilter getPayPrice() {
-        return payPrice;
-    }
-
-    public void setPayPrice(LongFilter payPrice) {
-        this.payPrice = payPrice;
     }
 
     public LongFilter getOrderId() {
@@ -139,20 +99,60 @@ public class WalletDetailsCriteria implements Serializable {
         this.createdTime = createdTime;
     }
 
+    public BigDecimalFilter getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimalFilter balance) {
+        this.balance = balance;
+    }
+
+    public BigDecimalFilter getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(BigDecimalFilter ticket) {
+        this.ticket = ticket;
+    }
+
+    public BigDecimalFilter getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(BigDecimalFilter integral) {
+        this.integral = integral;
+    }
+
+    public BigDecimalFilter getPay_price() {
+        return pay_price;
+    }
+
+    public void setPay_price(BigDecimalFilter pay_price) {
+        this.pay_price = pay_price;
+    }
+
+    public LongFilter getWalletId() {
+        return walletId;
+    }
+
+    public void setWalletId(LongFilter walletId) {
+        this.walletId = walletId;
+    }
+
     @Override
     public String toString() {
         return "WalletDetailsCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (userid != null ? "userid=" + userid + ", " : "") +
-                (walletId != null ? "walletId=" + walletId + ", " : "") +
                 (amount != null ? "amount=" + amount + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
+                (orderId != null ? "orderId=" + orderId + ", " : "") +
+                (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
                 (balance != null ? "balance=" + balance + ", " : "") +
                 (ticket != null ? "ticket=" + ticket + ", " : "") +
                 (integral != null ? "integral=" + integral + ", " : "") +
-                (payPrice != null ? "payPrice=" + payPrice + ", " : "") +
-                (orderId != null ? "orderId=" + orderId + ", " : "") +
-                (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
+                (pay_price != null ? "pay_price=" + pay_price + ", " : "") +
+                (walletId != null ? "walletId=" + walletId + ", " : "") +
             "}";
     }
 

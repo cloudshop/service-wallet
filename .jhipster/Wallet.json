@@ -1,19 +1,14 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "walletDetails",
+            "otherEntityName": "walletDetails",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "wallet"
+        }
+    ],
     "fields": [
-        {
-            "fieldName": "balance",
-            "fieldType": "Long"
-        },
-        {
-            "fieldName": "ticket",
-            "fieldType": "Long"
-        },
-        {
-            "fieldName": "integral",
-            "fieldType": "Long"
-        },
         {
             "fieldName": "userid",
             "fieldType": "Long",
@@ -28,6 +23,22 @@
         {
             "fieldName": "updatedTime",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "version",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "ticket",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "integral",
+            "fieldType": "BigDecimal"
         }
     ],
     "changelogDate": "20180326022747",

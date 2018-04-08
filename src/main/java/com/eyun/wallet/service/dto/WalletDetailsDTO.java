@@ -4,6 +4,9 @@ package com.eyun.wallet.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -16,24 +19,23 @@ public class WalletDetailsDTO implements Serializable {
     @NotNull
     private Long userid;
 
-    @NotNull
-    private Long walletId;
-
     private Long amount;
 
     private Integer type;
 
-    private Long balance;
-
-    private Long ticket;
-
-    private Long integral;
-
-    private Long payPrice;
-
     private Long orderId;
 
     private Instant createdTime;
+
+    private BigDecimal balance;
+
+    private BigDecimal ticket;
+
+    private BigDecimal integral;
+
+    private BigDecimal pay_price;
+
+    private Long walletId;
 
     public Long getId() {
         return id;
@@ -49,14 +51,6 @@ public class WalletDetailsDTO implements Serializable {
 
     public void setUserid(Long userid) {
         this.userid = userid;
-    }
-
-    public Long getWalletId() {
-        return walletId;
-    }
-
-    public void setWalletId(Long walletId) {
-        this.walletId = walletId;
     }
 
     public Long getAmount() {
@@ -75,38 +69,6 @@ public class WalletDetailsDTO implements Serializable {
         this.type = type;
     }
 
-    public Long getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Long balance) {
-        this.balance = balance;
-    }
-
-    public Long getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Long ticket) {
-        this.ticket = ticket;
-    }
-
-    public Long getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(Long integral) {
-        this.integral = integral;
-    }
-
-    public Long getPayPrice() {
-        return payPrice;
-    }
-
-    public void setPayPrice(Long payPrice) {
-        this.payPrice = payPrice;
-    }
-
     public Long getOrderId() {
         return orderId;
     }
@@ -121,6 +83,46 @@ public class WalletDetailsDTO implements Serializable {
 
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public BigDecimal getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(BigDecimal ticket) {
+        this.ticket = ticket;
+    }
+
+    public BigDecimal getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(BigDecimal integral) {
+        this.integral = integral;
+    }
+
+    public BigDecimal getPay_price() {
+        return pay_price;
+    }
+
+    public void setPay_price(BigDecimal pay_price) {
+        this.pay_price = pay_price;
+    }
+
+    public Long getWalletId() {
+        return walletId;
+    }
+
+    public void setWalletId(Long walletId) {
+        this.walletId = walletId;
     }
 
     @Override
@@ -149,15 +151,14 @@ public class WalletDetailsDTO implements Serializable {
         return "WalletDetailsDTO{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
-            ", walletId=" + getWalletId() +
             ", amount=" + getAmount() +
             ", type=" + getType() +
+            ", orderId=" + getOrderId() +
+            ", createdTime='" + getCreatedTime() + "'" +
             ", balance=" + getBalance() +
             ", ticket=" + getTicket() +
             ", integral=" + getIntegral() +
-            ", payPrice=" + getPayPrice() +
-            ", orderId=" + getOrderId() +
-            ", createdTime='" + getCreatedTime() + "'" +
+            ", pay_price=" + getPay_price() +
             "}";
     }
 }

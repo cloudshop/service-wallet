@@ -1,6 +1,7 @@
 package com.eyun.wallet.service;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -81,14 +82,17 @@ public class WalletDetailsQueryService extends QueryService<WalletDetails> {
             if (criteria.getUserid() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUserid(), WalletDetails_.userid));
             }
-            if (criteria.getWalletId() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getWalletId(), WalletDetails_.walletId));
-            }
             if (criteria.getAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAmount(), WalletDetails_.amount));
             }
             if (criteria.getType() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getType(), WalletDetails_.type));
+            }
+            if (criteria.getOrderId() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getOrderId(), WalletDetails_.orderId));
+            }
+            if (criteria.getCreatedTime() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCreatedTime(), WalletDetails_.createdTime));
             }
             if (criteria.getBalance() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getBalance(), WalletDetails_.balance));
@@ -99,14 +103,11 @@ public class WalletDetailsQueryService extends QueryService<WalletDetails> {
             if (criteria.getIntegral() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getIntegral(), WalletDetails_.integral));
             }
-            if (criteria.getPayPrice() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getPayPrice(), WalletDetails_.payPrice));
+            if (criteria.getPay_price() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPay_price(), WalletDetails_.pay_price));
             }
-            if (criteria.getOrderId() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getOrderId(), WalletDetails_.orderId));
-            }
-            if (criteria.getCreatedTime() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getCreatedTime(), WalletDetails_.createdTime));
+            if (criteria.getWalletId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getWalletId(), WalletDetails_.wallet, Wallet_.id));
             }
         }
         return specification;
