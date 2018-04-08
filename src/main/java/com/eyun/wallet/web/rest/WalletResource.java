@@ -8,8 +8,14 @@ import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.service.PayService;
 import com.eyun.wallet.service.WalletQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
+
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,6 +26,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -40,8 +48,11 @@ public class WalletResource {
     private final WalletService walletService;
 
     private final WalletQueryService walletQueryService;
+    
+    private final PayService payService;
 
-    public WalletResource(WalletService walletService, WalletQueryService walletQueryService) {
+    public WalletResource(WalletService walletService, WalletQueryService walletQueryService, PayService payService) {
+    	this.payService = payService;
         this.walletService = walletService;
         this.walletQueryService = walletQueryService;
     }
@@ -122,9 +133,11 @@ public class WalletResource {
      * DELETE  /wallets/:id : delete the "id" wallet.
      *
      * @param id the id of the walletDTO to delete
+     * @return 
      * @return the ResponseEntity with status 200 (OK)
       
     @DeleteMapping("/wallets/{id}")
+     * @throws JSONException 
     @Timed
     public ResponseEntity<Void> deleteWallet(@PathVariable Long id) {
         log.debug("REST request to delete Wallet : {}", id);
@@ -134,8 +147,24 @@ public class WalletResource {
      */
     
     @PutMapping("/wallet/balance")
-    public void fun1(@RequestBody BalanceDTO balanceDTO) {
-    	walletService.updateBalance(balanceDTO);
+    public ResponseEntity<Wallet> updateBalance(@RequestBody BalanceDTO balanceDTO) throws JSONException {
+    	switch (balanceDTO.getType()) {
+		case 1: //充值
+			String order = payService.queryOrder(balanceDTO.getOrderNo());
+			JSONObject jsonObject = new JSONObject(order);
+			double totalAmount = jsonObject.getJSONObject("alipay_trade_query_response").getDouble("total_amount");
+			//if (balanceDTO.getMoney().compareTo(new BigDecimal(totalAmount)) == 0) {
+			if (balanceDTO.getMoney().doubleValue() == totalAmount) {//比较充值金额是否和支付宝账单中金额相等
+				Wallet wallet = walletService.rechargeBalance(balanceDTO);
+				return ResponseEntity.ok()
+			            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, wallet.getId().toString()))
+			            .body(wallet);
+			} else {
+				return new ResponseEntity<>(HeaderUtil.createAlert("The amount of recharge is mistaken", "money:"+balanceDTO.getMoney()), HttpStatus.BAD_REQUEST);
+			}
+		default:
+			return new ResponseEntity<>(HeaderUtil.createAlert("Type field is mistaken", "type:"+balanceDTO.getType()), HttpStatus.BAD_REQUEST);
+		}
     }
     
 }

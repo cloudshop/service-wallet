@@ -34,10 +34,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="order_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="created_time" type="timestamp">
                 <constraints nullable="true" />
             </column>
@@ -55,6 +51,10 @@
             </column>
 
             <column name="pay_price" type="decimal(10,2)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="order_no" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 

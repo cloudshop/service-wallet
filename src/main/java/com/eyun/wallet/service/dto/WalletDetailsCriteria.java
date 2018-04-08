@@ -34,8 +34,6 @@ public class WalletDetailsCriteria implements Serializable {
 
     private IntegerFilter type;
 
-    private LongFilter orderId;
-
     private InstantFilter createdTime;
 
     private BigDecimalFilter balance;
@@ -45,6 +43,8 @@ public class WalletDetailsCriteria implements Serializable {
     private BigDecimalFilter integral;
 
     private BigDecimalFilter pay_price;
+
+    private StringFilter orderNo;
 
     private LongFilter walletId;
 
@@ -81,14 +81,6 @@ public class WalletDetailsCriteria implements Serializable {
 
     public void setType(IntegerFilter type) {
         this.type = type;
-    }
-
-    public LongFilter getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(LongFilter orderId) {
-        this.orderId = orderId;
     }
 
     public InstantFilter getCreatedTime() {
@@ -131,6 +123,14 @@ public class WalletDetailsCriteria implements Serializable {
         this.pay_price = pay_price;
     }
 
+    public StringFilter getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(StringFilter orderNo) {
+        this.orderNo = orderNo;
+    }
+
     public LongFilter getWalletId() {
         return walletId;
     }
@@ -146,12 +146,12 @@ public class WalletDetailsCriteria implements Serializable {
                 (userid != null ? "userid=" + userid + ", " : "") +
                 (amount != null ? "amount=" + amount + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
-                (orderId != null ? "orderId=" + orderId + ", " : "") +
                 (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
                 (balance != null ? "balance=" + balance + ", " : "") +
                 (ticket != null ? "ticket=" + ticket + ", " : "") +
                 (integral != null ? "integral=" + integral + ", " : "") +
                 (pay_price != null ? "pay_price=" + pay_price + ", " : "") +
+                (orderNo != null ? "orderNo=" + orderNo + ", " : "") +
                 (walletId != null ? "walletId=" + walletId + ", " : "") +
             "}";
     }

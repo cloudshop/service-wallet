@@ -35,9 +35,6 @@ public class WalletDetails implements Serializable {
     @Column(name = "jhi_type")
     private Integer type;
 
-    @Column(name = "order_id")
-    private Long orderId;
-
     @Column(name = "created_time")
     private Instant createdTime;
 
@@ -52,6 +49,9 @@ public class WalletDetails implements Serializable {
 
     @Column(name = "pay_price", precision=10, scale=2)
     private BigDecimal pay_price;
+
+    @Column(name = "order_no")
+    private String orderNo;
 
     @ManyToOne
     private Wallet wallet;
@@ -102,19 +102,6 @@ public class WalletDetails implements Serializable {
 
     public void setType(Integer type) {
         this.type = type;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public WalletDetails orderId(Long orderId) {
-        this.orderId = orderId;
-        return this;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     public Instant getCreatedTime() {
@@ -182,6 +169,19 @@ public class WalletDetails implements Serializable {
         this.pay_price = pay_price;
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public WalletDetails orderNo(String orderNo) {
+        this.orderNo = orderNo;
+        return this;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
     public Wallet getWallet() {
         return wallet;
     }
@@ -223,12 +223,12 @@ public class WalletDetails implements Serializable {
             ", userid=" + getUserid() +
             ", amount=" + getAmount() +
             ", type=" + getType() +
-            ", orderId=" + getOrderId() +
             ", createdTime='" + getCreatedTime() + "'" +
             ", balance=" + getBalance() +
             ", ticket=" + getTicket() +
             ", integral=" + getIntegral() +
             ", pay_price=" + getPay_price() +
+            ", orderNo='" + getOrderNo() + "'" +
             "}";
     }
 }

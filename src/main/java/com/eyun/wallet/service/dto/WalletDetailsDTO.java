@@ -23,8 +23,6 @@ public class WalletDetailsDTO implements Serializable {
 
     private Integer type;
 
-    private Long orderId;
-
     private Instant createdTime;
 
     private BigDecimal balance;
@@ -34,6 +32,8 @@ public class WalletDetailsDTO implements Serializable {
     private BigDecimal integral;
 
     private BigDecimal pay_price;
+
+    private String orderNo;
 
     private Long walletId;
 
@@ -67,14 +67,6 @@ public class WalletDetailsDTO implements Serializable {
 
     public void setType(Integer type) {
         this.type = type;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     public Instant getCreatedTime() {
@@ -117,6 +109,14 @@ public class WalletDetailsDTO implements Serializable {
         this.pay_price = pay_price;
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
     public Long getWalletId() {
         return walletId;
     }
@@ -153,12 +153,12 @@ public class WalletDetailsDTO implements Serializable {
             ", userid=" + getUserid() +
             ", amount=" + getAmount() +
             ", type=" + getType() +
-            ", orderId=" + getOrderId() +
             ", createdTime='" + getCreatedTime() + "'" +
             ", balance=" + getBalance() +
             ", ticket=" + getTicket() +
             ", integral=" + getIntegral() +
             ", pay_price=" + getPay_price() +
+            ", orderNo='" + getOrderNo() + "'" +
             "}";
     }
 }

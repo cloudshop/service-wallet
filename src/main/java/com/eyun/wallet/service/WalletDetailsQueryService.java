@@ -88,9 +88,6 @@ public class WalletDetailsQueryService extends QueryService<WalletDetails> {
             if (criteria.getType() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getType(), WalletDetails_.type));
             }
-            if (criteria.getOrderId() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getOrderId(), WalletDetails_.orderId));
-            }
             if (criteria.getCreatedTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedTime(), WalletDetails_.createdTime));
             }
@@ -105,6 +102,9 @@ public class WalletDetailsQueryService extends QueryService<WalletDetails> {
             }
             if (criteria.getPay_price() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPay_price(), WalletDetails_.pay_price));
+            }
+            if (criteria.getOrderNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOrderNo(), WalletDetails_.orderNo));
             }
             if (criteria.getWalletId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getWalletId(), WalletDetails_.wallet, Wallet_.id));

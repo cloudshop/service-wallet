@@ -96,7 +96,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
 	@Override
-	public void updateBalance(BalanceDTO balanceDTO) {
+	public Wallet rechargeBalance(BalanceDTO balanceDTO) {
 		Wallet wallet = walletRepository.findByUserid(balanceDTO.getUserid());
 		BigDecimal balance = wallet.getBalance();//获取当前账户余额
 		BigDecimal balance1 = balance.add(balanceDTO.getMoney());//添加金额
@@ -110,8 +110,9 @@ public class WalletServiceImpl implements WalletService {
 		wd.setType(1);//1:充值
 		wd.setCreatedTime(Instant.now());
 		wd.setBalance(balanceDTO.getMoney());
-		// TODO wd.setOrderId(balanceDTO.getOrderNo());
+		wd.setOrderNo(balanceDTO.getOrderNo());
 		wd.setWallet(wallet);
 		walletDetailsRepository.save(wd);
+		return wallet;
 	}
 }

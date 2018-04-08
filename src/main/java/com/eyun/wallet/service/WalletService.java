@@ -1,6 +1,7 @@
 package com.eyun.wallet.service;
 
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.dto.WalletDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,5 +42,5 @@ public interface WalletService {
      */
     void delete(Long id);
 
-	void updateBalance(BalanceDTO balanceDTO);
+    Wallet rechargeBalance(BalanceDTO balanceDTO);
 }

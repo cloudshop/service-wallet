@@ -58,9 +58,6 @@ public class WalletDetailsResourceIntTest {
     private static final Integer DEFAULT_TYPE = 1;
     private static final Integer UPDATED_TYPE = 2;
 
-    private static final Long DEFAULT_ORDER_ID = 1L;
-    private static final Long UPDATED_ORDER_ID = 2L;
-
     private static final Instant DEFAULT_CREATED_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -75,6 +72,9 @@ public class WalletDetailsResourceIntTest {
 
     private static final BigDecimal DEFAULT_PAY_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAY_PRICE = new BigDecimal(2);
+
+    private static final String DEFAULT_ORDER_NO = "AAAAAAAAAA";
+    private static final String UPDATED_ORDER_NO = "BBBBBBBBBB";
 
     @Autowired
     private WalletDetailsRepository walletDetailsRepository;
@@ -126,12 +126,12 @@ public class WalletDetailsResourceIntTest {
             .userid(DEFAULT_USERID)
             .amount(DEFAULT_AMOUNT)
             .type(DEFAULT_TYPE)
-            .orderId(DEFAULT_ORDER_ID)
             .createdTime(DEFAULT_CREATED_TIME)
             .balance(DEFAULT_BALANCE)
             .ticket(DEFAULT_TICKET)
             .integral(DEFAULT_INTEGRAL)
-            .pay_price(DEFAULT_PAY_PRICE);
+            .pay_price(DEFAULT_PAY_PRICE)
+            .orderNo(DEFAULT_ORDER_NO);
         return walletDetails;
     }
 
@@ -159,12 +159,12 @@ public class WalletDetailsResourceIntTest {
         assertThat(testWalletDetails.getUserid()).isEqualTo(DEFAULT_USERID);
         assertThat(testWalletDetails.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testWalletDetails.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testWalletDetails.getOrderId()).isEqualTo(DEFAULT_ORDER_ID);
         assertThat(testWalletDetails.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
         assertThat(testWalletDetails.getBalance()).isEqualTo(DEFAULT_BALANCE);
         assertThat(testWalletDetails.getTicket()).isEqualTo(DEFAULT_TICKET);
         assertThat(testWalletDetails.getIntegral()).isEqualTo(DEFAULT_INTEGRAL);
         assertThat(testWalletDetails.getPay_price()).isEqualTo(DEFAULT_PAY_PRICE);
+        assertThat(testWalletDetails.getOrderNo()).isEqualTo(DEFAULT_ORDER_NO);
     }
 
     @Test
@@ -220,12 +220,12 @@ public class WalletDetailsResourceIntTest {
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
-            .andExpect(jsonPath("$.[*].orderId").value(hasItem(DEFAULT_ORDER_ID.intValue())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
             .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
             .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
-            .andExpect(jsonPath("$.[*].pay_price").value(hasItem(DEFAULT_PAY_PRICE.intValue())));
+            .andExpect(jsonPath("$.[*].pay_price").value(hasItem(DEFAULT_PAY_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
     @Test
@@ -242,12 +242,12 @@ public class WalletDetailsResourceIntTest {
             .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
-            .andExpect(jsonPath("$.orderId").value(DEFAULT_ORDER_ID.intValue()))
             .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()))
             .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.intValue()))
             .andExpect(jsonPath("$.ticket").value(DEFAULT_TICKET.intValue()))
             .andExpect(jsonPath("$.integral").value(DEFAULT_INTEGRAL.intValue()))
-            .andExpect(jsonPath("$.pay_price").value(DEFAULT_PAY_PRICE.intValue()));
+            .andExpect(jsonPath("$.pay_price").value(DEFAULT_PAY_PRICE.intValue()))
+            .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO.toString()));
     }
 
     @Test
@@ -450,72 +450,6 @@ public class WalletDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllWalletDetailsByOrderIdIsEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where orderId equals to DEFAULT_ORDER_ID
-        defaultWalletDetailsShouldBeFound("orderId.equals=" + DEFAULT_ORDER_ID);
-
-        // Get all the walletDetailsList where orderId equals to UPDATED_ORDER_ID
-        defaultWalletDetailsShouldNotBeFound("orderId.equals=" + UPDATED_ORDER_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByOrderIdIsInShouldWork() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where orderId in DEFAULT_ORDER_ID or UPDATED_ORDER_ID
-        defaultWalletDetailsShouldBeFound("orderId.in=" + DEFAULT_ORDER_ID + "," + UPDATED_ORDER_ID);
-
-        // Get all the walletDetailsList where orderId equals to UPDATED_ORDER_ID
-        defaultWalletDetailsShouldNotBeFound("orderId.in=" + UPDATED_ORDER_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByOrderIdIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where orderId is not null
-        defaultWalletDetailsShouldBeFound("orderId.specified=true");
-
-        // Get all the walletDetailsList where orderId is null
-        defaultWalletDetailsShouldNotBeFound("orderId.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByOrderIdIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where orderId greater than or equals to DEFAULT_ORDER_ID
-        defaultWalletDetailsShouldBeFound("orderId.greaterOrEqualThan=" + DEFAULT_ORDER_ID);
-
-        // Get all the walletDetailsList where orderId greater than or equals to UPDATED_ORDER_ID
-        defaultWalletDetailsShouldNotBeFound("orderId.greaterOrEqualThan=" + UPDATED_ORDER_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllWalletDetailsByOrderIdIsLessThanSomething() throws Exception {
-        // Initialize the database
-        walletDetailsRepository.saveAndFlush(walletDetails);
-
-        // Get all the walletDetailsList where orderId less than or equals to DEFAULT_ORDER_ID
-        defaultWalletDetailsShouldNotBeFound("orderId.lessThan=" + DEFAULT_ORDER_ID);
-
-        // Get all the walletDetailsList where orderId less than or equals to UPDATED_ORDER_ID
-        defaultWalletDetailsShouldBeFound("orderId.lessThan=" + UPDATED_ORDER_ID);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllWalletDetailsByCreatedTimeIsEqualToSomething() throws Exception {
         // Initialize the database
         walletDetailsRepository.saveAndFlush(walletDetails);
@@ -711,6 +645,45 @@ public class WalletDetailsResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllWalletDetailsByOrderNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where orderNo equals to DEFAULT_ORDER_NO
+        defaultWalletDetailsShouldBeFound("orderNo.equals=" + DEFAULT_ORDER_NO);
+
+        // Get all the walletDetailsList where orderNo equals to UPDATED_ORDER_NO
+        defaultWalletDetailsShouldNotBeFound("orderNo.equals=" + UPDATED_ORDER_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByOrderNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where orderNo in DEFAULT_ORDER_NO or UPDATED_ORDER_NO
+        defaultWalletDetailsShouldBeFound("orderNo.in=" + DEFAULT_ORDER_NO + "," + UPDATED_ORDER_NO);
+
+        // Get all the walletDetailsList where orderNo equals to UPDATED_ORDER_NO
+        defaultWalletDetailsShouldNotBeFound("orderNo.in=" + UPDATED_ORDER_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletDetailsByOrderNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletDetailsRepository.saveAndFlush(walletDetails);
+
+        // Get all the walletDetailsList where orderNo is not null
+        defaultWalletDetailsShouldBeFound("orderNo.specified=true");
+
+        // Get all the walletDetailsList where orderNo is null
+        defaultWalletDetailsShouldNotBeFound("orderNo.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllWalletDetailsByWalletIsEqualToSomething() throws Exception {
         // Initialize the database
         Wallet wallet = WalletResourceIntTest.createEntity(em);
@@ -738,12 +711,12 @@ public class WalletDetailsResourceIntTest {
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
-            .andExpect(jsonPath("$.[*].orderId").value(hasItem(DEFAULT_ORDER_ID.intValue())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
             .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
             .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
-            .andExpect(jsonPath("$.[*].pay_price").value(hasItem(DEFAULT_PAY_PRICE.intValue())));
+            .andExpect(jsonPath("$.[*].pay_price").value(hasItem(DEFAULT_PAY_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
     /**
@@ -781,12 +754,12 @@ public class WalletDetailsResourceIntTest {
             .userid(UPDATED_USERID)
             .amount(UPDATED_AMOUNT)
             .type(UPDATED_TYPE)
-            .orderId(UPDATED_ORDER_ID)
             .createdTime(UPDATED_CREATED_TIME)
             .balance(UPDATED_BALANCE)
             .ticket(UPDATED_TICKET)
             .integral(UPDATED_INTEGRAL)
-            .pay_price(UPDATED_PAY_PRICE);
+            .pay_price(UPDATED_PAY_PRICE)
+            .orderNo(UPDATED_ORDER_NO);
         WalletDetailsDTO walletDetailsDTO = walletDetailsMapper.toDto(updatedWalletDetails);
 
         restWalletDetailsMockMvc.perform(put("/api/wallet-details")
@@ -801,12 +774,12 @@ public class WalletDetailsResourceIntTest {
         assertThat(testWalletDetails.getUserid()).isEqualTo(UPDATED_USERID);
         assertThat(testWalletDetails.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testWalletDetails.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testWalletDetails.getOrderId()).isEqualTo(UPDATED_ORDER_ID);
         assertThat(testWalletDetails.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
         assertThat(testWalletDetails.getBalance()).isEqualTo(UPDATED_BALANCE);
         assertThat(testWalletDetails.getTicket()).isEqualTo(UPDATED_TICKET);
         assertThat(testWalletDetails.getIntegral()).isEqualTo(UPDATED_INTEGRAL);
         assertThat(testWalletDetails.getPay_price()).isEqualTo(UPDATED_PAY_PRICE);
+        assertThat(testWalletDetails.getOrderNo()).isEqualTo(UPDATED_ORDER_NO);
     }
 
     @Test

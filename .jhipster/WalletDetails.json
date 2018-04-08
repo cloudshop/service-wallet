@@ -25,10 +25,6 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "orderId",
-            "fieldType": "Long"
-        },
-        {
             "fieldName": "createdTime",
             "fieldType": "Instant"
         },
@@ -47,6 +43,10 @@
         {
             "fieldName": "pay_price",
             "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "orderNo",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180326031236",
