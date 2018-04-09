@@ -146,7 +146,7 @@ public class WalletResource {
     }
      */
     
-    @PutMapping("/wallet/balance")
+    @PutMapping("/wallets/balance")
     public ResponseEntity<Wallet> updateBalance(@RequestBody BalanceDTO balanceDTO) throws JSONException {
     	switch (balanceDTO.getType()) {
 		case 1: //充值
