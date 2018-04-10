@@ -98,7 +98,7 @@ liquibase:
 #        key-alias: wallet
 # ===================================================================
 server:
-    port: 8090
+    port: 8119
 
 # ===================================================================
 # JHipster specific properties
@@ -134,7 +134,7 @@ jhipster:
             client-secret: internal
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: wallet@localhost
-        base-url: http://127.0.0.1:8090
+        base-url: http://127.0.0.1:8119
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
