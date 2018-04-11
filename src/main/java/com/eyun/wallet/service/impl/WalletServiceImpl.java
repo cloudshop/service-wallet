@@ -2,6 +2,7 @@ package com.eyun.wallet.service.impl;
 
 import com.eyun.wallet.service.WalletService;
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.domain.WalletDetails;
 import com.eyun.wallet.repository.WalletDetailsRepository;
@@ -114,5 +115,48 @@ public class WalletServiceImpl implements WalletService {
 		wd.setWallet(wallet);
 		walletDetailsRepository.save(wd);
 		return wallet;
+	}
+
+	@Override
+	public String giveIntegral(GiveIntegralDTO giveIntegralDTO) {
+		Long userid = giveIntegralDTO.getUserid();
+		BigDecimal integral = giveIntegralDTO.getIntegral();// 赠送积分额
+		Long target = giveIntegralDTO.getTarget();
+		Wallet fromWallet = walletRepository.findByUserid(userid);
+		Wallet toWallet = walletRepository.findByUserid(target);
+		BigDecimal subtract = fromWallet.getIntegral().subtract(integral);
+		if (subtract.doubleValue() < 0.00) {
+			return "error";
+		}
+		fromWallet.setIntegral(subtract);
+		toWallet.setIntegral(toWallet.getIntegral().add(integral));
+		Instant now = Instant.now();
+		fromWallet.setUpdatedTime(now);
+		toWallet.setUpdatedTime(now);
+		
+		//添加账户明细-from
+		WalletDetails wdf = new WalletDetails();
+		wdf.setUserid(fromWallet.getUserid());
+		wdf.setType(2);//2:赠送积分
+		wdf.setCreatedTime(now);
+		wdf.setIntegral(integral);
+		wdf.setWallet(fromWallet);
+		walletDetailsRepository.save(wdf);
+		
+		//添加账户明细-to
+		WalletDetails wdt = new WalletDetails();
+		wdt.setUserid(toWallet.getUserid());
+		wdt.setType(3);//3:被送积分
+		wdt.setCreatedTime(now);
+		wdt.setIntegral(integral);
+		wdt.setWallet(toWallet);
+		walletDetailsRepository.save(wdt);
+		
+		return "success";
+	}
+	
+	@Override
+	public Wallet findByUserid(Long userid) {
+		return walletRepository.findByUserid(userid);
 	}
 }

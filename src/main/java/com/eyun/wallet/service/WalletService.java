@@ -1,6 +1,7 @@
 package com.eyun.wallet.service;
 
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.dto.WalletDTO;
 import org.springframework.data.domain.Page;
@@ -43,4 +44,8 @@ public interface WalletService {
     void delete(Long id);
 
     Wallet rechargeBalance(BalanceDTO balanceDTO);
+
+	String giveIntegral(GiveIntegralDTO giveIntegralDTO);
+
+	Wallet findByUserid(Long userid);
 }

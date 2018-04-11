@@ -8,12 +8,13 @@ import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.PayService;
 import com.eyun.wallet.service.WalletQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiOperation;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -27,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -146,6 +146,16 @@ public class WalletResource {
     }
      */
     
+    /**
+     * 支付通知回调
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月09日
+     * @version 1.0
+     * @param balanceDTO
+     * @return
+     * @throws JSONException
+     */
     @PutMapping("/wallets/balance")
     public ResponseEntity<Wallet> updateBalance(@RequestBody BalanceDTO balanceDTO) throws JSONException {
     	switch (balanceDTO.getType()) {
@@ -165,6 +175,37 @@ public class WalletResource {
 		default:
 			return new ResponseEntity<>(HeaderUtil.createAlert("Type field is mistaken", "type:"+balanceDTO.getType()), HttpStatus.BAD_REQUEST);
 		}
+    }
+    
+    /**
+     * 赠送积分
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月11日
+     * @version 1.0
+     * @param giveIntegralDTO
+     * @return
+     */
+    @ApiOperation(value="赠送积分")
+    @PutMapping("/wallets/giveIntegral")
+    public String giveIntegral (@RequestBody GiveIntegralDTO giveIntegralDTO) {
+    	String result = walletService.giveIntegral(giveIntegralDTO);
+    	return result;
+    }
+    
+    /**
+     * 查看钱包接口
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月11日
+     * @version 1.0
+     * @param userid
+     */
+    @ApiOperation(value="查看钱包接口")
+    @GetMapping("/wallets/user/{userid}") 
+    public ResponseEntity<Wallet> findWalletsByUserid(@PathVariable("userid") Long userid){
+    	Wallet wallet = walletService.findByUserid(userid);
+    	return new ResponseEntity<Wallet>(wallet, HeaderUtil.createAlert("wallets", "userid："+userid), HttpStatus.OK);
     }
     
 }
