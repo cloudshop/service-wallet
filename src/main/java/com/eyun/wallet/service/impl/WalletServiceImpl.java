@@ -157,6 +157,16 @@ public class WalletServiceImpl implements WalletService {
 	
 	@Override
 	public Wallet findByUserid(Long userid) {
-		return walletRepository.findByUserid(userid);
+		Wallet wallet = walletRepository.findByUserid(userid);
+		if (wallet == null) {
+			Wallet newWallet = new Wallet();
+			newWallet.setUserid(userid);
+			newWallet.setCreateTime(Instant.now());
+			newWallet.setUpdatedTime(Instant.now());
+			Wallet save = walletRepository.save(newWallet);
+			return save;
+		} else {
+			return wallet;
+		}
 	}
 }
