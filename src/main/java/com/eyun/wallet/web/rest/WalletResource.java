@@ -6,11 +6,13 @@ import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WalletDTO;
+import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.PayService;
+import com.eyun.wallet.service.UaaService;
 import com.eyun.wallet.service.WalletQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -50,6 +53,9 @@ public class WalletResource {
     private final WalletQueryService walletQueryService;
     
     private final PayService payService;
+    
+    @Autowired
+    private UaaService uaaService;
 
     public WalletResource(WalletService walletService, WalletQueryService walletQueryService, PayService payService) {
     	this.payService = payService;
@@ -189,6 +195,8 @@ public class WalletResource {
     @ApiOperation(value="赠送积分")
     @PutMapping("/wallets/giveIntegral")
     public String giveIntegral (@RequestBody GiveIntegralDTO giveIntegralDTO) {
+    	UserDTO account = uaaService.getAccount();
+    	giveIntegralDTO.setUserid(account.getId());
     	String result = walletService.giveIntegral(giveIntegralDTO);
     	return result;
     }
@@ -202,10 +210,11 @@ public class WalletResource {
      * @param userid
      */
     @ApiOperation(value="查看钱包接口")
-    @GetMapping("/wallets/user/{userid}") 
-    public ResponseEntity<Wallet> findWalletsByUserid(@PathVariable("userid") Long userid){
-    	Wallet wallet = walletService.findByUserid(userid);
-    	return new ResponseEntity<Wallet>(wallet, HeaderUtil.createAlert("wallets", "userid："+userid), HttpStatus.OK);
+    @GetMapping("/wallets/user") 
+    public ResponseEntity<Wallet> findWalletsByUserid(){
+    	UserDTO user = uaaService.getAccount();
+    	Wallet wallet = walletService.findByUserid(user.getId());
+    	return new ResponseEntity<Wallet>(wallet, HeaderUtil.createAlert("wallets", "userid："+user.getId()), HttpStatus.OK);
     }
     
 }
