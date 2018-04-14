@@ -100,6 +100,9 @@ public class WalletQueryService extends QueryService<Wallet> {
             if (criteria.getIntegral() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getIntegral(), Wallet_.integral));
             }
+            if (criteria.getPassword() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPassword(), Wallet_.password));
+            }
             if (criteria.getWalletDetailsId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getWalletDetailsId(), Wallet_.walletDetails, WalletDetails_.id));
             }

@@ -70,6 +70,9 @@ public class WalletResourceIntTest {
     private static final BigDecimal DEFAULT_INTEGRAL = new BigDecimal(1);
     private static final BigDecimal UPDATED_INTEGRAL = new BigDecimal(2);
 
+    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
+    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
+
     @Autowired
     private WalletRepository walletRepository;
 
@@ -123,7 +126,8 @@ public class WalletResourceIntTest {
             .version(DEFAULT_VERSION)
             .balance(DEFAULT_BALANCE)
             .ticket(DEFAULT_TICKET)
-            .integral(DEFAULT_INTEGRAL);
+            .integral(DEFAULT_INTEGRAL)
+            .password(DEFAULT_PASSWORD);
         return wallet;
     }
 
@@ -155,6 +159,7 @@ public class WalletResourceIntTest {
         assertThat(testWallet.getBalance()).isEqualTo(DEFAULT_BALANCE);
         assertThat(testWallet.getTicket()).isEqualTo(DEFAULT_TICKET);
         assertThat(testWallet.getIntegral()).isEqualTo(DEFAULT_INTEGRAL);
+        assertThat(testWallet.getPassword()).isEqualTo(DEFAULT_PASSWORD);
     }
 
     @Test
@@ -213,7 +218,8 @@ public class WalletResourceIntTest {
             .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION)))
             .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
-            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())));
+            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())));
     }
 
     @Test
@@ -233,7 +239,8 @@ public class WalletResourceIntTest {
             .andExpect(jsonPath("$.version").value(DEFAULT_VERSION))
             .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.intValue()))
             .andExpect(jsonPath("$.ticket").value(DEFAULT_TICKET.intValue()))
-            .andExpect(jsonPath("$.integral").value(DEFAULT_INTEGRAL.intValue()));
+            .andExpect(jsonPath("$.integral").value(DEFAULT_INTEGRAL.intValue()))
+            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()));
     }
 
     @Test
@@ -565,6 +572,45 @@ public class WalletResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllWalletsByPasswordIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where password equals to DEFAULT_PASSWORD
+        defaultWalletShouldBeFound("password.equals=" + DEFAULT_PASSWORD);
+
+        // Get all the walletList where password equals to UPDATED_PASSWORD
+        defaultWalletShouldNotBeFound("password.equals=" + UPDATED_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletsByPasswordIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where password in DEFAULT_PASSWORD or UPDATED_PASSWORD
+        defaultWalletShouldBeFound("password.in=" + DEFAULT_PASSWORD + "," + UPDATED_PASSWORD);
+
+        // Get all the walletList where password equals to UPDATED_PASSWORD
+        defaultWalletShouldNotBeFound("password.in=" + UPDATED_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWalletsByPasswordIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where password is not null
+        defaultWalletShouldBeFound("password.specified=true");
+
+        // Get all the walletList where password is null
+        defaultWalletShouldNotBeFound("password.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllWalletsByWalletDetailsIsEqualToSomething() throws Exception {
         // Initialize the database
         WalletDetails walletDetails = WalletDetailsResourceIntTest.createEntity(em);
@@ -595,7 +641,8 @@ public class WalletResourceIntTest {
             .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION)))
             .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
-            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())));
+            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())));
     }
 
     /**
@@ -636,7 +683,8 @@ public class WalletResourceIntTest {
             .version(UPDATED_VERSION)
             .balance(UPDATED_BALANCE)
             .ticket(UPDATED_TICKET)
-            .integral(UPDATED_INTEGRAL);
+            .integral(UPDATED_INTEGRAL)
+            .password(UPDATED_PASSWORD);
         WalletDTO walletDTO = walletMapper.toDto(updatedWallet);
 
         restWalletMockMvc.perform(put("/api/wallets")
@@ -655,6 +703,7 @@ public class WalletResourceIntTest {
         assertThat(testWallet.getBalance()).isEqualTo(UPDATED_BALANCE);
         assertThat(testWallet.getTicket()).isEqualTo(UPDATED_TICKET);
         assertThat(testWallet.getIntegral()).isEqualTo(UPDATED_INTEGRAL);
+        assertThat(testWallet.getPassword()).isEqualTo(UPDATED_PASSWORD);
     }
 
     @Test

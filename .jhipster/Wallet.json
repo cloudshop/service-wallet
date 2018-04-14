@@ -39,6 +39,10 @@
         {
             "fieldName": "integral",
             "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "password",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180326022747",

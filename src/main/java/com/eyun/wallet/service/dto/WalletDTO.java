@@ -31,6 +31,8 @@ public class WalletDTO implements Serializable {
 
     private BigDecimal integral;
 
+    private String password;
+
     public Long getId() {
         return id;
     }
@@ -95,6 +97,14 @@ public class WalletDTO implements Serializable {
         this.integral = integral;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -127,6 +137,7 @@ public class WalletDTO implements Serializable {
             ", balance=" + getBalance() +
             ", ticket=" + getTicket() +
             ", integral=" + getIntegral() +
+            ", password='" + getPassword() + "'" +
             "}";
     }
 }

@@ -42,6 +42,8 @@ public class WalletCriteria implements Serializable {
 
     private BigDecimalFilter integral;
 
+    private StringFilter password;
+
     private LongFilter walletDetailsId;
 
     public WalletCriteria() {
@@ -111,6 +113,14 @@ public class WalletCriteria implements Serializable {
         this.integral = integral;
     }
 
+    public StringFilter getPassword() {
+        return password;
+    }
+
+    public void setPassword(StringFilter password) {
+        this.password = password;
+    }
+
     public LongFilter getWalletDetailsId() {
         return walletDetailsId;
     }
@@ -130,6 +140,7 @@ public class WalletCriteria implements Serializable {
                 (balance != null ? "balance=" + balance + ", " : "") +
                 (ticket != null ? "ticket=" + ticket + ", " : "") +
                 (integral != null ? "integral=" + integral + ", " : "") +
+                (password != null ? "password=" + password + ", " : "") +
                 (walletDetailsId != null ? "walletDetailsId=" + walletDetailsId + ", " : "") +
             "}";
     }

@@ -27,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -198,6 +199,12 @@ public class WalletResource {
     public ResponseEntity giveIntegral (@RequestBody GiveIntegralDTO giveIntegralDTO) {
     	UserDTO account = uaaService.getAccount();
     	UserDTO target = uaaService.getUserByLogin(giveIntegralDTO.getTarget());
+    	Wallet wallet = walletService.findByUserid(account.getId());
+    	if (wallet.getPassword() == null) {
+    		return new ResponseEntity<>(HeaderUtil.createAlert("请设置钱包密码", "Password"), HttpStatus.BAD_REQUEST);
+    	} else if (!wallet.getPassword().equals(giveIntegralDTO.getPassword())) {
+    		return new ResponseEntity<>(HeaderUtil.createAlert("钱包密码输入错误", "Password:"+giveIntegralDTO.getPassword()), HttpStatus.BAD_REQUEST);
+    	}
     	if (target == null) {
     		return new ResponseEntity<>(HeaderUtil.createAlert("赠送目标不存在", "target:"+giveIntegralDTO.getTarget()), HttpStatus.BAD_REQUEST);
     	}
@@ -209,7 +216,7 @@ public class WalletResource {
 		Long fromUserId = account.getId();
 		String result = walletService.giveIntegral(fromUserId , toUserId, integral);
 		if ("integral-error".equals(result)) {
-			return new ResponseEntity<>(HeaderUtil.createAlert("积分不足", "integral:"+giveIntegralDTO.getIntegral()), HttpStatus.OK);
+			return new ResponseEntity<>(HeaderUtil.createAlert("积分不足", "integral:"+giveIntegralDTO.getIntegral()), HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -12,6 +12,8 @@ public class GiveIntegralDTO {
 	private BigDecimal integral;
 	@ApiModelProperty("赠送目标手机号")
 	private String target;
+	@ApiModelProperty("支付密码")
+	private String password;
 
 	public BigDecimal getIntegral() {
 		return integral;
@@ -27,6 +29,14 @@ public class GiveIntegralDTO {
 
 	public void setTarget(String target) {
 		this.target = target;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

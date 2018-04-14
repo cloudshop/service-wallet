@@ -52,6 +52,9 @@ public class Wallet implements Serializable {
     @Column(name = "integral", precision=10, scale=2)
     private BigDecimal integral;
 
+    @Column(name = "jhi_password")
+    private String password;
+
     @OneToMany(mappedBy = "wallet")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -157,6 +160,19 @@ public class Wallet implements Serializable {
         this.integral = integral;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public Wallet password(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Set<WalletDetails> getWalletDetails() {
         return walletDetails;
     }
@@ -214,6 +230,7 @@ public class Wallet implements Serializable {
             ", balance=" + getBalance() +
             ", ticket=" + getTicket() +
             ", integral=" + getIntegral() +
+            ", password='" + getPassword() + "'" +
             "}";
     }
 }

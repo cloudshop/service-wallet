@@ -156,6 +156,7 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Wallet findByUserid(Long userid) {
 		Wallet wallet = walletRepository.findByUserid(userid);
 		if (wallet == null) {
