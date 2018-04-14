@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -194,11 +195,23 @@ public class WalletResource {
      */
     @ApiOperation(value="赠送积分")
     @PutMapping("/wallets/giveIntegral")
-    public String giveIntegral (@RequestBody GiveIntegralDTO giveIntegralDTO) {
+    public ResponseEntity giveIntegral (@RequestBody GiveIntegralDTO giveIntegralDTO) {
     	UserDTO account = uaaService.getAccount();
-    	giveIntegralDTO.setUserid(account.getId());
-    	String result = walletService.giveIntegral(giveIntegralDTO);
-    	return result;
+    	UserDTO target = uaaService.getUserByLogin(giveIntegralDTO.getTarget());
+    	if (target == null) {
+    		return new ResponseEntity<>(HeaderUtil.createAlert("赠送目标不存在", "target:"+giveIntegralDTO.getTarget()), HttpStatus.BAD_REQUEST);
+    	}
+    	if (giveIntegralDTO.getIntegral().doubleValue() < 0.00) {
+    		return new ResponseEntity<>(HeaderUtil.createAlert("赠送积分输入错误", "integral:"+giveIntegralDTO.getIntegral()), HttpStatus.BAD_REQUEST);
+    	}
+    	BigDecimal integral = giveIntegralDTO.getIntegral();
+		Long toUserId = target.getId();
+		Long fromUserId = account.getId();
+		String result = walletService.giveIntegral(fromUserId , toUserId, integral);
+		if ("integral-error".equals(result)) {
+			return new ResponseEntity<>(HeaderUtil.createAlert("积分不足", "integral:"+giveIntegralDTO.getIntegral()), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
     }
     
     /**

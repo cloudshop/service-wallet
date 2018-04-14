@@ -4,6 +4,9 @@ import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.dto.WalletDTO;
+
+import java.math.BigDecimal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -45,7 +48,8 @@ public interface WalletService {
 
     Wallet rechargeBalance(BalanceDTO balanceDTO);
 
-	String giveIntegral(GiveIntegralDTO giveIntegralDTO);
-
 	Wallet findByUserid(Long userid);
+
+	String giveIntegral(Long fromUserId, Long toUserId, BigDecimal integral);
+	
 }
