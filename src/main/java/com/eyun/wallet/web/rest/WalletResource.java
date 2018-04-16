@@ -263,7 +263,7 @@ public class WalletResource {
      */
     @SuppressWarnings("all")
     @ApiOperation("余额支付接口")
-    @PutMapping("/wallets/balance/pay")
+    @PostMapping("/wallets/balance/pay")
     public ResponseEntity balancePay(@RequestBody BalancePayDTO balancePayDTO) {
     	UserDTO user = uaaService.getAccount();
     	Wallet wallet = walletService.findByUserid(user.getId());
@@ -282,8 +282,8 @@ public class WalletResource {
     
     
     @SuppressWarnings("all")
-    @ApiOperation("余额支付接口")
-    @PutMapping
+    @ApiOperation("修改钱包密码")
+    @PostMapping
     public ResponseEntity updateWalletPassword(@RequestBody PasswordDTO passwordDTO) {
     	String verifyCode = VerifyService.getVerifyCode();
     	if (StringUtils.isNotBlank(verifyCode) && verifyCode.equals(passwordDTO.getCode())) {
