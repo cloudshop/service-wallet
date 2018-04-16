@@ -10,6 +10,8 @@ import com.eyun.wallet.repository.WalletRepository;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
 
+import io.undertow.util.BadRequestException;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
@@ -156,7 +158,6 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Wallet findByUserid(Long userid) {
 		Wallet wallet = walletRepository.findByUserid(userid);
 		if (wallet == null) {
@@ -172,6 +173,26 @@ public class WalletServiceImpl implements WalletService {
 			return save;
 		} else {
 			return wallet;
+		}
+	}
+
+	@Override
+	public void balancePay(Long id, BigDecimal price, String orderNo) {
+		Wallet wallet = walletRepository.findOne(id);
+		BigDecimal balance = wallet.getBalance();
+		BigDecimal subtract = balance.subtract(price);
+		if (subtract.doubleValue() < 0.00) {
+			return;
+		}
+		wallet.balance(subtract).updatedTime(Instant.now());
+		walletRepository.save(wallet);
+		//TODO 1、账户记录  2、支付订单
+	}
+
+	@Override
+	public void update(Wallet wallet) {
+		if (wallet.getId() != null) {
+			walletRepository.save(wallet);
 		}
 	}
 }

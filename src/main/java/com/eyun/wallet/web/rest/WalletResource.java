@@ -6,23 +6,33 @@ import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WalletDTO;
+import com.eyun.wallet.service.dto.BalancePayDTO;
+import com.eyun.wallet.service.dto.PasswordDTO;
+import com.eyun.wallet.service.dto.ProOrderCriteria;
+import com.eyun.wallet.service.dto.ProOrderDTO;
 import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.service.OrderService;
 import com.eyun.wallet.service.PayService;
 import com.eyun.wallet.service.UaaService;
+import com.eyun.wallet.service.VerifyService;
 import com.eyun.wallet.service.WalletQueryService;
+
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,6 +68,12 @@ public class WalletResource {
     
     @Autowired
     private UaaService uaaService;
+    
+    @Autowired
+    private OrderService orderService;
+    
+    @Autowired
+    private VerifyService VerifyService;
 
     public WalletResource(WalletService walletService, WalletQueryService walletQueryService, PayService payService) {
     	this.payService = payService;
@@ -235,6 +251,51 @@ public class WalletResource {
     	UserDTO user = uaaService.getAccount();
     	Wallet wallet = walletService.findByUserid(user.getId());
     	return new ResponseEntity<Wallet>(wallet, HeaderUtil.createAlert("wallets", "userid："+user.getId()), HttpStatus.OK);
+    }
+    
+    /**
+     * 余额支付接口
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月16日
+     * @version 1.0
+     * @return ResponseEntity
+     */
+    @SuppressWarnings("all")
+    @ApiOperation("余额支付接口")
+    @PutMapping("/wallets/balance/pay")
+    public ResponseEntity balancePay(@RequestBody BalancePayDTO balancePayDTO) {
+    	UserDTO user = uaaService.getAccount();
+    	Wallet wallet = walletService.findByUserid(user.getId());
+    	if (wallet.getPassword() != null) {
+    		if (!wallet.getPassword().equals(balancePayDTO.getPassword())) {
+    			return new ResponseEntity(null, HeaderUtil.createAlert("支付密码输入错误","password:"+balancePayDTO.getPassword()), HttpStatus.BAD_REQUEST);
+    		}
+    	} else {
+    		return new ResponseEntity("", HeaderUtil.createAlert("请设置支付密码","password:null"), HttpStatus.BAD_REQUEST);
+    	}
+		ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
+    	walletService.balancePay(wallet.getId(),proOrderDTO.getPayment(),balancePayDTO.getOrderNo());
+    	//TODO  调用订单服务 通知支付成功
+    	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
+    }
+    
+    
+    @SuppressWarnings("all")
+    @ApiOperation("余额支付接口")
+    @PutMapping
+    public ResponseEntity updateWalletPassword(@RequestBody PasswordDTO passwordDTO) {
+    	String verifyCode = VerifyService.getVerifyCode();
+    	if (StringUtils.isNotBlank(verifyCode) && verifyCode.equals(passwordDTO.getCode())) {
+    		UserDTO user = uaaService.getAccount();
+    		Wallet wallet = walletService.findByUserid(user.getId());
+    		wallet.setPassword(passwordDTO.getPassword());
+    		walletService.update(wallet);
+    		return new ResponseEntity(null, HeaderUtil.createAlert("修改成功","password:"+passwordDTO.getPassword()), HttpStatus.OK);
+    	} else {
+    		return new ResponseEntity(null, HeaderUtil.createAlert("修改失败","password:"+passwordDTO.getPassword()), HttpStatus.BAD_REQUEST);
+    	}
+    	
     }
     
 }

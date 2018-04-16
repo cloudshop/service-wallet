@@ -3,6 +3,9 @@ package com.eyun.wallet.service.dto;
 
 import java.time.Instant;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -31,7 +34,10 @@ public class WalletDTO implements Serializable {
 
     private BigDecimal integral;
 
+    @JsonIgnore
     private String password;
+    
+    private Boolean passwordIsNull = true;
 
     public Long getId() {
         return id;
@@ -103,8 +109,9 @@ public class WalletDTO implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+        this.passwordIsNull = false;
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {

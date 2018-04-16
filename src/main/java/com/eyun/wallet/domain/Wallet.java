@@ -53,6 +53,7 @@ public class Wallet implements Serializable {
     private BigDecimal integral;
 
     @Column(name = "jhi_password")
+    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "wallet")
