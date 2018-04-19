@@ -15,6 +15,8 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface PayOrderRepository extends JpaRepository<PayOrder, Long>, JpaSpecificationExecutor<PayOrder> {
 
-	PayOrderDTO findPayOrderByPayNo(String payNo);
+	PayOrderDTO findByPayNo(String payNo);
+
+	PayOrder findByOrderNo(String orderNo);
 
 }
