@@ -1,0 +1,53 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "wallet",
+            "otherEntityName": "wallet",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "userid",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "Long"
+        },
+		{
+            "fieldName": "addAmount",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "Integer"
+        },
+		{
+            "fieldName": "typeString",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdTime",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "orderNo",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180326031236",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "balance_details",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
+    "microserviceName": "wallet",
+    "searchEngine": false
+}

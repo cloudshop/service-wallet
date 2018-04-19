@@ -53,13 +53,22 @@ public class Wallet implements Serializable {
     private BigDecimal integral;
 
     @Column(name = "jhi_password")
-    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "wallet")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<WalletDetails> walletDetails = new HashSet<>();
+    private Set<BalanceDetails> balanceDetails = new HashSet<>();
+
+    @OneToMany(mappedBy = "wallet")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<IntegralDetails> integralDetails = new HashSet<>();
+
+    @OneToMany(mappedBy = "wallet")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<TicketDetails> ticketDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -174,29 +183,79 @@ public class Wallet implements Serializable {
         this.password = password;
     }
 
-    public Set<WalletDetails> getWalletDetails() {
-        return walletDetails;
+    public Set<BalanceDetails> getBalanceDetails() {
+        return balanceDetails;
     }
 
-    public Wallet walletDetails(Set<WalletDetails> walletDetails) {
-        this.walletDetails = walletDetails;
+    public Wallet balanceDetails(Set<BalanceDetails> balanceDetails) {
+        this.balanceDetails = balanceDetails;
         return this;
     }
 
-    public Wallet addWalletDetails(WalletDetails walletDetails) {
-        this.walletDetails.add(walletDetails);
-        walletDetails.setWallet(this);
+    public Wallet addBalanceDetails(BalanceDetails balanceDetails) {
+        this.balanceDetails.add(balanceDetails);
+        balanceDetails.setWallet(this);
         return this;
     }
 
-    public Wallet removeWalletDetails(WalletDetails walletDetails) {
-        this.walletDetails.remove(walletDetails);
-        walletDetails.setWallet(null);
+    public Wallet removeBalanceDetails(BalanceDetails balanceDetails) {
+        this.balanceDetails.remove(balanceDetails);
+        balanceDetails.setWallet(null);
         return this;
     }
 
-    public void setWalletDetails(Set<WalletDetails> walletDetails) {
-        this.walletDetails = walletDetails;
+    public void setBalanceDetails(Set<BalanceDetails> balanceDetails) {
+        this.balanceDetails = balanceDetails;
+    }
+
+    public Set<IntegralDetails> getIntegralDetails() {
+        return integralDetails;
+    }
+
+    public Wallet integralDetails(Set<IntegralDetails> integralDetails) {
+        this.integralDetails = integralDetails;
+        return this;
+    }
+
+    public Wallet addIntegralDetails(IntegralDetails integralDetails) {
+        this.integralDetails.add(integralDetails);
+        integralDetails.setWallet(this);
+        return this;
+    }
+
+    public Wallet removeIntegralDetails(IntegralDetails integralDetails) {
+        this.integralDetails.remove(integralDetails);
+        integralDetails.setWallet(null);
+        return this;
+    }
+
+    public void setIntegralDetails(Set<IntegralDetails> integralDetails) {
+        this.integralDetails = integralDetails;
+    }
+
+    public Set<TicketDetails> getTicketDetails() {
+        return ticketDetails;
+    }
+
+    public Wallet ticketDetails(Set<TicketDetails> ticketDetails) {
+        this.ticketDetails = ticketDetails;
+        return this;
+    }
+
+    public Wallet addTicketDetails(TicketDetails ticketDetails) {
+        this.ticketDetails.add(ticketDetails);
+        ticketDetails.setWallet(this);
+        return this;
+    }
+
+    public Wallet removeTicketDetails(TicketDetails ticketDetails) {
+        this.ticketDetails.remove(ticketDetails);
+        ticketDetails.setWallet(null);
+        return this;
+    }
+
+    public void setTicketDetails(Set<TicketDetails> ticketDetails) {
+        this.ticketDetails = ticketDetails;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

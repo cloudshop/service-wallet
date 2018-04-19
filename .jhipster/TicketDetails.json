@@ -11,37 +11,30 @@
     "fields": [
         {
             "fieldName": "userid",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "Long"
         },
         {
             "fieldName": "amount",
             "fieldType": "Long"
         },
+		{
+            "fieldName": "addAmount",
+            "fieldType": "Boolean"
+        },
         {
             "fieldName": "type",
             "fieldType": "Integer"
+        },
+		{
+            "fieldName": "typeString",
+            "fieldType": "String"
         },
         {
             "fieldName": "createdTime",
             "fieldType": "Instant"
         },
         {
-            "fieldName": "balance",
-            "fieldType": "BigDecimal"
-        },
-        {
             "fieldName": "ticket",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "integral",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "pay_price",
             "fieldType": "BigDecimal"
         },
         {
@@ -52,7 +45,7 @@
     "changelogDate": "20180326031236",
     "dto": "mapstruct",
     "service": "serviceImpl",
-    "entityTableName": "wallet_details",
+    "entityTableName": "ticket_details",
     "jpaMetamodelFiltering": true,
     "pagination": "pagination",
     "microserviceName": "wallet",

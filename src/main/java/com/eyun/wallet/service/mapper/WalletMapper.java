@@ -12,7 +12,9 @@ import org.mapstruct.*;
 public interface WalletMapper extends EntityMapper<WalletDTO, Wallet> {
 
 
-    @Mapping(target = "walletDetails", ignore = true)
+    @Mapping(target = "balanceDetails", ignore = true)
+    @Mapping(target = "integralDetails", ignore = true)
+    @Mapping(target = "ticketDetails", ignore = true)
     Wallet toEntity(WalletDTO walletDTO);
 
     default Wallet fromId(Long id) {

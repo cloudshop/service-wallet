@@ -1,40 +1,40 @@
 package com.eyun.wallet.service;
 
-import com.eyun.wallet.service.dto.WalletDetailsDTO;
+import com.eyun.wallet.service.dto.TicketDetailsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing WalletDetails.
+ * Service Interface for managing TicketDetails.
  */
-public interface WalletDetailsService {
+public interface TicketDetailsService {
 
     /**
-     * Save a walletDetails.
+     * Save a ticketDetails.
      *
-     * @param walletDetailsDTO the entity to save
+     * @param ticketDetailsDTO the entity to save
      * @return the persisted entity
      */
-    WalletDetailsDTO save(WalletDetailsDTO walletDetailsDTO);
+    TicketDetailsDTO save(TicketDetailsDTO ticketDetailsDTO);
 
     /**
-     * Get all the walletDetails.
+     * Get all the ticketDetails.
      *
      * @param pageable the pagination information
      * @return the list of entities
      */
-    Page<WalletDetailsDTO> findAll(Pageable pageable);
+    Page<TicketDetailsDTO> findAll(Pageable pageable);
 
     /**
-     * Get the "id" walletDetails.
+     * Get the "id" ticketDetails.
      *
      * @param id the id of the entity
      * @return the entity
      */
-    WalletDetailsDTO findOne(Long id);
+    TicketDetailsDTO findOne(Long id);
 
     /**
-     * Delete the "id" walletDetails.
+     * Delete the "id" ticketDetails.
      *
      * @param id the id of the entity
      */

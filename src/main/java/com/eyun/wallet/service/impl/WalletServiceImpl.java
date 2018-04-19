@@ -2,19 +2,14 @@ package com.eyun.wallet.service.impl;
 
 import com.eyun.wallet.service.WalletService;
 import com.eyun.wallet.domain.BalanceDTO;
-import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.Wallet;
-import com.eyun.wallet.domain.WalletDetails;
-import com.eyun.wallet.repository.WalletDetailsRepository;
 import com.eyun.wallet.repository.WalletRepository;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
 
-import io.undertow.util.BadRequestException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +27,11 @@ public class WalletServiceImpl implements WalletService {
 
 	private final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
 
-	private final WalletDetailsRepository walletDetailsRepository;
-
 	private final WalletRepository walletRepository;
 
 	private final WalletMapper walletMapper;
 
-	public WalletServiceImpl(WalletRepository walletRepository, WalletMapper walletMapper,
-			WalletDetailsRepository walletDetailsRepository) {
-		this.walletDetailsRepository = walletDetailsRepository;
+	public WalletServiceImpl(WalletRepository walletRepository, WalletMapper walletMapper) {
 		this.walletRepository = walletRepository;
 		this.walletMapper = walletMapper;
 	}
@@ -110,15 +101,15 @@ public class WalletServiceImpl implements WalletService {
 		wallet.setUpdatedTime(Instant.now());
 		wallet.setVersion(wallet.getVersion() + 1);
 		walletRepository.save(wallet);
-		// 添加账户明细
-		WalletDetails wd = new WalletDetails();
-		wd.setUserid(wallet.getUserid());
-		wd.setType(1);// 1:充值
-		wd.setCreatedTime(Instant.now());
-		wd.setBalance(balanceDTO.getMoney());
-		wd.setOrderNo(balanceDTO.getOrderNo());
-		wd.setWallet(wallet);
-		walletDetailsRepository.save(wd);
+		// 添加账户明细 TODO
+//		WalletDetails wd = new WalletDetails();
+//		wd.setUserid(wallet.getUserid());
+//		wd.setType(1);// 1:充值
+//		wd.setCreatedTime(Instant.now());
+//		wd.setBalance(balanceDTO.getMoney());
+//		wd.setOrderNo(balanceDTO.getOrderNo());
+//		wd.setWallet(wallet);
+//		walletDetailsRepository.save(wd);
 		return wallet;
 	}
 
@@ -136,23 +127,23 @@ public class WalletServiceImpl implements WalletService {
 		fromWallet.setUpdatedTime(now);
 		toWallet.setUpdatedTime(now);
 
-		// 添加账户明细-from
-		WalletDetails wdf = new WalletDetails();
-		wdf.setUserid(fromWallet.getUserid());
-		wdf.setType(2);// 2:赠送积分
-		wdf.setCreatedTime(now);
-		wdf.setIntegral(integral);
-		wdf.setWallet(fromWallet);
-		walletDetailsRepository.save(wdf);
+		// 添加账户明细-from TODO
+//		WalletDetails wdf = new WalletDetails();
+//		wdf.setUserid(fromWallet.getUserid());
+//		wdf.setType(2);// 2:赠送积分
+//		wdf.setCreatedTime(now);
+//		wdf.setIntegral(integral);
+//		wdf.setWallet(fromWallet);
+//		walletDetailsRepository.save(wdf);
 
-		// 添加账户明细-to
-		WalletDetails wdt = new WalletDetails();
-		wdt.setUserid(toWallet.getUserid());
-		wdt.setType(3);// 3:被送积分
-		wdt.setCreatedTime(now);
-		wdt.setIntegral(integral);
-		wdt.setWallet(toWallet);
-		walletDetailsRepository.save(wdt);
+		// 添加账户明细-to TODO
+//		WalletDetails wdt = new WalletDetails();
+//		wdt.setUserid(toWallet.getUserid());
+//		wdt.setType(3);// 3:被送积分
+//		wdt.setCreatedTime(now);
+//		wdt.setIntegral(integral);
+//		wdt.setWallet(toWallet);
+//		walletDetailsRepository.save(wdt);
 
 		return "success";
 	}

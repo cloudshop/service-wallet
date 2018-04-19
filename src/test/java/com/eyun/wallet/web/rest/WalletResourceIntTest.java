@@ -5,7 +5,9 @@ import com.eyun.wallet.WalletApp;
 import com.eyun.wallet.config.SecurityBeanOverrideConfiguration;
 
 import com.eyun.wallet.domain.Wallet;
-import com.eyun.wallet.domain.WalletDetails;
+import com.eyun.wallet.domain.BalanceDetails;
+import com.eyun.wallet.domain.IntegralDetails;
+import com.eyun.wallet.domain.TicketDetails;
 import com.eyun.wallet.repository.WalletRepository;
 import com.eyun.wallet.service.WalletService;
 import com.eyun.wallet.service.dto.WalletDTO;
@@ -104,7 +106,7 @@ public class WalletResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WalletResource walletResource = new WalletResource(walletService, walletQueryService, null);
+        final WalletResource walletResource = new WalletResource(walletService, walletQueryService);
         this.restWalletMockMvc = MockMvcBuilders.standaloneSetup(walletResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -611,20 +613,58 @@ public class WalletResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllWalletsByWalletDetailsIsEqualToSomething() throws Exception {
+    public void getAllWalletsByBalanceDetailsIsEqualToSomething() throws Exception {
         // Initialize the database
-        WalletDetails walletDetails = WalletDetailsResourceIntTest.createEntity(em);
-        em.persist(walletDetails);
+        BalanceDetails balanceDetails = BalanceDetailsResourceIntTest.createEntity(em);
+        em.persist(balanceDetails);
         em.flush();
-        wallet.addWalletDetails(walletDetails);
+        wallet.addBalanceDetails(balanceDetails);
         walletRepository.saveAndFlush(wallet);
-        Long walletDetailsId = walletDetails.getId();
+        Long balanceDetailsId = balanceDetails.getId();
 
-        // Get all the walletList where walletDetails equals to walletDetailsId
-        defaultWalletShouldBeFound("walletDetailsId.equals=" + walletDetailsId);
+        // Get all the walletList where balanceDetails equals to balanceDetailsId
+        defaultWalletShouldBeFound("balanceDetailsId.equals=" + balanceDetailsId);
 
-        // Get all the walletList where walletDetails equals to walletDetailsId + 1
-        defaultWalletShouldNotBeFound("walletDetailsId.equals=" + (walletDetailsId + 1));
+        // Get all the walletList where balanceDetails equals to balanceDetailsId + 1
+        defaultWalletShouldNotBeFound("balanceDetailsId.equals=" + (balanceDetailsId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllWalletsByIntegralDetailsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        IntegralDetails integralDetails = IntegralDetailsResourceIntTest.createEntity(em);
+        em.persist(integralDetails);
+        em.flush();
+        wallet.addIntegralDetails(integralDetails);
+        walletRepository.saveAndFlush(wallet);
+        Long integralDetailsId = integralDetails.getId();
+
+        // Get all the walletList where integralDetails equals to integralDetailsId
+        defaultWalletShouldBeFound("integralDetailsId.equals=" + integralDetailsId);
+
+        // Get all the walletList where integralDetails equals to integralDetailsId + 1
+        defaultWalletShouldNotBeFound("integralDetailsId.equals=" + (integralDetailsId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllWalletsByTicketDetailsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        TicketDetails ticketDetails = TicketDetailsResourceIntTest.createEntity(em);
+        em.persist(ticketDetails);
+        em.flush();
+        wallet.addTicketDetails(ticketDetails);
+        walletRepository.saveAndFlush(wallet);
+        Long ticketDetailsId = ticketDetails.getId();
+
+        // Get all the walletList where ticketDetails equals to ticketDetailsId
+        defaultWalletShouldBeFound("ticketDetailsId.equals=" + ticketDetailsId);
+
+        // Get all the walletList where ticketDetails equals to ticketDetailsId + 1
+        defaultWalletShouldNotBeFound("ticketDetailsId.equals=" + (ticketDetailsId + 1));
     }
 
     /**

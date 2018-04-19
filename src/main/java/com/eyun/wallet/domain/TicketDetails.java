@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,12 +11,12 @@ import java.time.Instant;
 import java.util.Objects;
 
 /**
- * A WalletDetails.
+ * A TicketDetails.
  */
 @Entity
-@Table(name = "wallet_details")
+@Table(name = "ticket_details")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WalletDetails implements Serializable {
+public class TicketDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,30 +24,26 @@ public class WalletDetails implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(name = "userid", nullable = false)
+    @Column(name = "userid")
     private Long userid;
 
     @Column(name = "amount")
     private Long amount;
 
+    @Column(name = "add_amount")
+    private Boolean addAmount;
+
     @Column(name = "jhi_type")
     private Integer type;
+
+    @Column(name = "type_string")
+    private String typeString;
 
     @Column(name = "created_time")
     private Instant createdTime;
 
-    @Column(name = "balance", precision=10, scale=2)
-    private BigDecimal balance;
-
     @Column(name = "ticket", precision=10, scale=2)
     private BigDecimal ticket;
-
-    @Column(name = "integral", precision=10, scale=2)
-    private BigDecimal integral;
-
-    @Column(name = "pay_price", precision=10, scale=2)
-    private BigDecimal pay_price;
 
     @Column(name = "order_no")
     private String orderNo;
@@ -69,7 +64,7 @@ public class WalletDetails implements Serializable {
         return userid;
     }
 
-    public WalletDetails userid(Long userid) {
+    public TicketDetails userid(Long userid) {
         this.userid = userid;
         return this;
     }
@@ -82,7 +77,7 @@ public class WalletDetails implements Serializable {
         return amount;
     }
 
-    public WalletDetails amount(Long amount) {
+    public TicketDetails amount(Long amount) {
         this.amount = amount;
         return this;
     }
@@ -91,11 +86,24 @@ public class WalletDetails implements Serializable {
         this.amount = amount;
     }
 
+    public Boolean isAddAmount() {
+        return addAmount;
+    }
+
+    public TicketDetails addAmount(Boolean addAmount) {
+        this.addAmount = addAmount;
+        return this;
+    }
+
+    public void setAddAmount(Boolean addAmount) {
+        this.addAmount = addAmount;
+    }
+
     public Integer getType() {
         return type;
     }
 
-    public WalletDetails type(Integer type) {
+    public TicketDetails type(Integer type) {
         this.type = type;
         return this;
     }
@@ -104,11 +112,24 @@ public class WalletDetails implements Serializable {
         this.type = type;
     }
 
+    public String getTypeString() {
+        return typeString;
+    }
+
+    public TicketDetails typeString(String typeString) {
+        this.typeString = typeString;
+        return this;
+    }
+
+    public void setTypeString(String typeString) {
+        this.typeString = typeString;
+    }
+
     public Instant getCreatedTime() {
         return createdTime;
     }
 
-    public WalletDetails createdTime(Instant createdTime) {
+    public TicketDetails createdTime(Instant createdTime) {
         this.createdTime = createdTime;
         return this;
     }
@@ -117,24 +138,11 @@ public class WalletDetails implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public WalletDetails balance(BigDecimal balance) {
-        this.balance = balance;
-        return this;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
     public BigDecimal getTicket() {
         return ticket;
     }
 
-    public WalletDetails ticket(BigDecimal ticket) {
+    public TicketDetails ticket(BigDecimal ticket) {
         this.ticket = ticket;
         return this;
     }
@@ -143,37 +151,11 @@ public class WalletDetails implements Serializable {
         this.ticket = ticket;
     }
 
-    public BigDecimal getIntegral() {
-        return integral;
-    }
-
-    public WalletDetails integral(BigDecimal integral) {
-        this.integral = integral;
-        return this;
-    }
-
-    public void setIntegral(BigDecimal integral) {
-        this.integral = integral;
-    }
-
-    public BigDecimal getPay_price() {
-        return pay_price;
-    }
-
-    public WalletDetails pay_price(BigDecimal pay_price) {
-        this.pay_price = pay_price;
-        return this;
-    }
-
-    public void setPay_price(BigDecimal pay_price) {
-        this.pay_price = pay_price;
-    }
-
     public String getOrderNo() {
         return orderNo;
     }
 
-    public WalletDetails orderNo(String orderNo) {
+    public TicketDetails orderNo(String orderNo) {
         this.orderNo = orderNo;
         return this;
     }
@@ -186,7 +168,7 @@ public class WalletDetails implements Serializable {
         return wallet;
     }
 
-    public WalletDetails wallet(Wallet wallet) {
+    public TicketDetails wallet(Wallet wallet) {
         this.wallet = wallet;
         return this;
     }
@@ -204,11 +186,11 @@ public class WalletDetails implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        WalletDetails walletDetails = (WalletDetails) o;
-        if (walletDetails.getId() == null || getId() == null) {
+        TicketDetails ticketDetails = (TicketDetails) o;
+        if (ticketDetails.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), walletDetails.getId());
+        return Objects.equals(getId(), ticketDetails.getId());
     }
 
     @Override
@@ -218,16 +200,15 @@ public class WalletDetails implements Serializable {
 
     @Override
     public String toString() {
-        return "WalletDetails{" +
+        return "TicketDetails{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
             ", amount=" + getAmount() +
+            ", addAmount='" + isAddAmount() + "'" +
             ", type=" + getType() +
+            ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
-            ", balance=" + getBalance() +
             ", ticket=" + getTicket() +
-            ", integral=" + getIntegral() +
-            ", pay_price=" + getPay_price() +
             ", orderNo='" + getOrderNo() + "'" +
             "}";
     }

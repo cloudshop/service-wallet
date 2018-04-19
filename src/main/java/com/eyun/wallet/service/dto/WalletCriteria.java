@@ -44,7 +44,11 @@ public class WalletCriteria implements Serializable {
 
     private StringFilter password;
 
-    private LongFilter walletDetailsId;
+    private LongFilter balanceDetailsId;
+
+    private LongFilter integralDetailsId;
+
+    private LongFilter ticketDetailsId;
 
     public WalletCriteria() {
     }
@@ -121,12 +125,28 @@ public class WalletCriteria implements Serializable {
         this.password = password;
     }
 
-    public LongFilter getWalletDetailsId() {
-        return walletDetailsId;
+    public LongFilter getBalanceDetailsId() {
+        return balanceDetailsId;
     }
 
-    public void setWalletDetailsId(LongFilter walletDetailsId) {
-        this.walletDetailsId = walletDetailsId;
+    public void setBalanceDetailsId(LongFilter balanceDetailsId) {
+        this.balanceDetailsId = balanceDetailsId;
+    }
+
+    public LongFilter getIntegralDetailsId() {
+        return integralDetailsId;
+    }
+
+    public void setIntegralDetailsId(LongFilter integralDetailsId) {
+        this.integralDetailsId = integralDetailsId;
+    }
+
+    public LongFilter getTicketDetailsId() {
+        return ticketDetailsId;
+    }
+
+    public void setTicketDetailsId(LongFilter ticketDetailsId) {
+        this.ticketDetailsId = ticketDetailsId;
     }
 
     @Override
@@ -141,7 +161,9 @@ public class WalletCriteria implements Serializable {
                 (ticket != null ? "ticket=" + ticket + ", " : "") +
                 (integral != null ? "integral=" + integral + ", " : "") +
                 (password != null ? "password=" + password + ", " : "") +
-                (walletDetailsId != null ? "walletDetailsId=" + walletDetailsId + ", " : "") +
+                (balanceDetailsId != null ? "balanceDetailsId=" + balanceDetailsId + ", " : "") +
+                (integralDetailsId != null ? "integralDetailsId=" + integralDetailsId + ", " : "") +
+                (ticketDetailsId != null ? "ticketDetailsId=" + ticketDetailsId + ", " : "") +
             "}";
     }
 

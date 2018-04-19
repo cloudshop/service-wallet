@@ -2,8 +2,20 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipName": "walletDetails",
-            "otherEntityName": "walletDetails",
+            "relationshipName": "balanceDetails",
+            "otherEntityName": "balanceDetails",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "wallet"
+        },
+		{
+            "relationshipName": "integralDetails",
+            "otherEntityName": "integralDetails",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "wallet"
+        },
+		{
+            "relationshipName": "ticketDetails",
+            "otherEntityName": "ticketDetails",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "wallet"
         }
