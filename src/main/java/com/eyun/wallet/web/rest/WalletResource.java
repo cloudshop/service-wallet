@@ -64,8 +64,6 @@ public class WalletResource {
 
     private final WalletQueryService walletQueryService;
     
-    private final PayService payService;
-    
     @Autowired
     private UaaService uaaService;
     
@@ -74,9 +72,11 @@ public class WalletResource {
     
     @Autowired
     private VerifyService VerifyService;
+    
+    @Autowired
+    private PayService payService;
 
-    public WalletResource(WalletService walletService, WalletQueryService walletQueryService, PayService payService) {
-    	this.payService = payService;
+    public WalletResource(WalletService walletService, WalletQueryService walletQueryService) {
         this.walletService = walletService;
         this.walletQueryService = walletQueryService;
     }
@@ -210,29 +210,31 @@ public class WalletResource {
      * @param giveIntegralDTO
      * @return
      */
+    @SuppressWarnings("all")
     @ApiOperation(value="赠送积分")
-    @PutMapping("/wallets/giveIntegral")
+    @PostMapping("/wallets/giveIntegral")
     public ResponseEntity giveIntegral (@RequestBody GiveIntegralDTO giveIntegralDTO) {
     	UserDTO account = uaaService.getAccount();
-    	UserDTO target = uaaService.getUserByLogin(giveIntegralDTO.getTarget());
     	Wallet wallet = walletService.findByUserid(account.getId());
     	if (wallet.getPassword() == null) {
-    		return new ResponseEntity<>(HeaderUtil.createAlert("请设置钱包密码", "Password"), HttpStatus.BAD_REQUEST);
+    		throw new BadRequestAlertException("请设置钱包密码", "wallet", "walletPsdNull");
     	} else if (!wallet.getPassword().equals(giveIntegralDTO.getPassword())) {
-    		return new ResponseEntity<>(HeaderUtil.createAlert("钱包密码输入错误", "Password:"+giveIntegralDTO.getPassword()), HttpStatus.BAD_REQUEST);
+    		throw new BadRequestAlertException("钱包密码输入错误", "wallet", "walletPsdError");
     	}
-    	if (target == null) {
-    		return new ResponseEntity<>(HeaderUtil.createAlert("赠送目标不存在", "target:"+giveIntegralDTO.getTarget()), HttpStatus.BAD_REQUEST);
+    	ResponseEntity<UserDTO> resp = uaaService.getUserByLogin(giveIntegralDTO.getTarget());
+    	if (!HttpStatus.NOT_FOUND.equals(resp.getStatusCode())) {
+    		throw new BadRequestAlertException("赠送目标不存在", "target", "targetIsNull");
     	}
     	if (giveIntegralDTO.getIntegral().doubleValue() < 0.00) {
-    		return new ResponseEntity<>(HeaderUtil.createAlert("赠送积分输入错误", "integral:"+giveIntegralDTO.getIntegral()), HttpStatus.BAD_REQUEST);
+    		throw new BadRequestAlertException("赠送积分输入错误", "integral", "integralError");
     	}
     	BigDecimal integral = giveIntegralDTO.getIntegral();
+    	UserDTO target = resp.getBody();
 		Long toUserId = target.getId();
 		Long fromUserId = account.getId();
 		String result = walletService.giveIntegral(fromUserId , toUserId, integral);
 		if ("integral-error".equals(result)) {
-			return new ResponseEntity<>(HeaderUtil.createAlert("积分不足", "integral:"+giveIntegralDTO.getIntegral()), HttpStatus.BAD_REQUEST);
+			throw new BadRequestAlertException("积分不足", "integral", "integralError");
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
     }
