@@ -2,6 +2,7 @@ package com.eyun.wallet.service;
 
 import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
+import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.dto.WalletDTO;
 
@@ -52,7 +53,7 @@ public interface WalletService {
 
 	String giveIntegral(Long fromUserId, Long toUserId, BigDecimal integral);
 
-	void balancePay(Long long1, BigDecimal price, String orderNo);
+	PayOrder balancePay(Long long1, BigDecimal price, String orderNo);
 
 	void update(Wallet wallet);
 	

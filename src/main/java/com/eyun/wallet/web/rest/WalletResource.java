@@ -14,6 +14,7 @@ import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
+import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.OrderService;
 import com.eyun.wallet.service.PayService;
@@ -269,16 +270,20 @@ public class WalletResource {
     public ResponseEntity balancePay(@RequestBody BalancePayDTO balancePayDTO) {
     	UserDTO user = uaaService.getAccount();
     	Wallet wallet = walletService.findByUserid(user.getId());
+    	ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
+    	if (user.getId() != proOrderDTO.getId()) {
+    		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
+    	}
     	if (wallet.getPassword() != null) {
     		if (!wallet.getPassword().equals(balancePayDTO.getPassword())) {
-    			return new ResponseEntity(null, HeaderUtil.createAlert("支付密码输入错误","password:"+balancePayDTO.getPassword()), HttpStatus.BAD_REQUEST);
+    			throw new BadRequestAlertException("钱包密码输入错误", "wallet", "walletPsdError");
     		}
     	} else {
-    		return new ResponseEntity("", HeaderUtil.createAlert("请设置支付密码","password:null"), HttpStatus.BAD_REQUEST);
+    		throw new BadRequestAlertException("请设置钱包密码", "wallet", "walletPsdNull");
     	}
-		ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
-    	walletService.balancePay(wallet.getId(),proOrderDTO.getPayment(),balancePayDTO.getOrderNo());
+    	PayOrder balancePay = walletService.balancePay(wallet.getId(),proOrderDTO.getPayment(),balancePayDTO.getOrderNo());
     	//TODO  调用订单服务 通知支付成功
+    	
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
     

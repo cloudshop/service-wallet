@@ -2,17 +2,23 @@ package com.eyun.wallet.service.impl;
 
 import com.eyun.wallet.service.WalletService;
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.repository.BalanceDetailsRepository;
+import com.eyun.wallet.repository.IntegralDetailsRepository;
+import com.eyun.wallet.repository.PayOrderRepository;
+import com.eyun.wallet.repository.TicketDetailsRepository;
 import com.eyun.wallet.repository.WalletRepository;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
-
+import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,6 +36,18 @@ public class WalletServiceImpl implements WalletService {
 	private final WalletRepository walletRepository;
 
 	private final WalletMapper walletMapper;
+	
+	@Autowired
+	private BalanceDetailsRepository balanceDetailsRepository;
+	
+	@Autowired
+	private IntegralDetailsRepository integralDetailsRepository;
+	
+	@Autowired
+	private TicketDetailsRepository ticketDetailsRepository;
+	
+	@Autowired
+	private PayOrderRepository payOrderRepository;
 
 	public WalletServiceImpl(WalletRepository walletRepository, WalletMapper walletMapper) {
 		this.walletRepository = walletRepository;
@@ -168,16 +186,26 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	public void balancePay(Long id, BigDecimal price, String orderNo) {
+	public PayOrder balancePay(Long id, BigDecimal price, String orderNo) {
 		Wallet wallet = walletRepository.findOne(id);
 		BigDecimal balance = wallet.getBalance();
 		BigDecimal subtract = balance.subtract(price);
 		if (subtract.doubleValue() < 0.00) {
-			return;
+			throw new BadRequestAlertException("钱包余额不足", "balance", "balanceError");
 		}
 		wallet.balance(subtract).updatedTime(Instant.now());
 		walletRepository.save(wallet);
-		//TODO 1、账户记录  2、支付订单
+		//TODO 1、账户记录  
+		
+		//添加支付账单
+		PayOrder payOrder = new PayOrder();
+		payOrder
+			.userid(wallet.getUserid())
+			.balance(balance)
+			.wallet(wallet)
+			.payTime(Instant.now())
+			.orderNo(orderNo);
+		return payOrderRepository.save(payOrder);
 	}
 
 	@Override
