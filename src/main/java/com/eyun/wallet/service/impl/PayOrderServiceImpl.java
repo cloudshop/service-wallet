@@ -86,6 +86,6 @@ public class PayOrderServiceImpl implements PayOrderService {
 
 	@Override
 	public PayOrderDTO findPayOrderByPayNo(String payNo) {
-		return payOrderRepository.findPayOrderByPayNo(payNo);
+		return payOrderRepository.findByPayNo(payNo);
 	}
 }
