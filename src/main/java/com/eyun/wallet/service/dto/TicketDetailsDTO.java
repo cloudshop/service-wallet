@@ -17,17 +17,15 @@ public class TicketDetailsDTO implements Serializable {
 
     private Long userid;
 
-    private Long amount;
+    private BigDecimal ticket;
 
-    private Boolean addAmount;
+    private Boolean addTicket;
 
     private Integer type;
 
     private String typeString;
 
     private Instant createdTime;
-
-    private BigDecimal ticket;
 
     private String orderNo;
 
@@ -49,20 +47,20 @@ public class TicketDetailsDTO implements Serializable {
         this.userid = userid;
     }
 
-    public Long getAmount() {
-        return amount;
+    public BigDecimal getTicket() {
+        return ticket;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setTicket(BigDecimal ticket) {
+        this.ticket = ticket;
     }
 
-    public Boolean isAddAmount() {
-        return addAmount;
+    public Boolean isAddTicket() {
+        return addTicket;
     }
 
-    public void setAddAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public void setAddTicket(Boolean addTicket) {
+        this.addTicket = addTicket;
     }
 
     public Integer getType() {
@@ -87,14 +85,6 @@ public class TicketDetailsDTO implements Serializable {
 
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public BigDecimal getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(BigDecimal ticket) {
-        this.ticket = ticket;
     }
 
     public String getOrderNo() {
@@ -139,12 +129,11 @@ public class TicketDetailsDTO implements Serializable {
         return "TicketDetailsDTO{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
-            ", amount=" + getAmount() +
-            ", addAmount='" + isAddAmount() + "'" +
+            ", ticket=" + getTicket() +
+            ", addTicket='" + isAddTicket() + "'" +
             ", type=" + getType() +
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
-            ", ticket=" + getTicket() +
             ", orderNo='" + getOrderNo() + "'" +
             "}";
     }

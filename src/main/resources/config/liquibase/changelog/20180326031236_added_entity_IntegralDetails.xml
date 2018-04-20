@@ -26,11 +26,11 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="amount" type="bigint">
+            <column name="integral" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="add_amount" type="bit">
+            <column name="add_integral" type="bit">
                 <constraints nullable="true" />
             </column>
 
@@ -43,10 +43,6 @@
             </column>
 
             <column name="created_time" type="timestamp">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="integral" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
 

@@ -2,15 +2,22 @@ package com.eyun.wallet.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.eyun.wallet.service.BalanceDetailsService;
+import com.eyun.wallet.service.UaaService;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.BalanceDetailsDTO;
+import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.BalanceDetailsCriteria;
 import com.eyun.wallet.service.BalanceDetailsQueryService;
+
+import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiOperation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +45,9 @@ public class BalanceDetailsResource {
     private final BalanceDetailsService balanceDetailsService;
 
     private final BalanceDetailsQueryService balanceDetailsQueryService;
+    
+    @Autowired
+    private UaaService uaaService;
 
     public BalanceDetailsResource(BalanceDetailsService balanceDetailsService, BalanceDetailsQueryService balanceDetailsQueryService) {
         this.balanceDetailsService = balanceDetailsService;
@@ -121,7 +131,6 @@ public class BalanceDetailsResource {
      *
      * @param id the id of the balanceDetailsDTO to delete
      * @return the ResponseEntity with status 200 (OK)
-     */
     @DeleteMapping("/balance-details/{id}")
     @Timed
     public ResponseEntity<Void> deleteBalanceDetails(@PathVariable Long id) {
@@ -129,4 +138,28 @@ public class BalanceDetailsResource {
         balanceDetailsService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+     */
+    
+    /**
+     * 获取钱包余额明细
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月20日
+     * @version 1.0
+     * @param pageable
+     * @return
+     */
+    @ApiOperation("获取钱包余额明细")
+    @GetMapping("/wallet/details/balance")
+    public ResponseEntity<List<BalanceDetailsDTO>> getWalletDetailsWithBalance(Pageable pageable) {
+    	UserDTO user = uaaService.getAccount();
+        BalanceDetailsCriteria criteria = new BalanceDetailsCriteria();
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(user.getId());
+        criteria.setUserid(longFilter);
+		Page<BalanceDetailsDTO> page = balanceDetailsQueryService.findByCriteria(criteria , pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/wallet/details/balance");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+    
 }

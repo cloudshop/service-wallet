@@ -30,17 +30,15 @@ public class BalanceDetailsCriteria implements Serializable {
 
     private LongFilter userid;
 
-    private LongFilter amount;
+    private BigDecimalFilter balance;
 
-    private BooleanFilter addAmount;
+    private BooleanFilter addBalance;
 
     private IntegerFilter type;
 
     private StringFilter typeString;
 
     private InstantFilter createdTime;
-
-    private BigDecimalFilter balance;
 
     private StringFilter orderNo;
 
@@ -65,20 +63,20 @@ public class BalanceDetailsCriteria implements Serializable {
         this.userid = userid;
     }
 
-    public LongFilter getAmount() {
-        return amount;
+    public BigDecimalFilter getBalance() {
+        return balance;
     }
 
-    public void setAmount(LongFilter amount) {
-        this.amount = amount;
+    public void setBalance(BigDecimalFilter balance) {
+        this.balance = balance;
     }
 
-    public BooleanFilter getAddAmount() {
-        return addAmount;
+    public BooleanFilter getAddBalance() {
+        return addBalance;
     }
 
-    public void setAddAmount(BooleanFilter addAmount) {
-        this.addAmount = addAmount;
+    public void setAddBalance(BooleanFilter addBalance) {
+        this.addBalance = addBalance;
     }
 
     public IntegerFilter getType() {
@@ -105,14 +103,6 @@ public class BalanceDetailsCriteria implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public BigDecimalFilter getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimalFilter balance) {
-        this.balance = balance;
-    }
-
     public StringFilter getOrderNo() {
         return orderNo;
     }
@@ -134,12 +124,11 @@ public class BalanceDetailsCriteria implements Serializable {
         return "BalanceDetailsCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (userid != null ? "userid=" + userid + ", " : "") +
-                (amount != null ? "amount=" + amount + ", " : "") +
-                (addAmount != null ? "addAmount=" + addAmount + ", " : "") +
+                (balance != null ? "balance=" + balance + ", " : "") +
+                (addBalance != null ? "addBalance=" + addBalance + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (typeString != null ? "typeString=" + typeString + ", " : "") +
                 (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
-                (balance != null ? "balance=" + balance + ", " : "") +
                 (orderNo != null ? "orderNo=" + orderNo + ", " : "") +
                 (walletId != null ? "walletId=" + walletId + ", " : "") +
             "}";

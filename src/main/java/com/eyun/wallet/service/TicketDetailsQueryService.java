@@ -82,11 +82,11 @@ public class TicketDetailsQueryService extends QueryService<TicketDetails> {
             if (criteria.getUserid() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUserid(), TicketDetails_.userid));
             }
-            if (criteria.getAmount() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getAmount(), TicketDetails_.amount));
+            if (criteria.getTicket() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTicket(), TicketDetails_.ticket));
             }
-            if (criteria.getAddAmount() != null) {
-                specification = specification.and(buildSpecification(criteria.getAddAmount(), TicketDetails_.addAmount));
+            if (criteria.getAddTicket() != null) {
+                specification = specification.and(buildSpecification(criteria.getAddTicket(), TicketDetails_.addTicket));
             }
             if (criteria.getType() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getType(), TicketDetails_.type));
@@ -96,9 +96,6 @@ public class TicketDetailsQueryService extends QueryService<TicketDetails> {
             }
             if (criteria.getCreatedTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedTime(), TicketDetails_.createdTime));
-            }
-            if (criteria.getTicket() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTicket(), TicketDetails_.ticket));
             }
             if (criteria.getOrderNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getOrderNo(), TicketDetails_.orderNo));

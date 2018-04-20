@@ -17,17 +17,15 @@ public class IntegralDetailsDTO implements Serializable {
 
     private Long userid;
 
-    private Long amount;
+    private BigDecimal integral;
 
-    private Boolean addAmount;
+    private Boolean addIntegral;
 
     private Integer type;
 
     private String typeString;
 
     private Instant createdTime;
-
-    private BigDecimal integral;
 
     private String orderNo;
 
@@ -49,20 +47,20 @@ public class IntegralDetailsDTO implements Serializable {
         this.userid = userid;
     }
 
-    public Long getAmount() {
-        return amount;
+    public BigDecimal getIntegral() {
+        return integral;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setIntegral(BigDecimal integral) {
+        this.integral = integral;
     }
 
-    public Boolean isAddAmount() {
-        return addAmount;
+    public Boolean isAddIntegral() {
+        return addIntegral;
     }
 
-    public void setAddAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public void setAddIntegral(Boolean addIntegral) {
+        this.addIntegral = addIntegral;
     }
 
     public Integer getType() {
@@ -87,14 +85,6 @@ public class IntegralDetailsDTO implements Serializable {
 
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public BigDecimal getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(BigDecimal integral) {
-        this.integral = integral;
     }
 
     public String getOrderNo() {
@@ -139,12 +129,11 @@ public class IntegralDetailsDTO implements Serializable {
         return "IntegralDetailsDTO{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
-            ", amount=" + getAmount() +
-            ", addAmount='" + isAddAmount() + "'" +
+            ", integral=" + getIntegral() +
+            ", addIntegral='" + isAddIntegral() + "'" +
             ", type=" + getType() +
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
-            ", integral=" + getIntegral() +
             ", orderNo='" + getOrderNo() + "'" +
             "}";
     }

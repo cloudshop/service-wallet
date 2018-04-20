@@ -82,11 +82,11 @@ public class IntegralDetailsQueryService extends QueryService<IntegralDetails> {
             if (criteria.getUserid() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUserid(), IntegralDetails_.userid));
             }
-            if (criteria.getAmount() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getAmount(), IntegralDetails_.amount));
+            if (criteria.getIntegral() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getIntegral(), IntegralDetails_.integral));
             }
-            if (criteria.getAddAmount() != null) {
-                specification = specification.and(buildSpecification(criteria.getAddAmount(), IntegralDetails_.addAmount));
+            if (criteria.getAddIntegral() != null) {
+                specification = specification.and(buildSpecification(criteria.getAddIntegral(), IntegralDetails_.addIntegral));
             }
             if (criteria.getType() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getType(), IntegralDetails_.type));
@@ -96,9 +96,6 @@ public class IntegralDetailsQueryService extends QueryService<IntegralDetails> {
             }
             if (criteria.getCreatedTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedTime(), IntegralDetails_.createdTime));
-            }
-            if (criteria.getIntegral() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getIntegral(), IntegralDetails_.integral));
             }
             if (criteria.getOrderNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getOrderNo(), IntegralDetails_.orderNo));

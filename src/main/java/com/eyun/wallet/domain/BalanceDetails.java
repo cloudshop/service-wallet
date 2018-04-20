@@ -27,11 +27,11 @@ public class BalanceDetails implements Serializable {
     @Column(name = "userid")
     private Long userid;
 
-    @Column(name = "amount")
-    private Long amount;
+    @Column(name = "balance", precision=10, scale=2)
+    private BigDecimal balance;
 
-    @Column(name = "add_amount")
-    private Boolean addAmount;
+    @Column(name = "add_balance")
+    private Boolean addBalance;
 
     @Column(name = "jhi_type")
     private Integer type;
@@ -41,9 +41,6 @@ public class BalanceDetails implements Serializable {
 
     @Column(name = "created_time")
     private Instant createdTime;
-
-    @Column(name = "balance", precision=10, scale=2)
-    private BigDecimal balance;
 
     @Column(name = "order_no")
     private String orderNo;
@@ -73,30 +70,30 @@ public class BalanceDetails implements Serializable {
         this.userid = userid;
     }
 
-    public Long getAmount() {
-        return amount;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public BalanceDetails amount(Long amount) {
-        this.amount = amount;
+    public BalanceDetails balance(BigDecimal balance) {
+        this.balance = balance;
         return this;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
-    public Boolean isAddAmount() {
-        return addAmount;
+    public Boolean isAddBalance() {
+        return addBalance;
     }
 
-    public BalanceDetails addAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public BalanceDetails addBalance(Boolean addBalance) {
+        this.addBalance = addBalance;
         return this;
     }
 
-    public void setAddAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public void setAddBalance(Boolean addBalance) {
+        this.addBalance = addBalance;
     }
 
     public Integer getType() {
@@ -136,19 +133,6 @@ public class BalanceDetails implements Serializable {
 
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public BalanceDetails balance(BigDecimal balance) {
-        this.balance = balance;
-        return this;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
     }
 
     public String getOrderNo() {
@@ -203,12 +187,11 @@ public class BalanceDetails implements Serializable {
         return "BalanceDetails{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
-            ", amount=" + getAmount() +
-            ", addAmount='" + isAddAmount() + "'" +
+            ", balance=" + getBalance() +
+            ", addBalance='" + isAddBalance() + "'" +
             ", type=" + getType() +
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
-            ", balance=" + getBalance() +
             ", orderNo='" + getOrderNo() + "'" +
             "}";
     }

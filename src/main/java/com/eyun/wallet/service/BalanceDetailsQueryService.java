@@ -82,11 +82,11 @@ public class BalanceDetailsQueryService extends QueryService<BalanceDetails> {
             if (criteria.getUserid() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUserid(), BalanceDetails_.userid));
             }
-            if (criteria.getAmount() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getAmount(), BalanceDetails_.amount));
+            if (criteria.getBalance() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getBalance(), BalanceDetails_.balance));
             }
-            if (criteria.getAddAmount() != null) {
-                specification = specification.and(buildSpecification(criteria.getAddAmount(), BalanceDetails_.addAmount));
+            if (criteria.getAddBalance() != null) {
+                specification = specification.and(buildSpecification(criteria.getAddBalance(), BalanceDetails_.addBalance));
             }
             if (criteria.getType() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getType(), BalanceDetails_.type));
@@ -96,9 +96,6 @@ public class BalanceDetailsQueryService extends QueryService<BalanceDetails> {
             }
             if (criteria.getCreatedTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedTime(), BalanceDetails_.createdTime));
-            }
-            if (criteria.getBalance() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getBalance(), BalanceDetails_.balance));
             }
             if (criteria.getOrderNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getOrderNo(), BalanceDetails_.orderNo));

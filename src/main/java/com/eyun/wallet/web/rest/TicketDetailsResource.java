@@ -2,15 +2,22 @@ package com.eyun.wallet.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.eyun.wallet.service.TicketDetailsService;
+import com.eyun.wallet.service.UaaService;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.TicketDetailsDTO;
+import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.TicketDetailsCriteria;
 import com.eyun.wallet.service.TicketDetailsQueryService;
+
+import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiOperation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +45,9 @@ public class TicketDetailsResource {
     private final TicketDetailsService ticketDetailsService;
 
     private final TicketDetailsQueryService ticketDetailsQueryService;
+    
+    @Autowired
+    private UaaService uaaService;
 
     public TicketDetailsResource(TicketDetailsService ticketDetailsService, TicketDetailsQueryService ticketDetailsQueryService) {
         this.ticketDetailsService = ticketDetailsService;
@@ -121,7 +131,6 @@ public class TicketDetailsResource {
      *
      * @param id the id of the ticketDetailsDTO to delete
      * @return the ResponseEntity with status 200 (OK)
-     */
     @DeleteMapping("/ticket-details/{id}")
     @Timed
     public ResponseEntity<Void> deleteTicketDetails(@PathVariable Long id) {
@@ -129,4 +138,28 @@ public class TicketDetailsResource {
         ticketDetailsService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+     */
+    
+    /**
+     * 获取钱包贡融卷明细
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月20日
+     * @version 1.0
+     * @param pageable
+     * @return
+     */
+    @ApiOperation("获取钱包贡融卷明细")
+    @GetMapping("/wallet/details/ticket")
+    public ResponseEntity<List<TicketDetailsDTO>> getWalletDetailsWithTicket(Pageable pageable) {
+    	UserDTO user = uaaService.getAccount();
+    	TicketDetailsCriteria criteria = new TicketDetailsCriteria();
+        LongFilter longFilter = new LongFilter();
+        longFilter.setEquals(user.getId());
+		criteria.setUserid(longFilter);
+		Page<TicketDetailsDTO> page = ticketDetailsQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/wallet/details/ticket");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+    
 }

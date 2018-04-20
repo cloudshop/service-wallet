@@ -17,17 +17,15 @@ public class BalanceDetailsDTO implements Serializable {
 
     private Long userid;
 
-    private Long amount;
+    private BigDecimal balance;
 
-    private Boolean addAmount;
+    private Boolean addBalance;
 
     private Integer type;
 
     private String typeString;
 
     private Instant createdTime;
-
-    private BigDecimal balance;
 
     private String orderNo;
 
@@ -49,20 +47,20 @@ public class BalanceDetailsDTO implements Serializable {
         this.userid = userid;
     }
 
-    public Long getAmount() {
-        return amount;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
-    public Boolean isAddAmount() {
-        return addAmount;
+    public Boolean isAddBalance() {
+        return addBalance;
     }
 
-    public void setAddAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public void setAddBalance(Boolean addBalance) {
+        this.addBalance = addBalance;
     }
 
     public Integer getType() {
@@ -87,14 +85,6 @@ public class BalanceDetailsDTO implements Serializable {
 
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
     }
 
     public String getOrderNo() {
@@ -139,12 +129,11 @@ public class BalanceDetailsDTO implements Serializable {
         return "BalanceDetailsDTO{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
-            ", amount=" + getAmount() +
-            ", addAmount='" + isAddAmount() + "'" +
+            ", balance=" + getBalance() +
+            ", addBalance='" + isAddBalance() + "'" +
             ", type=" + getType() +
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
-            ", balance=" + getBalance() +
             ", orderNo='" + getOrderNo() + "'" +
             "}";
     }

@@ -14,11 +14,11 @@
             "fieldType": "Long"
         },
         {
-            "fieldName": "amount",
-            "fieldType": "Long"
+            "fieldName": "integral",
+            "fieldType": "BigDecimal"
         },
 		{
-            "fieldName": "addAmount",
+            "fieldName": "addIntegral",
             "fieldType": "Boolean"
         },
         {
@@ -32,10 +32,6 @@
         {
             "fieldName": "createdTime",
             "fieldType": "Instant"
-        },
-        {
-            "fieldName": "integral",
-            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "orderNo",

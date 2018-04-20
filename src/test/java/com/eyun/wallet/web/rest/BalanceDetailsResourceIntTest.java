@@ -52,11 +52,11 @@ public class BalanceDetailsResourceIntTest {
     private static final Long DEFAULT_USERID = 1L;
     private static final Long UPDATED_USERID = 2L;
 
-    private static final Long DEFAULT_AMOUNT = 1L;
-    private static final Long UPDATED_AMOUNT = 2L;
+    private static final BigDecimal DEFAULT_BALANCE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_BALANCE = new BigDecimal(2);
 
-    private static final Boolean DEFAULT_ADD_AMOUNT = false;
-    private static final Boolean UPDATED_ADD_AMOUNT = true;
+    private static final Boolean DEFAULT_ADD_BALANCE = false;
+    private static final Boolean UPDATED_ADD_BALANCE = true;
 
     private static final Integer DEFAULT_TYPE = 1;
     private static final Integer UPDATED_TYPE = 2;
@@ -66,9 +66,6 @@ public class BalanceDetailsResourceIntTest {
 
     private static final Instant DEFAULT_CREATED_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final BigDecimal DEFAULT_BALANCE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_BALANCE = new BigDecimal(2);
 
     private static final String DEFAULT_ORDER_NO = "AAAAAAAAAA";
     private static final String UPDATED_ORDER_NO = "BBBBBBBBBB";
@@ -121,12 +118,11 @@ public class BalanceDetailsResourceIntTest {
     public static BalanceDetails createEntity(EntityManager em) {
         BalanceDetails balanceDetails = new BalanceDetails()
             .userid(DEFAULT_USERID)
-            .amount(DEFAULT_AMOUNT)
-            .addAmount(DEFAULT_ADD_AMOUNT)
+            .balance(DEFAULT_BALANCE)
+            .addBalance(DEFAULT_ADD_BALANCE)
             .type(DEFAULT_TYPE)
             .typeString(DEFAULT_TYPE_STRING)
             .createdTime(DEFAULT_CREATED_TIME)
-            .balance(DEFAULT_BALANCE)
             .orderNo(DEFAULT_ORDER_NO);
         return balanceDetails;
     }
@@ -153,12 +149,11 @@ public class BalanceDetailsResourceIntTest {
         assertThat(balanceDetailsList).hasSize(databaseSizeBeforeCreate + 1);
         BalanceDetails testBalanceDetails = balanceDetailsList.get(balanceDetailsList.size() - 1);
         assertThat(testBalanceDetails.getUserid()).isEqualTo(DEFAULT_USERID);
-        assertThat(testBalanceDetails.getAmount()).isEqualTo(DEFAULT_AMOUNT);
-        assertThat(testBalanceDetails.isAddAmount()).isEqualTo(DEFAULT_ADD_AMOUNT);
+        assertThat(testBalanceDetails.getBalance()).isEqualTo(DEFAULT_BALANCE);
+        assertThat(testBalanceDetails.isAddBalance()).isEqualTo(DEFAULT_ADD_BALANCE);
         assertThat(testBalanceDetails.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testBalanceDetails.getTypeString()).isEqualTo(DEFAULT_TYPE_STRING);
         assertThat(testBalanceDetails.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
-        assertThat(testBalanceDetails.getBalance()).isEqualTo(DEFAULT_BALANCE);
         assertThat(testBalanceDetails.getOrderNo()).isEqualTo(DEFAULT_ORDER_NO);
     }
 
@@ -194,12 +189,11 @@ public class BalanceDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(balanceDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].addAmount").value(hasItem(DEFAULT_ADD_AMOUNT.booleanValue())))
+            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
+            .andExpect(jsonPath("$.[*].addBalance").value(hasItem(DEFAULT_ADD_BALANCE.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
@@ -215,12 +209,11 @@ public class BalanceDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(balanceDetails.getId().intValue()))
             .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
-            .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.addAmount").value(DEFAULT_ADD_AMOUNT.booleanValue()))
+            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.intValue()))
+            .andExpect(jsonPath("$.addBalance").value(DEFAULT_ADD_BALANCE.booleanValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.typeString").value(DEFAULT_TYPE_STRING.toString()))
             .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()))
-            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.intValue()))
             .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO.toString()));
     }
 
@@ -292,107 +285,80 @@ public class BalanceDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllBalanceDetailsByAmountIsEqualToSomething() throws Exception {
+    public void getAllBalanceDetailsByBalanceIsEqualToSomething() throws Exception {
         // Initialize the database
         balanceDetailsRepository.saveAndFlush(balanceDetails);
 
-        // Get all the balanceDetailsList where amount equals to DEFAULT_AMOUNT
-        defaultBalanceDetailsShouldBeFound("amount.equals=" + DEFAULT_AMOUNT);
+        // Get all the balanceDetailsList where balance equals to DEFAULT_BALANCE
+        defaultBalanceDetailsShouldBeFound("balance.equals=" + DEFAULT_BALANCE);
 
-        // Get all the balanceDetailsList where amount equals to UPDATED_AMOUNT
-        defaultBalanceDetailsShouldNotBeFound("amount.equals=" + UPDATED_AMOUNT);
+        // Get all the balanceDetailsList where balance equals to UPDATED_BALANCE
+        defaultBalanceDetailsShouldNotBeFound("balance.equals=" + UPDATED_BALANCE);
     }
 
     @Test
     @Transactional
-    public void getAllBalanceDetailsByAmountIsInShouldWork() throws Exception {
+    public void getAllBalanceDetailsByBalanceIsInShouldWork() throws Exception {
         // Initialize the database
         balanceDetailsRepository.saveAndFlush(balanceDetails);
 
-        // Get all the balanceDetailsList where amount in DEFAULT_AMOUNT or UPDATED_AMOUNT
-        defaultBalanceDetailsShouldBeFound("amount.in=" + DEFAULT_AMOUNT + "," + UPDATED_AMOUNT);
+        // Get all the balanceDetailsList where balance in DEFAULT_BALANCE or UPDATED_BALANCE
+        defaultBalanceDetailsShouldBeFound("balance.in=" + DEFAULT_BALANCE + "," + UPDATED_BALANCE);
 
-        // Get all the balanceDetailsList where amount equals to UPDATED_AMOUNT
-        defaultBalanceDetailsShouldNotBeFound("amount.in=" + UPDATED_AMOUNT);
+        // Get all the balanceDetailsList where balance equals to UPDATED_BALANCE
+        defaultBalanceDetailsShouldNotBeFound("balance.in=" + UPDATED_BALANCE);
     }
 
     @Test
     @Transactional
-    public void getAllBalanceDetailsByAmountIsNullOrNotNull() throws Exception {
+    public void getAllBalanceDetailsByBalanceIsNullOrNotNull() throws Exception {
         // Initialize the database
         balanceDetailsRepository.saveAndFlush(balanceDetails);
 
-        // Get all the balanceDetailsList where amount is not null
-        defaultBalanceDetailsShouldBeFound("amount.specified=true");
+        // Get all the balanceDetailsList where balance is not null
+        defaultBalanceDetailsShouldBeFound("balance.specified=true");
 
-        // Get all the balanceDetailsList where amount is null
-        defaultBalanceDetailsShouldNotBeFound("amount.specified=false");
+        // Get all the balanceDetailsList where balance is null
+        defaultBalanceDetailsShouldNotBeFound("balance.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllBalanceDetailsByAmountIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllBalanceDetailsByAddBalanceIsEqualToSomething() throws Exception {
         // Initialize the database
         balanceDetailsRepository.saveAndFlush(balanceDetails);
 
-        // Get all the balanceDetailsList where amount greater than or equals to DEFAULT_AMOUNT
-        defaultBalanceDetailsShouldBeFound("amount.greaterOrEqualThan=" + DEFAULT_AMOUNT);
+        // Get all the balanceDetailsList where addBalance equals to DEFAULT_ADD_BALANCE
+        defaultBalanceDetailsShouldBeFound("addBalance.equals=" + DEFAULT_ADD_BALANCE);
 
-        // Get all the balanceDetailsList where amount greater than or equals to UPDATED_AMOUNT
-        defaultBalanceDetailsShouldNotBeFound("amount.greaterOrEqualThan=" + UPDATED_AMOUNT);
+        // Get all the balanceDetailsList where addBalance equals to UPDATED_ADD_BALANCE
+        defaultBalanceDetailsShouldNotBeFound("addBalance.equals=" + UPDATED_ADD_BALANCE);
     }
 
     @Test
     @Transactional
-    public void getAllBalanceDetailsByAmountIsLessThanSomething() throws Exception {
+    public void getAllBalanceDetailsByAddBalanceIsInShouldWork() throws Exception {
         // Initialize the database
         balanceDetailsRepository.saveAndFlush(balanceDetails);
 
-        // Get all the balanceDetailsList where amount less than or equals to DEFAULT_AMOUNT
-        defaultBalanceDetailsShouldNotBeFound("amount.lessThan=" + DEFAULT_AMOUNT);
+        // Get all the balanceDetailsList where addBalance in DEFAULT_ADD_BALANCE or UPDATED_ADD_BALANCE
+        defaultBalanceDetailsShouldBeFound("addBalance.in=" + DEFAULT_ADD_BALANCE + "," + UPDATED_ADD_BALANCE);
 
-        // Get all the balanceDetailsList where amount less than or equals to UPDATED_AMOUNT
-        defaultBalanceDetailsShouldBeFound("amount.lessThan=" + UPDATED_AMOUNT);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllBalanceDetailsByAddAmountIsEqualToSomething() throws Exception {
-        // Initialize the database
-        balanceDetailsRepository.saveAndFlush(balanceDetails);
-
-        // Get all the balanceDetailsList where addAmount equals to DEFAULT_ADD_AMOUNT
-        defaultBalanceDetailsShouldBeFound("addAmount.equals=" + DEFAULT_ADD_AMOUNT);
-
-        // Get all the balanceDetailsList where addAmount equals to UPDATED_ADD_AMOUNT
-        defaultBalanceDetailsShouldNotBeFound("addAmount.equals=" + UPDATED_ADD_AMOUNT);
+        // Get all the balanceDetailsList where addBalance equals to UPDATED_ADD_BALANCE
+        defaultBalanceDetailsShouldNotBeFound("addBalance.in=" + UPDATED_ADD_BALANCE);
     }
 
     @Test
     @Transactional
-    public void getAllBalanceDetailsByAddAmountIsInShouldWork() throws Exception {
+    public void getAllBalanceDetailsByAddBalanceIsNullOrNotNull() throws Exception {
         // Initialize the database
         balanceDetailsRepository.saveAndFlush(balanceDetails);
 
-        // Get all the balanceDetailsList where addAmount in DEFAULT_ADD_AMOUNT or UPDATED_ADD_AMOUNT
-        defaultBalanceDetailsShouldBeFound("addAmount.in=" + DEFAULT_ADD_AMOUNT + "," + UPDATED_ADD_AMOUNT);
+        // Get all the balanceDetailsList where addBalance is not null
+        defaultBalanceDetailsShouldBeFound("addBalance.specified=true");
 
-        // Get all the balanceDetailsList where addAmount equals to UPDATED_ADD_AMOUNT
-        defaultBalanceDetailsShouldNotBeFound("addAmount.in=" + UPDATED_ADD_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllBalanceDetailsByAddAmountIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        balanceDetailsRepository.saveAndFlush(balanceDetails);
-
-        // Get all the balanceDetailsList where addAmount is not null
-        defaultBalanceDetailsShouldBeFound("addAmount.specified=true");
-
-        // Get all the balanceDetailsList where addAmount is null
-        defaultBalanceDetailsShouldNotBeFound("addAmount.specified=false");
+        // Get all the balanceDetailsList where addBalance is null
+        defaultBalanceDetailsShouldNotBeFound("addBalance.specified=false");
     }
 
     @Test
@@ -541,45 +507,6 @@ public class BalanceDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllBalanceDetailsByBalanceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        balanceDetailsRepository.saveAndFlush(balanceDetails);
-
-        // Get all the balanceDetailsList where balance equals to DEFAULT_BALANCE
-        defaultBalanceDetailsShouldBeFound("balance.equals=" + DEFAULT_BALANCE);
-
-        // Get all the balanceDetailsList where balance equals to UPDATED_BALANCE
-        defaultBalanceDetailsShouldNotBeFound("balance.equals=" + UPDATED_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllBalanceDetailsByBalanceIsInShouldWork() throws Exception {
-        // Initialize the database
-        balanceDetailsRepository.saveAndFlush(balanceDetails);
-
-        // Get all the balanceDetailsList where balance in DEFAULT_BALANCE or UPDATED_BALANCE
-        defaultBalanceDetailsShouldBeFound("balance.in=" + DEFAULT_BALANCE + "," + UPDATED_BALANCE);
-
-        // Get all the balanceDetailsList where balance equals to UPDATED_BALANCE
-        defaultBalanceDetailsShouldNotBeFound("balance.in=" + UPDATED_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllBalanceDetailsByBalanceIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        balanceDetailsRepository.saveAndFlush(balanceDetails);
-
-        // Get all the balanceDetailsList where balance is not null
-        defaultBalanceDetailsShouldBeFound("balance.specified=true");
-
-        // Get all the balanceDetailsList where balance is null
-        defaultBalanceDetailsShouldNotBeFound("balance.specified=false");
-    }
-
-    @Test
-    @Transactional
     public void getAllBalanceDetailsByOrderNoIsEqualToSomething() throws Exception {
         // Initialize the database
         balanceDetailsRepository.saveAndFlush(balanceDetails);
@@ -644,12 +571,11 @@ public class BalanceDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(balanceDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].addAmount").value(hasItem(DEFAULT_ADD_AMOUNT.booleanValue())))
+            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
+            .andExpect(jsonPath("$.[*].addBalance").value(hasItem(DEFAULT_ADD_BALANCE.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
@@ -686,12 +612,11 @@ public class BalanceDetailsResourceIntTest {
         em.detach(updatedBalanceDetails);
         updatedBalanceDetails
             .userid(UPDATED_USERID)
-            .amount(UPDATED_AMOUNT)
-            .addAmount(UPDATED_ADD_AMOUNT)
+            .balance(UPDATED_BALANCE)
+            .addBalance(UPDATED_ADD_BALANCE)
             .type(UPDATED_TYPE)
             .typeString(UPDATED_TYPE_STRING)
             .createdTime(UPDATED_CREATED_TIME)
-            .balance(UPDATED_BALANCE)
             .orderNo(UPDATED_ORDER_NO);
         BalanceDetailsDTO balanceDetailsDTO = balanceDetailsMapper.toDto(updatedBalanceDetails);
 
@@ -705,12 +630,11 @@ public class BalanceDetailsResourceIntTest {
         assertThat(balanceDetailsList).hasSize(databaseSizeBeforeUpdate);
         BalanceDetails testBalanceDetails = balanceDetailsList.get(balanceDetailsList.size() - 1);
         assertThat(testBalanceDetails.getUserid()).isEqualTo(UPDATED_USERID);
-        assertThat(testBalanceDetails.getAmount()).isEqualTo(UPDATED_AMOUNT);
-        assertThat(testBalanceDetails.isAddAmount()).isEqualTo(UPDATED_ADD_AMOUNT);
+        assertThat(testBalanceDetails.getBalance()).isEqualTo(UPDATED_BALANCE);
+        assertThat(testBalanceDetails.isAddBalance()).isEqualTo(UPDATED_ADD_BALANCE);
         assertThat(testBalanceDetails.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testBalanceDetails.getTypeString()).isEqualTo(UPDATED_TYPE_STRING);
         assertThat(testBalanceDetails.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
-        assertThat(testBalanceDetails.getBalance()).isEqualTo(UPDATED_BALANCE);
         assertThat(testBalanceDetails.getOrderNo()).isEqualTo(UPDATED_ORDER_NO);
     }
 

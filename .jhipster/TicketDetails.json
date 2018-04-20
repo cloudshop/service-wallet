@@ -14,11 +14,11 @@
             "fieldType": "Long"
         },
         {
-            "fieldName": "amount",
-            "fieldType": "Long"
+            "fieldName": "ticket",
+            "fieldType": "BigDecimal"
         },
 		{
-            "fieldName": "addAmount",
+            "fieldName": "addTicket",
             "fieldType": "Boolean"
         },
         {
@@ -32,10 +32,6 @@
         {
             "fieldName": "createdTime",
             "fieldType": "Instant"
-        },
-        {
-            "fieldName": "ticket",
-            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "orderNo",

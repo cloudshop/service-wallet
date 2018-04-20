@@ -27,11 +27,11 @@ public class TicketDetails implements Serializable {
     @Column(name = "userid")
     private Long userid;
 
-    @Column(name = "amount")
-    private Long amount;
+    @Column(name = "ticket", precision=10, scale=2)
+    private BigDecimal ticket;
 
-    @Column(name = "add_amount")
-    private Boolean addAmount;
+    @Column(name = "add_ticket")
+    private Boolean addTicket;
 
     @Column(name = "jhi_type")
     private Integer type;
@@ -41,9 +41,6 @@ public class TicketDetails implements Serializable {
 
     @Column(name = "created_time")
     private Instant createdTime;
-
-    @Column(name = "ticket", precision=10, scale=2)
-    private BigDecimal ticket;
 
     @Column(name = "order_no")
     private String orderNo;
@@ -73,30 +70,30 @@ public class TicketDetails implements Serializable {
         this.userid = userid;
     }
 
-    public Long getAmount() {
-        return amount;
+    public BigDecimal getTicket() {
+        return ticket;
     }
 
-    public TicketDetails amount(Long amount) {
-        this.amount = amount;
+    public TicketDetails ticket(BigDecimal ticket) {
+        this.ticket = ticket;
         return this;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setTicket(BigDecimal ticket) {
+        this.ticket = ticket;
     }
 
-    public Boolean isAddAmount() {
-        return addAmount;
+    public Boolean isAddTicket() {
+        return addTicket;
     }
 
-    public TicketDetails addAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public TicketDetails addTicket(Boolean addTicket) {
+        this.addTicket = addTicket;
         return this;
     }
 
-    public void setAddAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public void setAddTicket(Boolean addTicket) {
+        this.addTicket = addTicket;
     }
 
     public Integer getType() {
@@ -136,19 +133,6 @@ public class TicketDetails implements Serializable {
 
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public BigDecimal getTicket() {
-        return ticket;
-    }
-
-    public TicketDetails ticket(BigDecimal ticket) {
-        this.ticket = ticket;
-        return this;
-    }
-
-    public void setTicket(BigDecimal ticket) {
-        this.ticket = ticket;
     }
 
     public String getOrderNo() {
@@ -203,12 +187,11 @@ public class TicketDetails implements Serializable {
         return "TicketDetails{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
-            ", amount=" + getAmount() +
-            ", addAmount='" + isAddAmount() + "'" +
+            ", ticket=" + getTicket() +
+            ", addTicket='" + isAddTicket() + "'" +
             ", type=" + getType() +
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
-            ", ticket=" + getTicket() +
             ", orderNo='" + getOrderNo() + "'" +
             "}";
     }

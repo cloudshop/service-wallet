@@ -14,11 +14,11 @@
             "fieldType": "Long"
         },
         {
-            "fieldName": "amount",
-            "fieldType": "Long"
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
         },
-		{
-            "fieldName": "addAmount",
+        {
+            "fieldName": "addBalance",
             "fieldType": "Boolean"
         },
         {
@@ -32,10 +32,6 @@
         {
             "fieldName": "createdTime",
             "fieldType": "Instant"
-        },
-        {
-            "fieldName": "balance",
-            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "orderNo",

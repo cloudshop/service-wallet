@@ -52,11 +52,11 @@ public class TicketDetailsResourceIntTest {
     private static final Long DEFAULT_USERID = 1L;
     private static final Long UPDATED_USERID = 2L;
 
-    private static final Long DEFAULT_AMOUNT = 1L;
-    private static final Long UPDATED_AMOUNT = 2L;
+    private static final BigDecimal DEFAULT_TICKET = new BigDecimal(1);
+    private static final BigDecimal UPDATED_TICKET = new BigDecimal(2);
 
-    private static final Boolean DEFAULT_ADD_AMOUNT = false;
-    private static final Boolean UPDATED_ADD_AMOUNT = true;
+    private static final Boolean DEFAULT_ADD_TICKET = false;
+    private static final Boolean UPDATED_ADD_TICKET = true;
 
     private static final Integer DEFAULT_TYPE = 1;
     private static final Integer UPDATED_TYPE = 2;
@@ -66,9 +66,6 @@ public class TicketDetailsResourceIntTest {
 
     private static final Instant DEFAULT_CREATED_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final BigDecimal DEFAULT_TICKET = new BigDecimal(1);
-    private static final BigDecimal UPDATED_TICKET = new BigDecimal(2);
 
     private static final String DEFAULT_ORDER_NO = "AAAAAAAAAA";
     private static final String UPDATED_ORDER_NO = "BBBBBBBBBB";
@@ -121,12 +118,11 @@ public class TicketDetailsResourceIntTest {
     public static TicketDetails createEntity(EntityManager em) {
         TicketDetails ticketDetails = new TicketDetails()
             .userid(DEFAULT_USERID)
-            .amount(DEFAULT_AMOUNT)
-            .addAmount(DEFAULT_ADD_AMOUNT)
+            .ticket(DEFAULT_TICKET)
+            .addTicket(DEFAULT_ADD_TICKET)
             .type(DEFAULT_TYPE)
             .typeString(DEFAULT_TYPE_STRING)
             .createdTime(DEFAULT_CREATED_TIME)
-            .ticket(DEFAULT_TICKET)
             .orderNo(DEFAULT_ORDER_NO);
         return ticketDetails;
     }
@@ -153,12 +149,11 @@ public class TicketDetailsResourceIntTest {
         assertThat(ticketDetailsList).hasSize(databaseSizeBeforeCreate + 1);
         TicketDetails testTicketDetails = ticketDetailsList.get(ticketDetailsList.size() - 1);
         assertThat(testTicketDetails.getUserid()).isEqualTo(DEFAULT_USERID);
-        assertThat(testTicketDetails.getAmount()).isEqualTo(DEFAULT_AMOUNT);
-        assertThat(testTicketDetails.isAddAmount()).isEqualTo(DEFAULT_ADD_AMOUNT);
+        assertThat(testTicketDetails.getTicket()).isEqualTo(DEFAULT_TICKET);
+        assertThat(testTicketDetails.isAddTicket()).isEqualTo(DEFAULT_ADD_TICKET);
         assertThat(testTicketDetails.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testTicketDetails.getTypeString()).isEqualTo(DEFAULT_TYPE_STRING);
         assertThat(testTicketDetails.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
-        assertThat(testTicketDetails.getTicket()).isEqualTo(DEFAULT_TICKET);
         assertThat(testTicketDetails.getOrderNo()).isEqualTo(DEFAULT_ORDER_NO);
     }
 
@@ -194,12 +189,11 @@ public class TicketDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ticketDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].addAmount").value(hasItem(DEFAULT_ADD_AMOUNT.booleanValue())))
+            .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
+            .andExpect(jsonPath("$.[*].addTicket").value(hasItem(DEFAULT_ADD_TICKET.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
             .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
@@ -215,12 +209,11 @@ public class TicketDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(ticketDetails.getId().intValue()))
             .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
-            .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.addAmount").value(DEFAULT_ADD_AMOUNT.booleanValue()))
+            .andExpect(jsonPath("$.ticket").value(DEFAULT_TICKET.intValue()))
+            .andExpect(jsonPath("$.addTicket").value(DEFAULT_ADD_TICKET.booleanValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.typeString").value(DEFAULT_TYPE_STRING.toString()))
             .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()))
-            .andExpect(jsonPath("$.ticket").value(DEFAULT_TICKET.intValue()))
             .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO.toString()));
     }
 
@@ -292,107 +285,80 @@ public class TicketDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllTicketDetailsByAmountIsEqualToSomething() throws Exception {
+    public void getAllTicketDetailsByTicketIsEqualToSomething() throws Exception {
         // Initialize the database
         ticketDetailsRepository.saveAndFlush(ticketDetails);
 
-        // Get all the ticketDetailsList where amount equals to DEFAULT_AMOUNT
-        defaultTicketDetailsShouldBeFound("amount.equals=" + DEFAULT_AMOUNT);
+        // Get all the ticketDetailsList where ticket equals to DEFAULT_TICKET
+        defaultTicketDetailsShouldBeFound("ticket.equals=" + DEFAULT_TICKET);
 
-        // Get all the ticketDetailsList where amount equals to UPDATED_AMOUNT
-        defaultTicketDetailsShouldNotBeFound("amount.equals=" + UPDATED_AMOUNT);
+        // Get all the ticketDetailsList where ticket equals to UPDATED_TICKET
+        defaultTicketDetailsShouldNotBeFound("ticket.equals=" + UPDATED_TICKET);
     }
 
     @Test
     @Transactional
-    public void getAllTicketDetailsByAmountIsInShouldWork() throws Exception {
+    public void getAllTicketDetailsByTicketIsInShouldWork() throws Exception {
         // Initialize the database
         ticketDetailsRepository.saveAndFlush(ticketDetails);
 
-        // Get all the ticketDetailsList where amount in DEFAULT_AMOUNT or UPDATED_AMOUNT
-        defaultTicketDetailsShouldBeFound("amount.in=" + DEFAULT_AMOUNT + "," + UPDATED_AMOUNT);
+        // Get all the ticketDetailsList where ticket in DEFAULT_TICKET or UPDATED_TICKET
+        defaultTicketDetailsShouldBeFound("ticket.in=" + DEFAULT_TICKET + "," + UPDATED_TICKET);
 
-        // Get all the ticketDetailsList where amount equals to UPDATED_AMOUNT
-        defaultTicketDetailsShouldNotBeFound("amount.in=" + UPDATED_AMOUNT);
+        // Get all the ticketDetailsList where ticket equals to UPDATED_TICKET
+        defaultTicketDetailsShouldNotBeFound("ticket.in=" + UPDATED_TICKET);
     }
 
     @Test
     @Transactional
-    public void getAllTicketDetailsByAmountIsNullOrNotNull() throws Exception {
+    public void getAllTicketDetailsByTicketIsNullOrNotNull() throws Exception {
         // Initialize the database
         ticketDetailsRepository.saveAndFlush(ticketDetails);
 
-        // Get all the ticketDetailsList where amount is not null
-        defaultTicketDetailsShouldBeFound("amount.specified=true");
+        // Get all the ticketDetailsList where ticket is not null
+        defaultTicketDetailsShouldBeFound("ticket.specified=true");
 
-        // Get all the ticketDetailsList where amount is null
-        defaultTicketDetailsShouldNotBeFound("amount.specified=false");
+        // Get all the ticketDetailsList where ticket is null
+        defaultTicketDetailsShouldNotBeFound("ticket.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllTicketDetailsByAmountIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllTicketDetailsByAddTicketIsEqualToSomething() throws Exception {
         // Initialize the database
         ticketDetailsRepository.saveAndFlush(ticketDetails);
 
-        // Get all the ticketDetailsList where amount greater than or equals to DEFAULT_AMOUNT
-        defaultTicketDetailsShouldBeFound("amount.greaterOrEqualThan=" + DEFAULT_AMOUNT);
+        // Get all the ticketDetailsList where addTicket equals to DEFAULT_ADD_TICKET
+        defaultTicketDetailsShouldBeFound("addTicket.equals=" + DEFAULT_ADD_TICKET);
 
-        // Get all the ticketDetailsList where amount greater than or equals to UPDATED_AMOUNT
-        defaultTicketDetailsShouldNotBeFound("amount.greaterOrEqualThan=" + UPDATED_AMOUNT);
+        // Get all the ticketDetailsList where addTicket equals to UPDATED_ADD_TICKET
+        defaultTicketDetailsShouldNotBeFound("addTicket.equals=" + UPDATED_ADD_TICKET);
     }
 
     @Test
     @Transactional
-    public void getAllTicketDetailsByAmountIsLessThanSomething() throws Exception {
+    public void getAllTicketDetailsByAddTicketIsInShouldWork() throws Exception {
         // Initialize the database
         ticketDetailsRepository.saveAndFlush(ticketDetails);
 
-        // Get all the ticketDetailsList where amount less than or equals to DEFAULT_AMOUNT
-        defaultTicketDetailsShouldNotBeFound("amount.lessThan=" + DEFAULT_AMOUNT);
+        // Get all the ticketDetailsList where addTicket in DEFAULT_ADD_TICKET or UPDATED_ADD_TICKET
+        defaultTicketDetailsShouldBeFound("addTicket.in=" + DEFAULT_ADD_TICKET + "," + UPDATED_ADD_TICKET);
 
-        // Get all the ticketDetailsList where amount less than or equals to UPDATED_AMOUNT
-        defaultTicketDetailsShouldBeFound("amount.lessThan=" + UPDATED_AMOUNT);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllTicketDetailsByAddAmountIsEqualToSomething() throws Exception {
-        // Initialize the database
-        ticketDetailsRepository.saveAndFlush(ticketDetails);
-
-        // Get all the ticketDetailsList where addAmount equals to DEFAULT_ADD_AMOUNT
-        defaultTicketDetailsShouldBeFound("addAmount.equals=" + DEFAULT_ADD_AMOUNT);
-
-        // Get all the ticketDetailsList where addAmount equals to UPDATED_ADD_AMOUNT
-        defaultTicketDetailsShouldNotBeFound("addAmount.equals=" + UPDATED_ADD_AMOUNT);
+        // Get all the ticketDetailsList where addTicket equals to UPDATED_ADD_TICKET
+        defaultTicketDetailsShouldNotBeFound("addTicket.in=" + UPDATED_ADD_TICKET);
     }
 
     @Test
     @Transactional
-    public void getAllTicketDetailsByAddAmountIsInShouldWork() throws Exception {
+    public void getAllTicketDetailsByAddTicketIsNullOrNotNull() throws Exception {
         // Initialize the database
         ticketDetailsRepository.saveAndFlush(ticketDetails);
 
-        // Get all the ticketDetailsList where addAmount in DEFAULT_ADD_AMOUNT or UPDATED_ADD_AMOUNT
-        defaultTicketDetailsShouldBeFound("addAmount.in=" + DEFAULT_ADD_AMOUNT + "," + UPDATED_ADD_AMOUNT);
+        // Get all the ticketDetailsList where addTicket is not null
+        defaultTicketDetailsShouldBeFound("addTicket.specified=true");
 
-        // Get all the ticketDetailsList where addAmount equals to UPDATED_ADD_AMOUNT
-        defaultTicketDetailsShouldNotBeFound("addAmount.in=" + UPDATED_ADD_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllTicketDetailsByAddAmountIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        ticketDetailsRepository.saveAndFlush(ticketDetails);
-
-        // Get all the ticketDetailsList where addAmount is not null
-        defaultTicketDetailsShouldBeFound("addAmount.specified=true");
-
-        // Get all the ticketDetailsList where addAmount is null
-        defaultTicketDetailsShouldNotBeFound("addAmount.specified=false");
+        // Get all the ticketDetailsList where addTicket is null
+        defaultTicketDetailsShouldNotBeFound("addTicket.specified=false");
     }
 
     @Test
@@ -541,45 +507,6 @@ public class TicketDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllTicketDetailsByTicketIsEqualToSomething() throws Exception {
-        // Initialize the database
-        ticketDetailsRepository.saveAndFlush(ticketDetails);
-
-        // Get all the ticketDetailsList where ticket equals to DEFAULT_TICKET
-        defaultTicketDetailsShouldBeFound("ticket.equals=" + DEFAULT_TICKET);
-
-        // Get all the ticketDetailsList where ticket equals to UPDATED_TICKET
-        defaultTicketDetailsShouldNotBeFound("ticket.equals=" + UPDATED_TICKET);
-    }
-
-    @Test
-    @Transactional
-    public void getAllTicketDetailsByTicketIsInShouldWork() throws Exception {
-        // Initialize the database
-        ticketDetailsRepository.saveAndFlush(ticketDetails);
-
-        // Get all the ticketDetailsList where ticket in DEFAULT_TICKET or UPDATED_TICKET
-        defaultTicketDetailsShouldBeFound("ticket.in=" + DEFAULT_TICKET + "," + UPDATED_TICKET);
-
-        // Get all the ticketDetailsList where ticket equals to UPDATED_TICKET
-        defaultTicketDetailsShouldNotBeFound("ticket.in=" + UPDATED_TICKET);
-    }
-
-    @Test
-    @Transactional
-    public void getAllTicketDetailsByTicketIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        ticketDetailsRepository.saveAndFlush(ticketDetails);
-
-        // Get all the ticketDetailsList where ticket is not null
-        defaultTicketDetailsShouldBeFound("ticket.specified=true");
-
-        // Get all the ticketDetailsList where ticket is null
-        defaultTicketDetailsShouldNotBeFound("ticket.specified=false");
-    }
-
-    @Test
-    @Transactional
     public void getAllTicketDetailsByOrderNoIsEqualToSomething() throws Exception {
         // Initialize the database
         ticketDetailsRepository.saveAndFlush(ticketDetails);
@@ -644,12 +571,11 @@ public class TicketDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ticketDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].addAmount").value(hasItem(DEFAULT_ADD_AMOUNT.booleanValue())))
+            .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
+            .andExpect(jsonPath("$.[*].addTicket").value(hasItem(DEFAULT_ADD_TICKET.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].ticket").value(hasItem(DEFAULT_TICKET.intValue())))
             .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
@@ -686,12 +612,11 @@ public class TicketDetailsResourceIntTest {
         em.detach(updatedTicketDetails);
         updatedTicketDetails
             .userid(UPDATED_USERID)
-            .amount(UPDATED_AMOUNT)
-            .addAmount(UPDATED_ADD_AMOUNT)
+            .ticket(UPDATED_TICKET)
+            .addTicket(UPDATED_ADD_TICKET)
             .type(UPDATED_TYPE)
             .typeString(UPDATED_TYPE_STRING)
             .createdTime(UPDATED_CREATED_TIME)
-            .ticket(UPDATED_TICKET)
             .orderNo(UPDATED_ORDER_NO);
         TicketDetailsDTO ticketDetailsDTO = ticketDetailsMapper.toDto(updatedTicketDetails);
 
@@ -705,12 +630,11 @@ public class TicketDetailsResourceIntTest {
         assertThat(ticketDetailsList).hasSize(databaseSizeBeforeUpdate);
         TicketDetails testTicketDetails = ticketDetailsList.get(ticketDetailsList.size() - 1);
         assertThat(testTicketDetails.getUserid()).isEqualTo(UPDATED_USERID);
-        assertThat(testTicketDetails.getAmount()).isEqualTo(UPDATED_AMOUNT);
-        assertThat(testTicketDetails.isAddAmount()).isEqualTo(UPDATED_ADD_AMOUNT);
+        assertThat(testTicketDetails.getTicket()).isEqualTo(UPDATED_TICKET);
+        assertThat(testTicketDetails.isAddTicket()).isEqualTo(UPDATED_ADD_TICKET);
         assertThat(testTicketDetails.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testTicketDetails.getTypeString()).isEqualTo(UPDATED_TYPE_STRING);
         assertThat(testTicketDetails.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
-        assertThat(testTicketDetails.getTicket()).isEqualTo(UPDATED_TICKET);
         assertThat(testTicketDetails.getOrderNo()).isEqualTo(UPDATED_ORDER_NO);
     }
 

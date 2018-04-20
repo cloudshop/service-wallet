@@ -52,11 +52,11 @@ public class IntegralDetailsResourceIntTest {
     private static final Long DEFAULT_USERID = 1L;
     private static final Long UPDATED_USERID = 2L;
 
-    private static final Long DEFAULT_AMOUNT = 1L;
-    private static final Long UPDATED_AMOUNT = 2L;
+    private static final BigDecimal DEFAULT_INTEGRAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_INTEGRAL = new BigDecimal(2);
 
-    private static final Boolean DEFAULT_ADD_AMOUNT = false;
-    private static final Boolean UPDATED_ADD_AMOUNT = true;
+    private static final Boolean DEFAULT_ADD_INTEGRAL = false;
+    private static final Boolean UPDATED_ADD_INTEGRAL = true;
 
     private static final Integer DEFAULT_TYPE = 1;
     private static final Integer UPDATED_TYPE = 2;
@@ -66,9 +66,6 @@ public class IntegralDetailsResourceIntTest {
 
     private static final Instant DEFAULT_CREATED_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_CREATED_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final BigDecimal DEFAULT_INTEGRAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_INTEGRAL = new BigDecimal(2);
 
     private static final String DEFAULT_ORDER_NO = "AAAAAAAAAA";
     private static final String UPDATED_ORDER_NO = "BBBBBBBBBB";
@@ -121,12 +118,11 @@ public class IntegralDetailsResourceIntTest {
     public static IntegralDetails createEntity(EntityManager em) {
         IntegralDetails integralDetails = new IntegralDetails()
             .userid(DEFAULT_USERID)
-            .amount(DEFAULT_AMOUNT)
-            .addAmount(DEFAULT_ADD_AMOUNT)
+            .integral(DEFAULT_INTEGRAL)
+            .addIntegral(DEFAULT_ADD_INTEGRAL)
             .type(DEFAULT_TYPE)
             .typeString(DEFAULT_TYPE_STRING)
             .createdTime(DEFAULT_CREATED_TIME)
-            .integral(DEFAULT_INTEGRAL)
             .orderNo(DEFAULT_ORDER_NO);
         return integralDetails;
     }
@@ -153,12 +149,11 @@ public class IntegralDetailsResourceIntTest {
         assertThat(integralDetailsList).hasSize(databaseSizeBeforeCreate + 1);
         IntegralDetails testIntegralDetails = integralDetailsList.get(integralDetailsList.size() - 1);
         assertThat(testIntegralDetails.getUserid()).isEqualTo(DEFAULT_USERID);
-        assertThat(testIntegralDetails.getAmount()).isEqualTo(DEFAULT_AMOUNT);
-        assertThat(testIntegralDetails.isAddAmount()).isEqualTo(DEFAULT_ADD_AMOUNT);
+        assertThat(testIntegralDetails.getIntegral()).isEqualTo(DEFAULT_INTEGRAL);
+        assertThat(testIntegralDetails.isAddIntegral()).isEqualTo(DEFAULT_ADD_INTEGRAL);
         assertThat(testIntegralDetails.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testIntegralDetails.getTypeString()).isEqualTo(DEFAULT_TYPE_STRING);
         assertThat(testIntegralDetails.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
-        assertThat(testIntegralDetails.getIntegral()).isEqualTo(DEFAULT_INTEGRAL);
         assertThat(testIntegralDetails.getOrderNo()).isEqualTo(DEFAULT_ORDER_NO);
     }
 
@@ -194,12 +189,11 @@ public class IntegralDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(integralDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].addAmount").value(hasItem(DEFAULT_ADD_AMOUNT.booleanValue())))
+            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
+            .andExpect(jsonPath("$.[*].addIntegral").value(hasItem(DEFAULT_ADD_INTEGRAL.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
             .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
@@ -215,12 +209,11 @@ public class IntegralDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(integralDetails.getId().intValue()))
             .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
-            .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.addAmount").value(DEFAULT_ADD_AMOUNT.booleanValue()))
+            .andExpect(jsonPath("$.integral").value(DEFAULT_INTEGRAL.intValue()))
+            .andExpect(jsonPath("$.addIntegral").value(DEFAULT_ADD_INTEGRAL.booleanValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.typeString").value(DEFAULT_TYPE_STRING.toString()))
             .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()))
-            .andExpect(jsonPath("$.integral").value(DEFAULT_INTEGRAL.intValue()))
             .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO.toString()));
     }
 
@@ -292,107 +285,80 @@ public class IntegralDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllIntegralDetailsByAmountIsEqualToSomething() throws Exception {
+    public void getAllIntegralDetailsByIntegralIsEqualToSomething() throws Exception {
         // Initialize the database
         integralDetailsRepository.saveAndFlush(integralDetails);
 
-        // Get all the integralDetailsList where amount equals to DEFAULT_AMOUNT
-        defaultIntegralDetailsShouldBeFound("amount.equals=" + DEFAULT_AMOUNT);
+        // Get all the integralDetailsList where integral equals to DEFAULT_INTEGRAL
+        defaultIntegralDetailsShouldBeFound("integral.equals=" + DEFAULT_INTEGRAL);
 
-        // Get all the integralDetailsList where amount equals to UPDATED_AMOUNT
-        defaultIntegralDetailsShouldNotBeFound("amount.equals=" + UPDATED_AMOUNT);
+        // Get all the integralDetailsList where integral equals to UPDATED_INTEGRAL
+        defaultIntegralDetailsShouldNotBeFound("integral.equals=" + UPDATED_INTEGRAL);
     }
 
     @Test
     @Transactional
-    public void getAllIntegralDetailsByAmountIsInShouldWork() throws Exception {
+    public void getAllIntegralDetailsByIntegralIsInShouldWork() throws Exception {
         // Initialize the database
         integralDetailsRepository.saveAndFlush(integralDetails);
 
-        // Get all the integralDetailsList where amount in DEFAULT_AMOUNT or UPDATED_AMOUNT
-        defaultIntegralDetailsShouldBeFound("amount.in=" + DEFAULT_AMOUNT + "," + UPDATED_AMOUNT);
+        // Get all the integralDetailsList where integral in DEFAULT_INTEGRAL or UPDATED_INTEGRAL
+        defaultIntegralDetailsShouldBeFound("integral.in=" + DEFAULT_INTEGRAL + "," + UPDATED_INTEGRAL);
 
-        // Get all the integralDetailsList where amount equals to UPDATED_AMOUNT
-        defaultIntegralDetailsShouldNotBeFound("amount.in=" + UPDATED_AMOUNT);
+        // Get all the integralDetailsList where integral equals to UPDATED_INTEGRAL
+        defaultIntegralDetailsShouldNotBeFound("integral.in=" + UPDATED_INTEGRAL);
     }
 
     @Test
     @Transactional
-    public void getAllIntegralDetailsByAmountIsNullOrNotNull() throws Exception {
+    public void getAllIntegralDetailsByIntegralIsNullOrNotNull() throws Exception {
         // Initialize the database
         integralDetailsRepository.saveAndFlush(integralDetails);
 
-        // Get all the integralDetailsList where amount is not null
-        defaultIntegralDetailsShouldBeFound("amount.specified=true");
+        // Get all the integralDetailsList where integral is not null
+        defaultIntegralDetailsShouldBeFound("integral.specified=true");
 
-        // Get all the integralDetailsList where amount is null
-        defaultIntegralDetailsShouldNotBeFound("amount.specified=false");
+        // Get all the integralDetailsList where integral is null
+        defaultIntegralDetailsShouldNotBeFound("integral.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllIntegralDetailsByAmountIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllIntegralDetailsByAddIntegralIsEqualToSomething() throws Exception {
         // Initialize the database
         integralDetailsRepository.saveAndFlush(integralDetails);
 
-        // Get all the integralDetailsList where amount greater than or equals to DEFAULT_AMOUNT
-        defaultIntegralDetailsShouldBeFound("amount.greaterOrEqualThan=" + DEFAULT_AMOUNT);
+        // Get all the integralDetailsList where addIntegral equals to DEFAULT_ADD_INTEGRAL
+        defaultIntegralDetailsShouldBeFound("addIntegral.equals=" + DEFAULT_ADD_INTEGRAL);
 
-        // Get all the integralDetailsList where amount greater than or equals to UPDATED_AMOUNT
-        defaultIntegralDetailsShouldNotBeFound("amount.greaterOrEqualThan=" + UPDATED_AMOUNT);
+        // Get all the integralDetailsList where addIntegral equals to UPDATED_ADD_INTEGRAL
+        defaultIntegralDetailsShouldNotBeFound("addIntegral.equals=" + UPDATED_ADD_INTEGRAL);
     }
 
     @Test
     @Transactional
-    public void getAllIntegralDetailsByAmountIsLessThanSomething() throws Exception {
+    public void getAllIntegralDetailsByAddIntegralIsInShouldWork() throws Exception {
         // Initialize the database
         integralDetailsRepository.saveAndFlush(integralDetails);
 
-        // Get all the integralDetailsList where amount less than or equals to DEFAULT_AMOUNT
-        defaultIntegralDetailsShouldNotBeFound("amount.lessThan=" + DEFAULT_AMOUNT);
+        // Get all the integralDetailsList where addIntegral in DEFAULT_ADD_INTEGRAL or UPDATED_ADD_INTEGRAL
+        defaultIntegralDetailsShouldBeFound("addIntegral.in=" + DEFAULT_ADD_INTEGRAL + "," + UPDATED_ADD_INTEGRAL);
 
-        // Get all the integralDetailsList where amount less than or equals to UPDATED_AMOUNT
-        defaultIntegralDetailsShouldBeFound("amount.lessThan=" + UPDATED_AMOUNT);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllIntegralDetailsByAddAmountIsEqualToSomething() throws Exception {
-        // Initialize the database
-        integralDetailsRepository.saveAndFlush(integralDetails);
-
-        // Get all the integralDetailsList where addAmount equals to DEFAULT_ADD_AMOUNT
-        defaultIntegralDetailsShouldBeFound("addAmount.equals=" + DEFAULT_ADD_AMOUNT);
-
-        // Get all the integralDetailsList where addAmount equals to UPDATED_ADD_AMOUNT
-        defaultIntegralDetailsShouldNotBeFound("addAmount.equals=" + UPDATED_ADD_AMOUNT);
+        // Get all the integralDetailsList where addIntegral equals to UPDATED_ADD_INTEGRAL
+        defaultIntegralDetailsShouldNotBeFound("addIntegral.in=" + UPDATED_ADD_INTEGRAL);
     }
 
     @Test
     @Transactional
-    public void getAllIntegralDetailsByAddAmountIsInShouldWork() throws Exception {
+    public void getAllIntegralDetailsByAddIntegralIsNullOrNotNull() throws Exception {
         // Initialize the database
         integralDetailsRepository.saveAndFlush(integralDetails);
 
-        // Get all the integralDetailsList where addAmount in DEFAULT_ADD_AMOUNT or UPDATED_ADD_AMOUNT
-        defaultIntegralDetailsShouldBeFound("addAmount.in=" + DEFAULT_ADD_AMOUNT + "," + UPDATED_ADD_AMOUNT);
+        // Get all the integralDetailsList where addIntegral is not null
+        defaultIntegralDetailsShouldBeFound("addIntegral.specified=true");
 
-        // Get all the integralDetailsList where addAmount equals to UPDATED_ADD_AMOUNT
-        defaultIntegralDetailsShouldNotBeFound("addAmount.in=" + UPDATED_ADD_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllIntegralDetailsByAddAmountIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        integralDetailsRepository.saveAndFlush(integralDetails);
-
-        // Get all the integralDetailsList where addAmount is not null
-        defaultIntegralDetailsShouldBeFound("addAmount.specified=true");
-
-        // Get all the integralDetailsList where addAmount is null
-        defaultIntegralDetailsShouldNotBeFound("addAmount.specified=false");
+        // Get all the integralDetailsList where addIntegral is null
+        defaultIntegralDetailsShouldNotBeFound("addIntegral.specified=false");
     }
 
     @Test
@@ -541,45 +507,6 @@ public class IntegralDetailsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllIntegralDetailsByIntegralIsEqualToSomething() throws Exception {
-        // Initialize the database
-        integralDetailsRepository.saveAndFlush(integralDetails);
-
-        // Get all the integralDetailsList where integral equals to DEFAULT_INTEGRAL
-        defaultIntegralDetailsShouldBeFound("integral.equals=" + DEFAULT_INTEGRAL);
-
-        // Get all the integralDetailsList where integral equals to UPDATED_INTEGRAL
-        defaultIntegralDetailsShouldNotBeFound("integral.equals=" + UPDATED_INTEGRAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllIntegralDetailsByIntegralIsInShouldWork() throws Exception {
-        // Initialize the database
-        integralDetailsRepository.saveAndFlush(integralDetails);
-
-        // Get all the integralDetailsList where integral in DEFAULT_INTEGRAL or UPDATED_INTEGRAL
-        defaultIntegralDetailsShouldBeFound("integral.in=" + DEFAULT_INTEGRAL + "," + UPDATED_INTEGRAL);
-
-        // Get all the integralDetailsList where integral equals to UPDATED_INTEGRAL
-        defaultIntegralDetailsShouldNotBeFound("integral.in=" + UPDATED_INTEGRAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllIntegralDetailsByIntegralIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        integralDetailsRepository.saveAndFlush(integralDetails);
-
-        // Get all the integralDetailsList where integral is not null
-        defaultIntegralDetailsShouldBeFound("integral.specified=true");
-
-        // Get all the integralDetailsList where integral is null
-        defaultIntegralDetailsShouldNotBeFound("integral.specified=false");
-    }
-
-    @Test
-    @Transactional
     public void getAllIntegralDetailsByOrderNoIsEqualToSomething() throws Exception {
         // Initialize the database
         integralDetailsRepository.saveAndFlush(integralDetails);
@@ -644,12 +571,11 @@ public class IntegralDetailsResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(integralDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].addAmount").value(hasItem(DEFAULT_ADD_AMOUNT.booleanValue())))
+            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
+            .andExpect(jsonPath("$.[*].addIntegral").value(hasItem(DEFAULT_ADD_INTEGRAL.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].integral").value(hasItem(DEFAULT_INTEGRAL.intValue())))
             .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
     }
 
@@ -686,12 +612,11 @@ public class IntegralDetailsResourceIntTest {
         em.detach(updatedIntegralDetails);
         updatedIntegralDetails
             .userid(UPDATED_USERID)
-            .amount(UPDATED_AMOUNT)
-            .addAmount(UPDATED_ADD_AMOUNT)
+            .integral(UPDATED_INTEGRAL)
+            .addIntegral(UPDATED_ADD_INTEGRAL)
             .type(UPDATED_TYPE)
             .typeString(UPDATED_TYPE_STRING)
             .createdTime(UPDATED_CREATED_TIME)
-            .integral(UPDATED_INTEGRAL)
             .orderNo(UPDATED_ORDER_NO);
         IntegralDetailsDTO integralDetailsDTO = integralDetailsMapper.toDto(updatedIntegralDetails);
 
@@ -705,12 +630,11 @@ public class IntegralDetailsResourceIntTest {
         assertThat(integralDetailsList).hasSize(databaseSizeBeforeUpdate);
         IntegralDetails testIntegralDetails = integralDetailsList.get(integralDetailsList.size() - 1);
         assertThat(testIntegralDetails.getUserid()).isEqualTo(UPDATED_USERID);
-        assertThat(testIntegralDetails.getAmount()).isEqualTo(UPDATED_AMOUNT);
-        assertThat(testIntegralDetails.isAddAmount()).isEqualTo(UPDATED_ADD_AMOUNT);
+        assertThat(testIntegralDetails.getIntegral()).isEqualTo(UPDATED_INTEGRAL);
+        assertThat(testIntegralDetails.isAddIntegral()).isEqualTo(UPDATED_ADD_INTEGRAL);
         assertThat(testIntegralDetails.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testIntegralDetails.getTypeString()).isEqualTo(UPDATED_TYPE_STRING);
         assertThat(testIntegralDetails.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
-        assertThat(testIntegralDetails.getIntegral()).isEqualTo(UPDATED_INTEGRAL);
         assertThat(testIntegralDetails.getOrderNo()).isEqualTo(UPDATED_ORDER_NO);
     }
 

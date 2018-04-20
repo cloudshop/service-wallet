@@ -30,17 +30,15 @@ public class TicketDetailsCriteria implements Serializable {
 
     private LongFilter userid;
 
-    private LongFilter amount;
+    private BigDecimalFilter ticket;
 
-    private BooleanFilter addAmount;
+    private BooleanFilter addTicket;
 
     private IntegerFilter type;
 
     private StringFilter typeString;
 
     private InstantFilter createdTime;
-
-    private BigDecimalFilter ticket;
 
     private StringFilter orderNo;
 
@@ -65,20 +63,20 @@ public class TicketDetailsCriteria implements Serializable {
         this.userid = userid;
     }
 
-    public LongFilter getAmount() {
-        return amount;
+    public BigDecimalFilter getTicket() {
+        return ticket;
     }
 
-    public void setAmount(LongFilter amount) {
-        this.amount = amount;
+    public void setTicket(BigDecimalFilter ticket) {
+        this.ticket = ticket;
     }
 
-    public BooleanFilter getAddAmount() {
-        return addAmount;
+    public BooleanFilter getAddTicket() {
+        return addTicket;
     }
 
-    public void setAddAmount(BooleanFilter addAmount) {
-        this.addAmount = addAmount;
+    public void setAddTicket(BooleanFilter addTicket) {
+        this.addTicket = addTicket;
     }
 
     public IntegerFilter getType() {
@@ -105,14 +103,6 @@ public class TicketDetailsCriteria implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public BigDecimalFilter getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(BigDecimalFilter ticket) {
-        this.ticket = ticket;
-    }
-
     public StringFilter getOrderNo() {
         return orderNo;
     }
@@ -134,12 +124,11 @@ public class TicketDetailsCriteria implements Serializable {
         return "TicketDetailsCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (userid != null ? "userid=" + userid + ", " : "") +
-                (amount != null ? "amount=" + amount + ", " : "") +
-                (addAmount != null ? "addAmount=" + addAmount + ", " : "") +
+                (ticket != null ? "ticket=" + ticket + ", " : "") +
+                (addTicket != null ? "addTicket=" + addTicket + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (typeString != null ? "typeString=" + typeString + ", " : "") +
                 (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
-                (ticket != null ? "ticket=" + ticket + ", " : "") +
                 (orderNo != null ? "orderNo=" + orderNo + ", " : "") +
                 (walletId != null ? "walletId=" + walletId + ", " : "") +
             "}";

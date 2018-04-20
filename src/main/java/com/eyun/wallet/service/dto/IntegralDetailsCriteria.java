@@ -30,17 +30,15 @@ public class IntegralDetailsCriteria implements Serializable {
 
     private LongFilter userid;
 
-    private LongFilter amount;
+    private BigDecimalFilter integral;
 
-    private BooleanFilter addAmount;
+    private BooleanFilter addIntegral;
 
     private IntegerFilter type;
 
     private StringFilter typeString;
 
     private InstantFilter createdTime;
-
-    private BigDecimalFilter integral;
 
     private StringFilter orderNo;
 
@@ -65,20 +63,20 @@ public class IntegralDetailsCriteria implements Serializable {
         this.userid = userid;
     }
 
-    public LongFilter getAmount() {
-        return amount;
+    public BigDecimalFilter getIntegral() {
+        return integral;
     }
 
-    public void setAmount(LongFilter amount) {
-        this.amount = amount;
+    public void setIntegral(BigDecimalFilter integral) {
+        this.integral = integral;
     }
 
-    public BooleanFilter getAddAmount() {
-        return addAmount;
+    public BooleanFilter getAddIntegral() {
+        return addIntegral;
     }
 
-    public void setAddAmount(BooleanFilter addAmount) {
-        this.addAmount = addAmount;
+    public void setAddIntegral(BooleanFilter addIntegral) {
+        this.addIntegral = addIntegral;
     }
 
     public IntegerFilter getType() {
@@ -105,14 +103,6 @@ public class IntegralDetailsCriteria implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public BigDecimalFilter getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(BigDecimalFilter integral) {
-        this.integral = integral;
-    }
-
     public StringFilter getOrderNo() {
         return orderNo;
     }
@@ -134,12 +124,11 @@ public class IntegralDetailsCriteria implements Serializable {
         return "IntegralDetailsCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (userid != null ? "userid=" + userid + ", " : "") +
-                (amount != null ? "amount=" + amount + ", " : "") +
-                (addAmount != null ? "addAmount=" + addAmount + ", " : "") +
+                (integral != null ? "integral=" + integral + ", " : "") +
+                (addIntegral != null ? "addIntegral=" + addIntegral + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (typeString != null ? "typeString=" + typeString + ", " : "") +
                 (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
-                (integral != null ? "integral=" + integral + ", " : "") +
                 (orderNo != null ? "orderNo=" + orderNo + ", " : "") +
                 (walletId != null ? "walletId=" + walletId + ", " : "") +
             "}";

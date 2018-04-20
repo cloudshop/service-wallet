@@ -27,11 +27,11 @@ public class IntegralDetails implements Serializable {
     @Column(name = "userid")
     private Long userid;
 
-    @Column(name = "amount")
-    private Long amount;
+    @Column(name = "integral", precision=10, scale=2)
+    private BigDecimal integral;
 
-    @Column(name = "add_amount")
-    private Boolean addAmount;
+    @Column(name = "add_integral")
+    private Boolean addIntegral;
 
     @Column(name = "jhi_type")
     private Integer type;
@@ -41,9 +41,6 @@ public class IntegralDetails implements Serializable {
 
     @Column(name = "created_time")
     private Instant createdTime;
-
-    @Column(name = "integral", precision=10, scale=2)
-    private BigDecimal integral;
 
     @Column(name = "order_no")
     private String orderNo;
@@ -73,30 +70,30 @@ public class IntegralDetails implements Serializable {
         this.userid = userid;
     }
 
-    public Long getAmount() {
-        return amount;
+    public BigDecimal getIntegral() {
+        return integral;
     }
 
-    public IntegralDetails amount(Long amount) {
-        this.amount = amount;
+    public IntegralDetails integral(BigDecimal integral) {
+        this.integral = integral;
         return this;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setIntegral(BigDecimal integral) {
+        this.integral = integral;
     }
 
-    public Boolean isAddAmount() {
-        return addAmount;
+    public Boolean isAddIntegral() {
+        return addIntegral;
     }
 
-    public IntegralDetails addAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public IntegralDetails addIntegral(Boolean addIntegral) {
+        this.addIntegral = addIntegral;
         return this;
     }
 
-    public void setAddAmount(Boolean addAmount) {
-        this.addAmount = addAmount;
+    public void setAddIntegral(Boolean addIntegral) {
+        this.addIntegral = addIntegral;
     }
 
     public Integer getType() {
@@ -136,19 +133,6 @@ public class IntegralDetails implements Serializable {
 
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public BigDecimal getIntegral() {
-        return integral;
-    }
-
-    public IntegralDetails integral(BigDecimal integral) {
-        this.integral = integral;
-        return this;
-    }
-
-    public void setIntegral(BigDecimal integral) {
-        this.integral = integral;
     }
 
     public String getOrderNo() {
@@ -203,12 +187,11 @@ public class IntegralDetails implements Serializable {
         return "IntegralDetails{" +
             "id=" + getId() +
             ", userid=" + getUserid() +
-            ", amount=" + getAmount() +
-            ", addAmount='" + isAddAmount() + "'" +
+            ", integral=" + getIntegral() +
+            ", addIntegral='" + isAddIntegral() + "'" +
             ", type=" + getType() +
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
-            ", integral=" + getIntegral() +
             ", orderNo='" + getOrderNo() + "'" +
             "}";
     }
