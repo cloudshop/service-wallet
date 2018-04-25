@@ -295,7 +295,7 @@ public class WalletResource {
     
     @SuppressWarnings("all")
     @ApiOperation("修改钱包密码")
-    @PostMapping
+    @PostMapping("/wallets/update-password")
     public ResponseEntity updateWalletPassword(@RequestBody PasswordDTO passwordDTO) {
     	String verifyCode = VerifyService.getVerifyCode();
     	if (StringUtils.isNotBlank(verifyCode) && verifyCode.equals(passwordDTO.getCode())) {
