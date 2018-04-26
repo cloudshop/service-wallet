@@ -303,9 +303,9 @@ public class WalletResource {
     		Wallet wallet = walletService.findByUserid(user.getId());
     		wallet.setPassword(passwordDTO.getPassword());
     		walletService.update(wallet);
-    		return new ResponseEntity(null, HeaderUtil.createAlert("修改成功","password:"+passwordDTO.getPassword()), HttpStatus.OK);
+    		return new ResponseEntity(null, HeaderUtil.createAlert("success","password:"+passwordDTO.getPassword()), HttpStatus.OK);
     	} else {
-    		return new ResponseEntity(null, HeaderUtil.createAlert("修改失败","password:"+passwordDTO.getPassword()), HttpStatus.BAD_REQUEST);
+    		throw new BadRequestAlertException("验证码错误", "password", "password:"+passwordDTO.getPassword());
     	}
     	
     }

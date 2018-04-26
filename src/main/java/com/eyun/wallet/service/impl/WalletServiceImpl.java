@@ -2,6 +2,7 @@ package com.eyun.wallet.service.impl;
 
 import com.eyun.wallet.service.WalletService;
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.BalanceDetails;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.repository.BalanceDetailsRepository;
@@ -120,14 +121,16 @@ public class WalletServiceImpl implements WalletService {
 		wallet.setVersion(wallet.getVersion() + 1);
 		walletRepository.save(wallet);
 		// 添加账户明细 TODO
-//		WalletDetails wd = new WalletDetails();
-//		wd.setUserid(wallet.getUserid());
-//		wd.setType(1);// 1:充值
-//		wd.setCreatedTime(Instant.now());
-//		wd.setBalance(balanceDTO.getMoney());
-//		wd.setOrderNo(balanceDTO.getOrderNo());
-//		wd.setWallet(wallet);
-//		walletDetailsRepository.save(wd);
+		BalanceDetails balanceDetails = new BalanceDetails();
+		balanceDetails.setAddBalance(true);
+		balanceDetails.setBalance(balanceDTO.getMoney());
+		balanceDetails.setCreatedTime(Instant.now());
+		balanceDetails.setOrderNo(balanceDTO.getOrderNo());
+		balanceDetails.setType(1);//1 ：充值
+		balanceDetails.setTypeString("充值");
+		balanceDetails.setWallet(wallet);
+		balanceDetails.setUserid(wallet.getUserid());
+		balanceDetailsRepository.save(balanceDetails);
 		return wallet;
 	}
 
