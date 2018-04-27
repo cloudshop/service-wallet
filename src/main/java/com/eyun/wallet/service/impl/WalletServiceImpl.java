@@ -220,9 +220,14 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	public void serviceProviderReward(ServiceProviderRewardDTO serviceProviderRewardDTO) {
+	public void serviceProviderReward(Long spid,Long incrBID) {
+		BalanceDetails bd = balanceDetailsRepository.findByUseridAndTypeAndIncrBID(spid,2,incrBID);
+		if (bd != null) {
+			throw new BadRequestAlertException("incrYoule", "incr", "incrEr");
+		}
+		//奖励业务
 		final BigDecimal reward = new BigDecimal(400.00);
-		Wallet wallet = walletRepository.findByUserid(serviceProviderRewardDTO.getServiceProviderID());
+		Wallet wallet = walletRepository.findByUserid(spid);
 		Instant now = Instant.now();
 		BigDecimal balance = wallet.getBalance();
 		BigDecimal add = balance.add(reward);
@@ -236,7 +241,9 @@ public class WalletServiceImpl implements WalletService {
 			.balance(reward)
 			.addBalance(true)
 			.type(2)
-			.typeString("增值商家奖励");
+			.typeString("增值商家奖励")
+			.incrBID(incrBID)
+			.wallet(wallet);
 		balanceDetailsRepository.save(balanceDetails);
 	}
 }

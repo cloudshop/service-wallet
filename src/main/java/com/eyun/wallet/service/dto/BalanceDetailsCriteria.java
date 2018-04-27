@@ -42,6 +42,8 @@ public class BalanceDetailsCriteria implements Serializable {
 
     private StringFilter orderNo;
 
+    private LongFilter incrBID;
+
     private LongFilter walletId;
 
     public BalanceDetailsCriteria() {
@@ -111,6 +113,14 @@ public class BalanceDetailsCriteria implements Serializable {
         this.orderNo = orderNo;
     }
 
+    public LongFilter getIncrBID() {
+        return incrBID;
+    }
+
+    public void setIncrBID(LongFilter incrBID) {
+        this.incrBID = incrBID;
+    }
+
     public LongFilter getWalletId() {
         return walletId;
     }
@@ -130,6 +140,7 @@ public class BalanceDetailsCriteria implements Serializable {
                 (typeString != null ? "typeString=" + typeString + ", " : "") +
                 (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
                 (orderNo != null ? "orderNo=" + orderNo + ", " : "") +
+                (incrBID != null ? "incrBID=" + incrBID + ", " : "") +
                 (walletId != null ? "walletId=" + walletId + ", " : "") +
             "}";
     }

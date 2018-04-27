@@ -13,4 +13,6 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface BalanceDetailsRepository extends JpaRepository<BalanceDetails, Long>, JpaSpecificationExecutor<BalanceDetails> {
 
+	BalanceDetails findByUseridAndTypeAndIncrBID(Long spid, int i, Long incrBID);
+
 }

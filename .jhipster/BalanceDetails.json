@@ -36,6 +36,10 @@
         {
             "fieldName": "orderNo",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "incrBID",
+            "fieldType": "Long"
         }
     ],
     "changelogDate": "20180326031236",

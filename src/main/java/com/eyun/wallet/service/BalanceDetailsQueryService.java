@@ -100,6 +100,9 @@ public class BalanceDetailsQueryService extends QueryService<BalanceDetails> {
             if (criteria.getOrderNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getOrderNo(), BalanceDetails_.orderNo));
             }
+            if (criteria.getIncrBID() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getIncrBID(), BalanceDetails_.incrBID));
+            }
             if (criteria.getWalletId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getWalletId(), BalanceDetails_.wallet, Wallet_.id));
             }

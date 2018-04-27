@@ -50,6 +50,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="incr_bid" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <column name="wallet_id" type="bigint">
                 <constraints nullable="true" />
             </column>

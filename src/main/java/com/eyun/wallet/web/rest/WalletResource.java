@@ -330,7 +330,7 @@ public class WalletResource {
     @PutMapping("/serviceProvider/reward")
     public void serviceProviderReward(@RequestBody ServiceProviderRewardDTO serviceProviderRewardDTO) {
     	//TODO 待添加校验业务
-    	walletService.serviceProviderReward(serviceProviderRewardDTO);
+    	walletService.serviceProviderReward(serviceProviderRewardDTO.getServiceProviderID(),serviceProviderRewardDTO.getIncrementBusinessID());
     }
     
 }

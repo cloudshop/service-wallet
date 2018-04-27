@@ -58,6 +58,6 @@ public interface WalletService {
 
 	void update(Wallet wallet);
 
-	void serviceProviderReward(ServiceProviderRewardDTO serviceProviderRewardDTO);
+	void serviceProviderReward(Long spid, Long incrBID);
 	
 }

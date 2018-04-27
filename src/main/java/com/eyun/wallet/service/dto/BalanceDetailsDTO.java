@@ -29,6 +29,8 @@ public class BalanceDetailsDTO implements Serializable {
 
     private String orderNo;
 
+    private Long incrBID;
+
     private Long walletId;
 
     public Long getId() {
@@ -95,6 +97,14 @@ public class BalanceDetailsDTO implements Serializable {
         this.orderNo = orderNo;
     }
 
+    public Long getIncrBID() {
+        return incrBID;
+    }
+
+    public void setIncrBID(Long incrBID) {
+        this.incrBID = incrBID;
+    }
+
     public Long getWalletId() {
         return walletId;
     }
@@ -135,6 +145,7 @@ public class BalanceDetailsDTO implements Serializable {
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
             ", orderNo='" + getOrderNo() + "'" +
+            ", incrBID=" + getIncrBID() +
             "}";
     }
 }

@@ -45,6 +45,9 @@ public class BalanceDetails implements Serializable {
     @Column(name = "order_no")
     private String orderNo;
 
+    @Column(name = "incr_bid")
+    private Long incrBID;
+
     @ManyToOne
     private Wallet wallet;
 
@@ -148,6 +151,19 @@ public class BalanceDetails implements Serializable {
         this.orderNo = orderNo;
     }
 
+    public Long getIncrBID() {
+        return incrBID;
+    }
+
+    public BalanceDetails incrBID(Long incrBID) {
+        this.incrBID = incrBID;
+        return this;
+    }
+
+    public void setIncrBID(Long incrBID) {
+        this.incrBID = incrBID;
+    }
+
     public Wallet getWallet() {
         return wallet;
     }
@@ -193,6 +209,7 @@ public class BalanceDetails implements Serializable {
             ", typeString='" + getTypeString() + "'" +
             ", createdTime='" + getCreatedTime() + "'" +
             ", orderNo='" + getOrderNo() + "'" +
+            ", incrBID=" + getIncrBID() +
             "}";
     }
 }

@@ -70,6 +70,9 @@ public class BalanceDetailsResourceIntTest {
     private static final String DEFAULT_ORDER_NO = "AAAAAAAAAA";
     private static final String UPDATED_ORDER_NO = "BBBBBBBBBB";
 
+    private static final Long DEFAULT_INCR_BID = 1L;
+    private static final Long UPDATED_INCR_BID = 2L;
+
     @Autowired
     private BalanceDetailsRepository balanceDetailsRepository;
 
@@ -123,7 +126,8 @@ public class BalanceDetailsResourceIntTest {
             .type(DEFAULT_TYPE)
             .typeString(DEFAULT_TYPE_STRING)
             .createdTime(DEFAULT_CREATED_TIME)
-            .orderNo(DEFAULT_ORDER_NO);
+            .orderNo(DEFAULT_ORDER_NO)
+            .incrBID(DEFAULT_INCR_BID);
         return balanceDetails;
     }
 
@@ -155,6 +159,7 @@ public class BalanceDetailsResourceIntTest {
         assertThat(testBalanceDetails.getTypeString()).isEqualTo(DEFAULT_TYPE_STRING);
         assertThat(testBalanceDetails.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
         assertThat(testBalanceDetails.getOrderNo()).isEqualTo(DEFAULT_ORDER_NO);
+        assertThat(testBalanceDetails.getIncrBID()).isEqualTo(DEFAULT_INCR_BID);
     }
 
     @Test
@@ -194,7 +199,8 @@ public class BalanceDetailsResourceIntTest {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
+            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())))
+            .andExpect(jsonPath("$.[*].incrBID").value(hasItem(DEFAULT_INCR_BID.intValue())));
     }
 
     @Test
@@ -214,7 +220,8 @@ public class BalanceDetailsResourceIntTest {
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.typeString").value(DEFAULT_TYPE_STRING.toString()))
             .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()))
-            .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO.toString()));
+            .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO.toString()))
+            .andExpect(jsonPath("$.incrBID").value(DEFAULT_INCR_BID.intValue()));
     }
 
     @Test
@@ -546,6 +553,72 @@ public class BalanceDetailsResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllBalanceDetailsByIncrBIDIsEqualToSomething() throws Exception {
+        // Initialize the database
+        balanceDetailsRepository.saveAndFlush(balanceDetails);
+
+        // Get all the balanceDetailsList where incrBID equals to DEFAULT_INCR_BID
+        defaultBalanceDetailsShouldBeFound("incrBID.equals=" + DEFAULT_INCR_BID);
+
+        // Get all the balanceDetailsList where incrBID equals to UPDATED_INCR_BID
+        defaultBalanceDetailsShouldNotBeFound("incrBID.equals=" + UPDATED_INCR_BID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllBalanceDetailsByIncrBIDIsInShouldWork() throws Exception {
+        // Initialize the database
+        balanceDetailsRepository.saveAndFlush(balanceDetails);
+
+        // Get all the balanceDetailsList where incrBID in DEFAULT_INCR_BID or UPDATED_INCR_BID
+        defaultBalanceDetailsShouldBeFound("incrBID.in=" + DEFAULT_INCR_BID + "," + UPDATED_INCR_BID);
+
+        // Get all the balanceDetailsList where incrBID equals to UPDATED_INCR_BID
+        defaultBalanceDetailsShouldNotBeFound("incrBID.in=" + UPDATED_INCR_BID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllBalanceDetailsByIncrBIDIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        balanceDetailsRepository.saveAndFlush(balanceDetails);
+
+        // Get all the balanceDetailsList where incrBID is not null
+        defaultBalanceDetailsShouldBeFound("incrBID.specified=true");
+
+        // Get all the balanceDetailsList where incrBID is null
+        defaultBalanceDetailsShouldNotBeFound("incrBID.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllBalanceDetailsByIncrBIDIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        balanceDetailsRepository.saveAndFlush(balanceDetails);
+
+        // Get all the balanceDetailsList where incrBID greater than or equals to DEFAULT_INCR_BID
+        defaultBalanceDetailsShouldBeFound("incrBID.greaterOrEqualThan=" + DEFAULT_INCR_BID);
+
+        // Get all the balanceDetailsList where incrBID greater than or equals to UPDATED_INCR_BID
+        defaultBalanceDetailsShouldNotBeFound("incrBID.greaterOrEqualThan=" + UPDATED_INCR_BID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllBalanceDetailsByIncrBIDIsLessThanSomething() throws Exception {
+        // Initialize the database
+        balanceDetailsRepository.saveAndFlush(balanceDetails);
+
+        // Get all the balanceDetailsList where incrBID less than or equals to DEFAULT_INCR_BID
+        defaultBalanceDetailsShouldNotBeFound("incrBID.lessThan=" + DEFAULT_INCR_BID);
+
+        // Get all the balanceDetailsList where incrBID less than or equals to UPDATED_INCR_BID
+        defaultBalanceDetailsShouldBeFound("incrBID.lessThan=" + UPDATED_INCR_BID);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllBalanceDetailsByWalletIsEqualToSomething() throws Exception {
         // Initialize the database
         Wallet wallet = WalletResourceIntTest.createEntity(em);
@@ -576,7 +649,8 @@ public class BalanceDetailsResourceIntTest {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].typeString").value(hasItem(DEFAULT_TYPE_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())));
+            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO.toString())))
+            .andExpect(jsonPath("$.[*].incrBID").value(hasItem(DEFAULT_INCR_BID.intValue())));
     }
 
     /**
@@ -617,7 +691,8 @@ public class BalanceDetailsResourceIntTest {
             .type(UPDATED_TYPE)
             .typeString(UPDATED_TYPE_STRING)
             .createdTime(UPDATED_CREATED_TIME)
-            .orderNo(UPDATED_ORDER_NO);
+            .orderNo(UPDATED_ORDER_NO)
+            .incrBID(UPDATED_INCR_BID);
         BalanceDetailsDTO balanceDetailsDTO = balanceDetailsMapper.toDto(updatedBalanceDetails);
 
         restBalanceDetailsMockMvc.perform(put("/api/balance-details")
@@ -636,6 +711,7 @@ public class BalanceDetailsResourceIntTest {
         assertThat(testBalanceDetails.getTypeString()).isEqualTo(UPDATED_TYPE_STRING);
         assertThat(testBalanceDetails.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
         assertThat(testBalanceDetails.getOrderNo()).isEqualTo(UPDATED_ORDER_NO);
+        assertThat(testBalanceDetails.getIncrBID()).isEqualTo(UPDATED_INCR_BID);
     }
 
     @Test
