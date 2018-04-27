@@ -4,6 +4,7 @@ import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
 import com.eyun.wallet.service.dto.WalletDTO;
 
 import java.math.BigDecimal;
@@ -56,5 +57,7 @@ public interface WalletService {
 	PayOrder balancePay(Long long1, BigDecimal price, String orderNo);
 
 	void update(Wallet wallet);
+
+	void serviceProviderReward(ServiceProviderRewardDTO serviceProviderRewardDTO);
 	
 }

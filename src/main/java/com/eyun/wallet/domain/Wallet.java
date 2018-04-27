@@ -293,4 +293,5 @@ public class Wallet implements Serializable {
             ", password='" + getPassword() + "'" +
             "}";
     }
+    
 }

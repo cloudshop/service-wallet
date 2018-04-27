@@ -11,6 +11,7 @@ import com.eyun.wallet.service.dto.PasswordDTO;
 import com.eyun.wallet.service.dto.PayNotifyDTO;
 import com.eyun.wallet.service.dto.ProOrderCriteria;
 import com.eyun.wallet.service.dto.ProOrderDTO;
+import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
 import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
@@ -292,7 +293,15 @@ public class WalletResource {
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
     
-    
+    /**
+     * 修改钱包密码
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月27日
+     * @version 1.0
+     * @param passwordDTO
+     * @return
+     */
     @SuppressWarnings("all")
     @ApiOperation("修改钱包密码")
     @PostMapping("/wallets/update-password")
@@ -308,6 +317,20 @@ public class WalletResource {
     		throw new BadRequestAlertException("验证码错误", "password", "password:"+passwordDTO.getPassword());
     	}
     	
+    }
+    
+    /**
+     * 服务商奖励-体系内新增 增值商家
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年4月27日
+     * @version 1.0
+     * @param serviceProviderRewardDTO
+     */
+    @PutMapping("/serviceProvider/reward")
+    public void serviceProviderReward(@RequestBody ServiceProviderRewardDTO serviceProviderRewardDTO) {
+    	//TODO 待添加校验业务
+    	walletService.serviceProviderReward(serviceProviderRewardDTO);
     }
     
 }

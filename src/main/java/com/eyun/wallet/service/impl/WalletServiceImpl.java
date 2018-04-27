@@ -10,6 +10,7 @@ import com.eyun.wallet.repository.IntegralDetailsRepository;
 import com.eyun.wallet.repository.PayOrderRepository;
 import com.eyun.wallet.repository.TicketDetailsRepository;
 import com.eyun.wallet.repository.WalletRepository;
+import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
@@ -216,5 +217,26 @@ public class WalletServiceImpl implements WalletService {
 		if (wallet.getId() != null) {
 			walletRepository.save(wallet);
 		}
+	}
+
+	@Override
+	public void serviceProviderReward(ServiceProviderRewardDTO serviceProviderRewardDTO) {
+		final BigDecimal reward = new BigDecimal(400.00);
+		Wallet wallet = walletRepository.findByUserid(serviceProviderRewardDTO.getServiceProviderID());
+		Instant now = Instant.now();
+		BigDecimal balance = wallet.getBalance();
+		BigDecimal add = balance.add(reward);
+		wallet.setBalance(add);
+		wallet.setUpdatedTime(now);
+		
+		//添加明细记录
+		BalanceDetails balanceDetails = new BalanceDetails();
+		balanceDetails.userid(wallet.getUserid())
+			.createdTime(now)
+			.balance(reward)
+			.addBalance(true)
+			.type(2)
+			.typeString("增值商家奖励");
+		balanceDetailsRepository.save(balanceDetails);
 	}
 }
