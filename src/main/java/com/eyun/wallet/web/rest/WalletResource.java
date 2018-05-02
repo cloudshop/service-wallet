@@ -7,6 +7,7 @@ import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.dto.BalancePayDTO;
+import com.eyun.wallet.service.dto.IncrementUserRewardDTO;
 import com.eyun.wallet.service.dto.PasswordDTO;
 import com.eyun.wallet.service.dto.PayNotifyDTO;
 import com.eyun.wallet.service.dto.ProOrderCriteria;
@@ -331,6 +332,20 @@ public class WalletResource {
     public void serviceProviderReward(@RequestBody ServiceProviderRewardDTO serviceProviderRewardDTO) {
     	//TODO 待添加校验业务
     	walletService.serviceProviderReward(serviceProviderRewardDTO.getServiceProviderID(),serviceProviderRewardDTO.getIncrementBusinessID());
+    }
+    
+    /**
+     * 增值用户奖励 -推荐增值商家入驻
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年5月2日
+     * @version 1.0
+     * @param serviceProviderRewardDTO
+     */
+    @PutMapping("/incrementUser/reward")
+    public void incrementUserReward(@RequestBody IncrementUserRewardDTO incrementUserRewardDTO) {
+    	//TODO 待添加校验业务
+    	walletService.incrementUserReward(incrementUserRewardDTO.getIncrementUserID(),incrementUserRewardDTO.getIncrementBusinessID());
     }
     
 }

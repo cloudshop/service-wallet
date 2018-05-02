@@ -59,5 +59,7 @@ public interface WalletService {
 	void update(Wallet wallet);
 
 	void serviceProviderReward(Long spid, Long incrBID);
+
+	void incrementUserReward(Long incrementUserID, Long incrementBusinessID);
 	
 }

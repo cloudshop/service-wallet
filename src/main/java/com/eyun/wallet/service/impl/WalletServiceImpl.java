@@ -246,4 +246,33 @@ public class WalletServiceImpl implements WalletService {
 			.wallet(wallet);
 		balanceDetailsRepository.save(balanceDetails);
 	}
+	
+	@Override
+	public void incrementUserReward(Long incrementUserID, Long incrementBusinessID) {
+		BalanceDetails bd = balanceDetailsRepository.findByUseridAndTypeAndIncrBID(incrementUserID,3,incrementBusinessID);
+		if (bd != null) {
+			throw new BadRequestAlertException("incrYoule", "incr", "incrEr");
+		}
+		//奖励业务
+		final BigDecimal reward = new BigDecimal(100.00);
+		Wallet wallet = walletRepository.findByUserid(incrementUserID);
+		Instant now = Instant.now();
+		BigDecimal balance = wallet.getBalance();
+		BigDecimal add = balance.add(reward);
+		wallet.setBalance(add);
+		wallet.setUpdatedTime(now);
+		
+		//添加明细记录
+		BalanceDetails balanceDetails = new BalanceDetails();
+		balanceDetails.userid(wallet.getUserid())
+		.createdTime(now)
+		.balance(reward)
+		.addBalance(true)
+		.type(3)
+		.typeString("推荐增值商家奖励")
+		.incrBID(incrementBusinessID)
+		.wallet(wallet);
+		balanceDetailsRepository.save(balanceDetails);
+	}
+
 }
