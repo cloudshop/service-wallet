@@ -356,9 +356,19 @@ public class WalletResource {
     	walletService.incrementUserReward(incrementUserRewardDTO.getIncrementUserID(),incrementUserRewardDTO.getIncrementBusinessID());
     }
     
+    /**
+     * 结算佣金
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年5月8日
+     * @version 1.0
+     * @param settlementWalletDTOList
+     */
     @PutMapping("/settlement")
     public void settlementWallet(@RequestBody List<SettlementWalletDTO> settlementWalletDTOList) {
-    	walletService.settlementWallet(settlementWalletDTOList);
+    	for (SettlementWalletDTO settlementWalletDTO : settlementWalletDTOList) {
+    		walletService.settlementWallet(settlementWalletDTO);
+		}
     }
     
 }

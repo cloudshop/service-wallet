@@ -64,6 +64,6 @@ public interface WalletService {
 
 	void incrementUserReward(Long incrementUserID, Long incrementBusinessID);
 
-	void settlementWallet(List<SettlementWalletDTO> settlementWalletDTOList);
+	void settlementWallet(SettlementWalletDTO settlementWalletDTO);
 	
 }

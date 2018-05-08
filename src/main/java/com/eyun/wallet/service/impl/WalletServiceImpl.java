@@ -279,9 +279,10 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	public void settlementWallet(List<SettlementWalletDTO> settlementWalletDTOList) {
+	//public void settlementWallet(List<SettlementWalletDTO> settlementWalletDTOList) {
+	public void settlementWallet(SettlementWalletDTO settlementWalletDTO) {
 		Instant now = Instant.now();
-		for (SettlementWalletDTO settlementWalletDTO : settlementWalletDTOList) {
+		//for (SettlementWalletDTO settlementWalletDTO : settlementWalletDTOList) {
 			Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
 			switch (settlementWalletDTO.getType()) {
 			case 1://1、b端收入余额 
@@ -301,7 +302,7 @@ public class WalletServiceImpl implements WalletService {
 				balanceDetailsRepository.save(balanceDetails);
 				break;
 			case 2://2、c端获得积分
-				wallet.setBalance(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+				wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
 				//添加明细记录
 				IntegralDetails integralDetails = new IntegralDetails();
 				integralDetails.userid(wallet.getUserid())
@@ -315,7 +316,7 @@ public class WalletServiceImpl implements WalletService {
 				integralDetailsRepository.save(integralDetails);
 				break;
 			case 3://3、b端获得积分 
-				wallet.setBalance(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+				wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
 				//添加明细记录
 				IntegralDetails integralDetails3 = new IntegralDetails();
 				integralDetails3.userid(wallet.getUserid())
@@ -329,7 +330,7 @@ public class WalletServiceImpl implements WalletService {
 				integralDetailsRepository.save(integralDetails3);
 				break;
 			case 4://4、邀请人获得积分
-				wallet.setBalance(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+				wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
 				//添加明细记录
 				IntegralDetails integralDetails4 = new IntegralDetails();
 				integralDetails4.userid(wallet.getUserid())
@@ -346,8 +347,8 @@ public class WalletServiceImpl implements WalletService {
 				return;
 			}
 			wallet.setUpdatedTime(now);
-			walletRepository.save(wallet);
-		}
+			walletRepository.saveAndFlush(wallet);
+		//}
 	}
 
 }
