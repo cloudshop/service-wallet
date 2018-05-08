@@ -6,6 +6,7 @@ import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WalletDTO;
+import com.eyun.wallet.service.mapper.WalletMapper;
 import com.eyun.wallet.service.dto.BalancePayDTO;
 import com.eyun.wallet.service.dto.IncrementUserRewardDTO;
 import com.eyun.wallet.service.dto.PasswordDTO;
@@ -13,12 +14,19 @@ import com.eyun.wallet.service.dto.PayNotifyDTO;
 import com.eyun.wallet.service.dto.ProOrderCriteria;
 import com.eyun.wallet.service.dto.ProOrderDTO;
 import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
+import com.eyun.wallet.service.dto.SettlementWalletDTO;
 import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
+import com.eyun.wallet.domain.BalanceDetails;
 import com.eyun.wallet.domain.GiveIntegralDTO;
+import com.eyun.wallet.domain.IntegralDetails;
 import com.eyun.wallet.domain.PayOrder;
+import com.eyun.wallet.domain.TicketDetails;
 import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.repository.BalanceDetailsRepository;
+import com.eyun.wallet.repository.IntegralDetailsRepository;
+import com.eyun.wallet.repository.TicketDetailsRepository;
 import com.eyun.wallet.service.OrderService;
 import com.eyun.wallet.service.PayService;
 import com.eyun.wallet.service.UaaService;
@@ -49,7 +57,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -346,6 +354,11 @@ public class WalletResource {
     public void incrementUserReward(@RequestBody IncrementUserRewardDTO incrementUserRewardDTO) {
     	//TODO 待添加校验业务
     	walletService.incrementUserReward(incrementUserRewardDTO.getIncrementUserID(),incrementUserRewardDTO.getIncrementBusinessID());
+    }
+    
+    @PutMapping("/settlement")
+    public void settlementWallet(@RequestBody List<SettlementWalletDTO> settlementWalletDTOList) {
+    	walletService.settlementWallet(settlementWalletDTOList);
     }
     
 }

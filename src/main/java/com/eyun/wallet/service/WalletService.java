@@ -5,9 +5,11 @@ import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
+import com.eyun.wallet.service.dto.SettlementWalletDTO;
 import com.eyun.wallet.service.dto.WalletDTO;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,5 +63,7 @@ public interface WalletService {
 	void serviceProviderReward(Long spid, Long incrBID);
 
 	void incrementUserReward(Long incrementUserID, Long incrementBusinessID);
+
+	void settlementWallet(List<SettlementWalletDTO> settlementWalletDTOList);
 	
 }

@@ -3,6 +3,7 @@ package com.eyun.wallet.service.impl;
 import com.eyun.wallet.service.WalletService;
 import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.BalanceDetails;
+import com.eyun.wallet.domain.IntegralDetails;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.repository.BalanceDetailsRepository;
@@ -11,12 +12,14 @@ import com.eyun.wallet.repository.PayOrderRepository;
 import com.eyun.wallet.repository.TicketDetailsRepository;
 import com.eyun.wallet.repository.WalletRepository;
 import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
+import com.eyun.wallet.service.dto.SettlementWalletDTO;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -273,6 +276,78 @@ public class WalletServiceImpl implements WalletService {
 		.incrBID(incrementBusinessID)
 		.wallet(wallet);
 		balanceDetailsRepository.save(balanceDetails);
+	}
+
+	@Override
+	public void settlementWallet(List<SettlementWalletDTO> settlementWalletDTOList) {
+		Instant now = Instant.now();
+		for (SettlementWalletDTO settlementWalletDTO : settlementWalletDTOList) {
+			Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
+			switch (settlementWalletDTO.getType()) {
+			case 1://1、b端收入余额 
+				BigDecimal balance = wallet.getBalance();
+				BigDecimal addBalance = balance.add(settlementWalletDTO.getAmount());
+				wallet.setBalance(addBalance);
+				//添加明细记录
+				BalanceDetails balanceDetails = new BalanceDetails();
+				balanceDetails.userid(wallet.getUserid())
+				.createdTime(now)
+				.balance(addBalance)
+				.addBalance(true)
+				.type(4)
+				.typeString("卖出商品收入")
+				.wallet(wallet)
+				.orderNo(settlementWalletDTO.getOrderNo());
+				balanceDetailsRepository.save(balanceDetails);
+				break;
+			case 2://2、c端获得积分
+				wallet.setBalance(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+				//添加明细记录
+				IntegralDetails integralDetails = new IntegralDetails();
+				integralDetails.userid(wallet.getUserid())
+				.createdTime(now)
+				.integral(settlementWalletDTO.getAmount())
+				.addIntegral(true)
+				.type(1)
+				.typeString("获得积分")
+				.wallet(wallet)
+				.orderNo(settlementWalletDTO.getOrderNo());
+				integralDetailsRepository.save(integralDetails);
+				break;
+			case 3://3、b端获得积分 
+				wallet.setBalance(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+				//添加明细记录
+				IntegralDetails integralDetails3 = new IntegralDetails();
+				integralDetails3.userid(wallet.getUserid())
+				.createdTime(now)
+				.integral(settlementWalletDTO.getAmount())
+				.addIntegral(true)
+				.type(1)
+				.typeString("获得积分")
+				.wallet(wallet)
+				.orderNo(settlementWalletDTO.getOrderNo());
+				integralDetailsRepository.save(integralDetails3);
+				break;
+			case 4://4、邀请人获得积分
+				wallet.setBalance(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+				//添加明细记录
+				IntegralDetails integralDetails4 = new IntegralDetails();
+				integralDetails4.userid(wallet.getUserid())
+				.createdTime(now)
+				.integral(settlementWalletDTO.getAmount())
+				.addIntegral(true)
+				.type(1)
+				.typeString("获得积分")
+				.wallet(wallet)
+				.orderNo(settlementWalletDTO.getOrderNo());
+				integralDetailsRepository.save(integralDetails4);
+				break;
+			default:
+				return;
+			}
+			wallet.setUpdatedTime(now);
+			walletRepository.save(wallet);
+		}
 	}
 
 }
