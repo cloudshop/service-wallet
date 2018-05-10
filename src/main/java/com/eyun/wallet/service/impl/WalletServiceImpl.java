@@ -5,6 +5,7 @@ import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.BalanceDetails;
 import com.eyun.wallet.domain.IntegralDetails;
 import com.eyun.wallet.domain.PayOrder;
+import com.eyun.wallet.domain.TicketDetails;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.repository.BalanceDetailsRepository;
 import com.eyun.wallet.repository.IntegralDetailsRepository;
@@ -349,6 +350,38 @@ public class WalletServiceImpl implements WalletService {
 			wallet.setUpdatedTime(now);
 			walletRepository.saveAndFlush(wallet);
 		//}
+	}
+
+	@Override
+	public void integralToTicket(Long id) {
+		Instant now = Instant.now();
+		Wallet wallet = walletRepository.findOne(id);
+		if (wallet.getIntegral().doubleValue() >= 100.00) {
+			int intValue = wallet.getIntegral().intValue() / 100 * 100;
+			BigDecimal shifang = new BigDecimal("0.001").multiply(new BigDecimal(intValue));
+			BigDecimal quan = shifang.multiply(new BigDecimal("0.9"));
+			wallet
+				.updatedTime(now)
+				.integral(wallet.getIntegral().subtract(shifang))
+				.ticket(wallet.getTicket().add(quan));
+			
+			integralDetailsRepository.save(new IntegralDetails()
+										.createdTime(now)
+										.type(2)
+										.typeString("积分释放")
+										.addIntegral(false)
+										.integral(shifang)
+										.userid(wallet.getUserid())
+										.wallet(wallet));
+			ticketDetailsRepository.save(new TicketDetails()
+										.createdTime(now)
+										.type(2)
+										.typeString("积分释放")
+										.addTicket(true)
+										.ticket(quan)
+										.userid(wallet.getUserid())
+										.wallet(wallet));
+		}
 	}
 
 }

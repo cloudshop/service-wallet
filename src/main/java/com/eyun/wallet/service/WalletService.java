@@ -65,5 +65,7 @@ public interface WalletService {
 	void incrementUserReward(Long incrementUserID, Long incrementBusinessID);
 
 	void settlementWallet(SettlementWalletDTO settlementWalletDTO);
+
+	void integralToTicket(Long id);
 	
 }
