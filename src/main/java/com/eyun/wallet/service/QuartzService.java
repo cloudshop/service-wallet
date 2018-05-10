@@ -15,7 +15,7 @@ public class QuartzService {
 	@Autowired
 	WalletService walletService;
 
-	@Scheduled(cron = "0 0 7 * * ? ")
+	@Scheduled(cron = "0 0 7 ? * MON-FRI")
     public void timerToNow(){
 		Page<WalletDTO> page = walletService.findAll(null);
 		List<WalletDTO> list = page.getContent();
