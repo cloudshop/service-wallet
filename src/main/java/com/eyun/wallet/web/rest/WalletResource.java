@@ -13,6 +13,7 @@ import com.eyun.wallet.service.dto.PasswordDTO;
 import com.eyun.wallet.service.dto.PayNotifyDTO;
 import com.eyun.wallet.service.dto.ProOrderCriteria;
 import com.eyun.wallet.service.dto.ProOrderDTO;
+import com.eyun.wallet.service.dto.ServiceProviderChainRewardDTO;
 import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
 import com.eyun.wallet.service.dto.SettlementWalletDTO;
 import com.eyun.wallet.service.dto.UserDTO;
@@ -370,5 +371,24 @@ public class WalletResource {
     		walletService.settlementWallet(settlementWalletDTO);
 		}
     }
+    
+    /**
+     * @author 蒋思
+     * @date 2018年5月9日
+     * 链上直接跟间接的服务商账户更改
+     * @param serviceProviderRewardDTO
+     */
+    @ApiOperation("链上直接或间接的服务商账户更改")
+    @PutMapping("/serviceProvider/chainReward")
+    public void serviceProviderChainReward(@RequestBody ServiceProviderChainRewardDTO serviceProviderChainRewardDTO) {
+    	//TODO 待添加校验业务
+    	walletService.serviceProviderChainReward(serviceProviderChainRewardDTO.getUserID(),serviceProviderChainRewardDTO.getServiceProviderID());
+    }
+
+    
+    
+    
+    
+    
     
 }

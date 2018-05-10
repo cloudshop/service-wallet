@@ -68,4 +68,6 @@ public interface WalletService {
 
 	void integralToTicket(Long id);
 	
+	public void serviceProviderChainReward(Long spid, Long serviceProviderID);
+	
 }
