@@ -406,6 +406,41 @@ public class WalletServiceImpl implements WalletService {
 										.wallet(wallet));
 		}
 	}
+	
+	/**
+     * 服务商直接跟间接增值
+     * @author 蒋思
+     * @version 1.0
+     * @param serviceProviderRewardDTO
+     */
+	@Override
+	public void serviceProviderChainReward(Long spid, Long serviceProviderID) {
+		
+		//奖励业务
+		final BigDecimal reward = new BigDecimal(4000.00);
+		Wallet wallet  = walletRepository.findByUserid(serviceProviderID);
+		if(wallet == null){
+				 throw new BadRequestAlertException("获取当前用户钱包失败 get wallet failed", "", "");
+			}
+		Instant now = Instant.now();
+		BigDecimal balance = wallet.getBalance();
+		BigDecimal add = balance.add(reward);
+		wallet.setBalance(add);
+		wallet.setUpdatedTime(now);
+		
+		//添加明细记录
+		BalanceDetails balanceDetails = new BalanceDetails();
+		balanceDetails.userid(wallet.getUserid())
+			.createdTime(now)
+			.balance(reward)
+			.addBalance(true)
+			.type(5)
+			.typeString("直接或间接服务商奖励")
+			.wallet(wallet);
+		balanceDetailsRepository.save(balanceDetails);		
+	}
+	
+	
 
 	/**
      * 服务商直接跟间接增值

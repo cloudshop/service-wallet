@@ -6,7 +6,7 @@ public class  ServiceProviderChainRewardDTO implements Serializable{
 
 	private Long UserID;// 用户id
 	private Long ServiceProviderID;// 服务商id
-	
+
 	public Long getUserID() {
 		return UserID;
 	}
@@ -19,6 +19,6 @@ public class  ServiceProviderChainRewardDTO implements Serializable{
 	public void setServiceProviderID(Long serviceProviderID) {
 		ServiceProviderID = serviceProviderID;
 	}
-	
-	
+
+
 }

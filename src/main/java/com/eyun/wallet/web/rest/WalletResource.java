@@ -13,6 +13,7 @@ import com.eyun.wallet.service.dto.PasswordDTO;
 import com.eyun.wallet.service.dto.PayNotifyDTO;
 import com.eyun.wallet.service.dto.ProOrderCriteria;
 import com.eyun.wallet.service.dto.ProOrderDTO;
+import com.eyun.wallet.service.dto.ServiceProviderChainRewardDTO;
 import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
 import com.eyun.wallet.service.dto.SettlementWalletDTO;
 import com.eyun.wallet.service.dto.UserDTO;
