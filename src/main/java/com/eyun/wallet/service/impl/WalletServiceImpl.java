@@ -42,16 +42,16 @@ public class WalletServiceImpl implements WalletService {
 	private final WalletRepository walletRepository;
 
 	private final WalletMapper walletMapper;
-	
+
 	@Autowired
 	private BalanceDetailsRepository balanceDetailsRepository;
-	
+
 	@Autowired
 	private IntegralDetailsRepository integralDetailsRepository;
-	
+
 	@Autowired
 	private TicketDetailsRepository ticketDetailsRepository;
-	
+
 	@Autowired
 	private PayOrderRepository payOrderRepository;
 
@@ -203,8 +203,8 @@ public class WalletServiceImpl implements WalletService {
 		}
 		wallet.balance(subtract).updatedTime(Instant.now());
 		walletRepository.save(wallet);
-		//TODO 1、账户记录  
-		
+		//TODO 1、账户记录
+
 		//添加支付账单
 		PayOrder payOrder = new PayOrder();
 		payOrder
@@ -237,7 +237,7 @@ public class WalletServiceImpl implements WalletService {
 		BigDecimal add = balance.add(reward);
 		wallet.setBalance(add);
 		wallet.setUpdatedTime(now);
-		
+
 		//添加明细记录
 		BalanceDetails balanceDetails = new BalanceDetails();
 		balanceDetails.userid(wallet.getUserid())
@@ -250,7 +250,7 @@ public class WalletServiceImpl implements WalletService {
 			.wallet(wallet);
 		balanceDetailsRepository.save(balanceDetails);
 	}
-	
+
 	@Override
 	public void incrementUserReward(Long incrementUserID, Long incrementBusinessID) {
 		BalanceDetails bd = balanceDetailsRepository.findByUseridAndTypeAndIncrBID(incrementUserID,3,incrementBusinessID);
@@ -265,7 +265,7 @@ public class WalletServiceImpl implements WalletService {
 		BigDecimal add = balance.add(reward);
 		wallet.setBalance(add);
 		wallet.setUpdatedTime(now);
-		
+
 		//添加明细记录
 		BalanceDetails balanceDetails = new BalanceDetails();
 		balanceDetails.userid(wallet.getUserid())
@@ -286,7 +286,7 @@ public class WalletServiceImpl implements WalletService {
 		//for (SettlementWalletDTO settlementWalletDTO : settlementWalletDTOList) {
 			Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
 			switch (settlementWalletDTO.getType()) {
-			case 1://1、b端收入余额 
+			case 1://1、b端收入余额
 				BigDecimal balance = wallet.getBalance();
 				BigDecimal addBalance = balance.add(settlementWalletDTO.getAmount());
 				wallet.setBalance(addBalance);
@@ -316,7 +316,7 @@ public class WalletServiceImpl implements WalletService {
 				.orderNo(settlementWalletDTO.getOrderNo());
 				integralDetailsRepository.save(integralDetails);
 				break;
-			case 3://3、b端获得积分 
+			case 3://3、b端获得积分
 				wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
 				//添加明细记录
 				IntegralDetails integralDetails3 = new IntegralDetails();
@@ -352,7 +352,30 @@ public class WalletServiceImpl implements WalletService {
 		//}
 	}
 
-	@Override
+    @Override
+     public String commissionCash(SettlementWalletDTO settlementWalletDTO) {
+        Instant now = Instant.now();
+        Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
+        BigDecimal balance = wallet.getBalance();
+        BigDecimal addBalance = balance.add(settlementWalletDTO.getAmount());
+        wallet.setBalance(addBalance);
+        wallet.setUpdatedTime(now);
+        walletRepository.saveAndFlush(wallet);
+        //添加明细记录
+        BalanceDetails balanceDetails = new BalanceDetails();
+        balanceDetails.userid(wallet.getUserid())
+            .createdTime(now)
+            .balance(addBalance)
+            .addBalance(true)
+            .type(4)
+            .typeString("卖出商品收入")
+            .wallet(wallet)
+            .orderNo(settlementWalletDTO.getOrderNo());
+        balanceDetailsRepository.save(balanceDetails);
+        return "success";
+    }
+
+    @Override
 	public void integralToTicket(Long id) {
 		Instant now = Instant.now();
 		Wallet wallet = walletRepository.findOne(id);
@@ -364,7 +387,7 @@ public class WalletServiceImpl implements WalletService {
 				.updatedTime(now)
 				.integral(wallet.getIntegral().subtract(shifang))
 				.ticket(wallet.getTicket().add(quan));
-			
+
 			integralDetailsRepository.save(new IntegralDetails()
 										.createdTime(now)
 										.type(2)
@@ -383,5 +406,40 @@ public class WalletServiceImpl implements WalletService {
 										.wallet(wallet));
 		}
 	}
+
+	/**
+     * 服务商直接跟间接增值
+     * @author 蒋思
+     * @version 1.0
+     * @param serviceProviderRewardDTO
+     */
+	@Override
+	public void serviceProviderChainReward(Long spid, Long serviceProviderID) {
+
+		//奖励业务
+		final BigDecimal reward = new BigDecimal(4000.00);
+		Wallet wallet  = walletRepository.findByUserid(serviceProviderID);
+		if(wallet == null){
+				 throw new BadRequestAlertException("获取当前用户钱包失败 get wallet failed", "", "");
+			}
+		Instant now = Instant.now();
+		BigDecimal balance = wallet.getBalance();
+		BigDecimal add = balance.add(reward);
+		wallet.setBalance(add);
+		wallet.setUpdatedTime(now);
+
+		//添加明细记录
+		BalanceDetails balanceDetails = new BalanceDetails();
+		balanceDetails.userid(wallet.getUserid())
+			.createdTime(now)
+			.balance(reward)
+			.addBalance(true)
+			.type(5)
+			.typeString("直接或间接服务商奖励")
+			.wallet(wallet);
+		balanceDetailsRepository.save(balanceDetails);
+	}
+
+
 
 }

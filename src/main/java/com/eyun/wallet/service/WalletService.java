@@ -52,20 +52,24 @@ public interface WalletService {
 
     Wallet rechargeBalance(BalanceDTO balanceDTO);
 
-	Wallet findByUserid(Long userid);
+    Wallet findByUserid(Long userid);
 
-	String giveIntegral(Long fromUserId, Long toUserId, BigDecimal integral);
+    String giveIntegral(Long fromUserId, Long toUserId, BigDecimal integral);
 
-	PayOrder balancePay(Long long1, BigDecimal price, String orderNo);
+    PayOrder balancePay(Long long1, BigDecimal price, String orderNo);
 
-	void update(Wallet wallet);
+    void update(Wallet wallet);
 
-	void serviceProviderReward(Long spid, Long incrBID);
+    void serviceProviderReward(Long spid, Long incrBID);
 
-	void incrementUserReward(Long incrementUserID, Long incrementBusinessID);
+    void incrementUserReward(Long incrementUserID, Long incrementBusinessID);
 
-	void settlementWallet(SettlementWalletDTO settlementWalletDTO);
+    void settlementWallet(SettlementWalletDTO settlementWalletDTO);
 
-	void integralToTicket(Long id);
-	
+    String commissionCash(SettlementWalletDTO settlementWalletDTO);
+
+    void integralToTicket(Long id);
+
+    public void serviceProviderChainReward(Long spid, Long serviceProviderID);
+
 }

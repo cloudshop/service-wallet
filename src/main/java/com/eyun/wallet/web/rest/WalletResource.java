@@ -75,16 +75,16 @@ public class WalletResource {
     private final WalletService walletService;
 
     private final WalletQueryService walletQueryService;
-    
+
     @Autowired
     private UaaService uaaService;
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @Autowired
     private VerifyService VerifyService;
-    
+
     @Autowired
     private PayService payService;
 
@@ -169,11 +169,11 @@ public class WalletResource {
      * DELETE  /wallets/:id : delete the "id" wallet.
      *
      * @param id the id of the walletDTO to delete
-     * @return 
+     * @return
      * @return the ResponseEntity with status 200 (OK)
-      
+
     @DeleteMapping("/wallets/{id}")
-     * @throws JSONException 
+     * @throws JSONException
     @Timed
     public ResponseEntity<Void> deleteWallet(@PathVariable Long id) {
         log.debug("REST request to delete Wallet : {}", id);
@@ -181,7 +181,7 @@ public class WalletResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
      */
-    
+
     /**
      * 支付通知回调
      * @author 逍遥子
@@ -212,7 +212,7 @@ public class WalletResource {
 			return new ResponseEntity<>(HeaderUtil.createAlert("Type field is mistaken", "type:"+balanceDTO.getType()), HttpStatus.BAD_REQUEST);
 		}
     }
-    
+
     /**
      * 赠送积分
      * @author 逍遥子
@@ -250,7 +250,7 @@ public class WalletResource {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+
     /**
      * 查看钱包接口
      * @author 逍遥子
@@ -260,13 +260,13 @@ public class WalletResource {
      * @param userid
      */
     @ApiOperation(value="查看钱包接口")
-    @GetMapping("/wallets/user") 
+    @GetMapping("/wallets/user")
     public ResponseEntity<Wallet> findWalletsByUserid(){
     	UserDTO user = uaaService.getAccount();
     	Wallet wallet = walletService.findByUserid(user.getId());
     	return new ResponseEntity<Wallet>(wallet, HeaderUtil.createAlert("wallets", "userid："+user.getId()), HttpStatus.OK);
     }
-    
+
     /**
      * 余额支付接口
      * @author 逍遥子
@@ -301,7 +301,7 @@ public class WalletResource {
     	ResponseEntity<ProOrderDTO> resp = orderService.proOrderNotify(payNotifyDTO);
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
-    
+
     /**
      * 修改钱包密码
      * @author 逍遥子
@@ -325,9 +325,9 @@ public class WalletResource {
     	} else {
     		throw new BadRequestAlertException("验证码错误", "password", "password:"+passwordDTO.getPassword());
     	}
-    	
+
     }
-    
+
     /**
      * 服务商奖励-体系内新增 增值商家
      * @author 逍遥子
@@ -341,7 +341,7 @@ public class WalletResource {
     	//TODO 待添加校验业务
     	walletService.serviceProviderReward(serviceProviderRewardDTO.getServiceProviderID(),serviceProviderRewardDTO.getIncrementBusinessID());
     }
-    
+
     /**
      * 增值用户奖励 -推荐增值商家入驻
      * @author 逍遥子
@@ -355,7 +355,7 @@ public class WalletResource {
     	//TODO 待添加校验业务
     	walletService.incrementUserReward(incrementUserRewardDTO.getIncrementUserID(),incrementUserRewardDTO.getIncrementBusinessID());
     }
-    
+
     /**
      * 结算佣金
      * @author 逍遥子
@@ -370,5 +370,33 @@ public class WalletResource {
     		walletService.settlementWallet(settlementWalletDTO);
 		}
     }
-    
+
+    /**
+     * @author 蒋思
+     * @date 2018年5月9日
+     * 链上直接跟间接的服务商账户更改
+     * @param serviceProviderRewardDTO
+     */
+    @ApiOperation("链上直接或间接的服务商账户更改")
+    @PutMapping("/serviceProvider/chainReward")
+    public void serviceProviderChainReward(@RequestBody ServiceProviderChainRewardDTO serviceProviderChainRewardDTO) {
+        //TODO 待添加校验业务
+        walletService.serviceProviderChainReward(serviceProviderChainRewardDTO.getUserID(),serviceProviderChainRewardDTO.getServiceProviderID());
+    }
+
+    /**
+     * 服务商奖励-体系内商家交易额2%手续费的20%
+     * 间接体系商家交易额2%手续费的20%
+     * 结算佣金(现金)
+     * @param settlementWalletDTOList
+     * @author 迎新
+     * @email
+     * @date 2018年5月11日
+     * @version 1.0
+     */
+    @PutMapping("/wallet/commission/cash")
+    public ResponseEntity commissionCash(@RequestBody SettlementWalletDTO settlementWalletDTO) {
+        String result = walletService.commissionCash(settlementWalletDTO);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(result));
+    }
 }
