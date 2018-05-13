@@ -1,0 +1,68 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "balanceDetails",
+            "otherEntityName": "balanceDetails",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "wallet"
+        },
+		{
+            "relationshipName": "integralDetails",
+            "otherEntityName": "integralDetails",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "wallet"
+        },
+		{
+            "relationshipName": "ticketDetails",
+            "otherEntityName": "ticketDetails",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "wallet"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "userid",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createTime",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "updatedTime",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "version",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "ticket",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "integral",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "password",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180326022747",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "wallet",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
+    "microserviceName": "wallet",
+    "searchEngine": false
+}

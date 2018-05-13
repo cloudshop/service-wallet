@@ -1,0 +1,49 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "wallet",
+            "otherEntityName": "wallet",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "userid",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "payNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "orderNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "ticket",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "integral",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "payTime",
+            "fieldType": "Instant"
+        }
+    ],
+    "changelogDate": "20180326031236",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "pay_order",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
+    "microserviceName": "wallet",
+    "searchEngine": false
+}
