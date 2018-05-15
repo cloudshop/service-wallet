@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 
 /**
  * Service Implementation for managing BalanceDetails.
@@ -82,5 +84,16 @@ public class BalanceDetailsServiceImpl implements BalanceDetailsService {
     public void delete(Long id) {
         log.debug("Request to delete BalanceDetails : {}", id);
         balanceDetailsRepository.delete(id);
+    }
+
+
+
+    @Override
+    public String Deductmoney(Long id, BigDecimal money) {
+
+        BalanceDetails balanceDetails = balanceDetailsRepository.findByUserid(id);
+        balanceDetails.setBalance(balanceDetails.getBalance().subtract(money));
+        balanceDetailsRepository.saveAndFlush(balanceDetails);
+        return "ok";
     }
 }
