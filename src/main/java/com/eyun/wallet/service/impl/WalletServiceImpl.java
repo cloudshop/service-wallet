@@ -440,4 +440,19 @@ public class WalletServiceImpl implements WalletService {
 		balanceDetailsRepository.save(balanceDetails);
 	}
 
+
+    /**
+     * 扣除商户的资金
+     * @param id
+     * @param money
+     * @return
+     */
+    @Override
+    public String Deductmoney(Long id, BigDecimal money) {
+        Wallet wallet = walletRepository.findByUserid(id);
+        wallet.setBalance(wallet.getBalance().subtract(money));
+        walletRepository.saveAndFlush(wallet);
+        return "ok";
+    }
+
 }
