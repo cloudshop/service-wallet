@@ -400,4 +400,22 @@ public class WalletResource {
         String result = walletService.commissionCash(settlementWalletDTO);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(result));
     }
+
+
+
+
+
+    /**
+     * 文亮
+     * @param money
+     * @return
+     */
+    @ApiOperation("扣除商户的资金")
+    @GetMapping("/wallet/deductmoney/{money}")
+    @Timed
+    public ResponseEntity<String> Deductmoney(@PathVariable BigDecimal money){
+        UserDTO user = uaaService.getAccount();
+        String deductmoney = walletService.Deductmoney(user.getId(), money);
+        return ResponseEntity.ok().body(deductmoney);
+    }
 }
