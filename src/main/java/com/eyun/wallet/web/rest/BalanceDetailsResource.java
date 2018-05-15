@@ -163,7 +163,12 @@ public class BalanceDetailsResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @ApiOperation("获取钱包余额明细")
+    /**
+     * 文亮
+     * @param money
+     * @return
+     */
+    @ApiOperation("扣除商户的资金")
     @GetMapping("/wallet/Deductmoney/{money}")
     public ResponseEntity<String> Deductmoney(@PathVariable BigDecimal money){
         UserDTO user = uaaService.getAccount();
