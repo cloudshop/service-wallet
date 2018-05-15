@@ -72,4 +72,6 @@ public interface WalletService {
 
     public void serviceProviderChainReward(Long spid, Long serviceProviderID);
 
+    String Deductmoney(Long id, BigDecimal money);
+
 }
