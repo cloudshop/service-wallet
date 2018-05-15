@@ -407,15 +407,15 @@ public class WalletResource {
 
     /**
      * 文亮
-     * @param money
+     * @param
      * @return
      */
     @ApiOperation("扣除商户的资金")
-    @GetMapping("/wallet/deductmoney/{money}")
+    @PostMapping("/wallet/deductmoney")
     @Timed
-    public ResponseEntity<String> Deductmoney(@PathVariable BigDecimal money){
+    public ResponseEntity<String> Deductmoney(@RequestBody SettlementWalletDTO settlementWalletDTO){
         UserDTO user = uaaService.getAccount();
-        String deductmoney = walletService.Deductmoney(user.getId(), money);
+        String deductmoney = walletService.Deductmoney(settlementWalletDTO.getUserid(), settlementWalletDTO.getAmount());
         return ResponseEntity.ok().body(deductmoney);
     }
 }
