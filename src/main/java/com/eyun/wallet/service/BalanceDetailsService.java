@@ -4,6 +4,8 @@ import com.eyun.wallet.service.dto.BalanceDetailsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
+
 /**
  * Service Interface for managing BalanceDetails.
  */
@@ -39,4 +41,7 @@ public interface BalanceDetailsService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+
+    String Deductmoney(Long id, BigDecimal money);
 }
