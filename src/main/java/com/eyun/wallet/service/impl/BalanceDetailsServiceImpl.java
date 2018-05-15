@@ -88,12 +88,4 @@ public class BalanceDetailsServiceImpl implements BalanceDetailsService {
 
 
 
-    @Override
-    public String Deductmoney(Long id, BigDecimal money) {
-
-        BalanceDetails balanceDetails = balanceDetailsRepository.findByUserid(id);
-        balanceDetails.setBalance(balanceDetails.getBalance().subtract(money));
-        balanceDetailsRepository.saveAndFlush(balanceDetails);
-        return "ok";
-    }
 }
