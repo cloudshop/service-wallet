@@ -43,5 +43,5 @@ public interface BalanceDetailsService {
     void delete(Long id);
 
 
-    String Deductmoney(Long id, BigDecimal money);
+
 }
