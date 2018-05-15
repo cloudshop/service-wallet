@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -45,7 +46,7 @@ public class BalanceDetailsResource {
     private final BalanceDetailsService balanceDetailsService;
 
     private final BalanceDetailsQueryService balanceDetailsQueryService;
-    
+
     @Autowired
     private UaaService uaaService;
 
@@ -139,7 +140,7 @@ public class BalanceDetailsResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
      */
-    
+
     /**
      * 获取钱包余额明细
      * @author 逍遥子
@@ -161,5 +162,13 @@ public class BalanceDetailsResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/wallet/details/balance");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-    
+
+    @ApiOperation("获取钱包余额明细")
+    @GetMapping("/wallet/Deductmoney/{money}")
+    public ResponseEntity<String> Deductmoney(@PathVariable BigDecimal money){
+        UserDTO user = uaaService.getAccount();
+        String deductmoney = balanceDetailsService.Deductmoney(user.getId(), money);
+        return ResponseEntity.ok().body(deductmoney);
+    }
+
 }
