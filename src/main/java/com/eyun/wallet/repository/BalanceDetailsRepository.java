@@ -16,6 +16,6 @@ public interface BalanceDetailsRepository extends JpaRepository<BalanceDetails, 
 	BalanceDetails findByUseridAndTypeAndIncrBID(Long spid, int i, Long incrBID);
 
 
-    BalanceDetails findByUserid(Long id);
+
 
 }
