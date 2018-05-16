@@ -13,6 +13,7 @@ import com.eyun.wallet.repository.PayOrderRepository;
 import com.eyun.wallet.repository.TicketDetailsRepository;
 import com.eyun.wallet.repository.WalletRepository;
 import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
+import com.eyun.wallet.service.dto.SetIntegralDTO;
 import com.eyun.wallet.service.dto.SettlementWalletDTO;
 import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
@@ -280,7 +281,12 @@ public class WalletServiceImpl implements WalletService {
 		balanceDetailsRepository.save(balanceDetails);
 	}
 
-	@Override
+    @Override
+    public void batchintegrals(List<SetIntegralDTO> setIntegralDTOList) {
+
+    }
+
+    @Override
 	//public void settlementWallet(List<SettlementWalletDTO> settlementWalletDTOList) {
 	public void settlementWallet(SettlementWalletDTO settlementWalletDTO) {
 		Instant now = Instant.now();
