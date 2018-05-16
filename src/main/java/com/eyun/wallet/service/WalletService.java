@@ -5,6 +5,7 @@ import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
+import com.eyun.wallet.service.dto.SetIntegralDTO;
 import com.eyun.wallet.service.dto.SettlementWalletDTO;
 import com.eyun.wallet.service.dto.WalletDTO;
 
@@ -79,4 +80,5 @@ public interface WalletService {
 
     WalletDTO getwalletInfos(Long id);
 
+    void batchintegrals(List<SetIntegralDTO> setIntegralDTOList);
 }
