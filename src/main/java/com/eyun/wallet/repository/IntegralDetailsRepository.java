@@ -13,4 +13,6 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface IntegralDetailsRepository extends JpaRepository<IntegralDetails, Long>, JpaSpecificationExecutor<IntegralDetails> {
 
+    IntegralDetails findByUserid(Long id);
+
 }
