@@ -74,4 +74,7 @@ public interface WalletService {
 
     String Deductmoney(Long id, BigDecimal money);
 
+
+    String AddUserIntegral(SettlementWalletDTO settlementWalletDTO);
+
 }
