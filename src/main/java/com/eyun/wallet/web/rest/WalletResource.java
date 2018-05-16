@@ -429,7 +429,7 @@ public class WalletResource {
     @ApiOperation("线下支付给用户添加对应的积分")
     @PostMapping("/wallet/AddUserIntegral")
     @Timed
-    public ResponseEntity AddUserIntegral(@RequestBody SettlementWalletDTO settlementWalletDTO){
+    public ResponseEntity<String> AddUserIntegral(@RequestBody SettlementWalletDTO settlementWalletDTO){
         String messageIntegral = walletService.AddUserIntegral(settlementWalletDTO);
         return ResponseEntity.ok().body(messageIntegral);
 
