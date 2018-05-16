@@ -2,22 +2,11 @@ package com.eyun.wallet.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.eyun.wallet.service.*;
+import com.eyun.wallet.service.dto.*;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
-import com.eyun.wallet.service.dto.WalletDTO;
 import com.eyun.wallet.service.mapper.WalletMapper;
-import com.eyun.wallet.service.dto.BalancePayDTO;
-import com.eyun.wallet.service.dto.IncrementUserRewardDTO;
-import com.eyun.wallet.service.dto.PasswordDTO;
-import com.eyun.wallet.service.dto.PayNotifyDTO;
-import com.eyun.wallet.service.dto.ProOrderCriteria;
-import com.eyun.wallet.service.dto.ProOrderDTO;
-import com.eyun.wallet.service.dto.ServiceProviderChainRewardDTO;
-import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
-import com.eyun.wallet.service.dto.SettlementWalletDTO;
-import com.eyun.wallet.service.dto.UserDTO;
-import com.eyun.wallet.service.dto.WalletCriteria;
 import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.BalanceDetails;
 import com.eyun.wallet.domain.GiveIntegralDTO;
@@ -440,4 +429,17 @@ public class WalletResource {
     }
 
 
-}
+    /**
+     * 线下支付批量积分的添加
+     * @param setIntegralDTOList
+     */
+    @ApiOperation("线下支付批量积分的添加")
+    @PutMapping("/wallet/batchintegrals")
+    @Timed
+    public void Batchintegrals(@RequestBody List<SetIntegralDTO> setIntegralDTOList) {
+            walletService.batchintegrals(setIntegralDTOList);
+        }
+    }
+
+
+
