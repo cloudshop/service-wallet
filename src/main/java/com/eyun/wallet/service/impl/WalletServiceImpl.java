@@ -411,7 +411,7 @@ public class WalletServiceImpl implements WalletService {
      * 服务商直接跟间接增值
      * @author 蒋思
      * @version 1.0
-     * @param serviceProviderRewardDTO
+     * @param
      */
 	@Override
 	public void serviceProviderChainReward(Long spid, Long serviceProviderID) {
@@ -440,6 +440,15 @@ public class WalletServiceImpl implements WalletService {
 		balanceDetailsRepository.save(balanceDetails);
 	}
 
+
+    @Override
+    public String AddUserIntegral(SettlementWalletDTO settlementWalletDTO) {
+
+        Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
+        wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+        walletRepository.saveAndFlush(wallet);
+        return "ok";
+    }
 
     /**
      * 扣除商户的资金
