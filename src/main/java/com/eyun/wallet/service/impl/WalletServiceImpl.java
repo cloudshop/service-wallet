@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -441,6 +442,11 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 
+    /**
+     * 线下付添加对应的积分
+     * @param settlementWalletDTO
+     * @return
+     */
     @Override
     public String AddUserIntegral(SettlementWalletDTO settlementWalletDTO) {
 
@@ -451,7 +457,6 @@ public class WalletServiceImpl implements WalletService {
         integralDetails.setTypeString("消费积分增加");
         integralDetails.setCreatedTime(Instant.now());
         integralDetails.setIntegral(integralDetails.getIntegral().add(settlementWalletDTO.getAmount()));
-
         return "ok";
     }
 
@@ -469,4 +474,17 @@ public class WalletServiceImpl implements WalletService {
         return "ok";
     }
 
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public WalletDTO getwalletInfos(Long id) {
+        Wallet wallet= walletRepository.findByUserid(id);
+        WalletDTO walletDTO = new WalletDTO();
+        BeanUtils.copyProperties(wallet,walletDTO);
+        return walletDTO;
+    }
 }
