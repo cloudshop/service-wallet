@@ -77,4 +77,6 @@ public interface WalletService {
 
     String AddUserIntegral(SettlementWalletDTO settlementWalletDTO);
 
+    WalletDTO getwalletInfos(Long id);
+
 }
