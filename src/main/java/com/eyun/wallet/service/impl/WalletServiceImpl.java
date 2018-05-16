@@ -447,6 +447,11 @@ public class WalletServiceImpl implements WalletService {
         Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
         wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
         walletRepository.saveAndFlush(wallet);
+        IntegralDetails integralDetails = integralDetailsRepository.findByUserid(settlementWalletDTO.getUserid());
+        integralDetails.setTypeString("消费积分增加");
+        integralDetails.setCreatedTime(Instant.now());
+        integralDetails.setIntegral(integralDetails.getIntegral().add(settlementWalletDTO.getAmount()));
+
         return "ok";
     }
 
