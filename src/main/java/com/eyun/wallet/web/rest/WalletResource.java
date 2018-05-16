@@ -418,4 +418,25 @@ public class WalletResource {
         String deductmoney = walletService.Deductmoney(settlementWalletDTO.getUserid(), settlementWalletDTO.getAmount());
         return ResponseEntity.ok().body(deductmoney);
     }
+
+
+
+    /**
+     * 文亮
+     * @param
+     * @return
+     */
+    @ApiOperation("线下支付给用户添加对应的积分")
+    @PostMapping("/wallet/AddUserIntegral")
+    @Timed
+    public ResponseEntity AddUserIntegral(@RequestBody SettlementWalletDTO settlementWalletDTO){
+        String messageIntegral = walletService.AddUserIntegral(settlementWalletDTO);
+        return ResponseEntity.ok().body(messageIntegral);
+
+    }
+
+
+
+
+
 }
