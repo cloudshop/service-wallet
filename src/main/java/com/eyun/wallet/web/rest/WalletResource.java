@@ -1,7 +1,7 @@
 package com.eyun.wallet.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.eyun.wallet.service.WalletService;
+import com.eyun.wallet.service.*;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
@@ -28,11 +28,6 @@ import com.eyun.wallet.domain.Wallet;
 import com.eyun.wallet.repository.BalanceDetailsRepository;
 import com.eyun.wallet.repository.IntegralDetailsRepository;
 import com.eyun.wallet.repository.TicketDetailsRepository;
-import com.eyun.wallet.service.OrderService;
-import com.eyun.wallet.service.PayService;
-import com.eyun.wallet.service.UaaService;
-import com.eyun.wallet.service.VerifyService;
-import com.eyun.wallet.service.WalletQueryService;
 
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -435,8 +430,14 @@ public class WalletResource {
 
     }
 
+    @ApiOperation("获取钱包的信息")
+    @GetMapping("/wallet/getwalletInfos/{userId}")
+    @Timed
+    public ResponseEntity<WalletDTO> getwalletInfos(@PathVariable Long userId){
+        WalletDTO walletDTO = walletService.getwalletInfos(userId);
+        return ResponseEntity.ok().body(walletDTO);
 
-
+    }
 
 
 }
