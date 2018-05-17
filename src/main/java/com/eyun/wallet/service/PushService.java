@@ -4,7 +4,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.eyun.user.client.AuthorizedFeignClient;
+import com.eyun.wallet.client.AuthorizedFeignClient;
+
 
 @AuthorizedFeignClient(name="push")
 public interface PushService {
