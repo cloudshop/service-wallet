@@ -172,8 +172,8 @@ public class WithdrawDepositResource {
     @ApiOperation("提现通过")
     @RolesAllowed("ROLE_ADMIN")
     @PutMapping("/put-forward/adopt/{withdrawDepositID}")
-    public void putForwardAdopt(@PathVariable("withdrawDeposit") Long id) {
-    	WithdrawDepositDTO withdrawDepositDTO = withdrawDepositService.findOne(id);
+    public void putForwardAdopt(@PathVariable("withdrawDeposit") Long withdrawDepositID) {
+    	WithdrawDepositDTO withdrawDepositDTO = withdrawDepositService.findOne(withdrawDepositID);
     	Instant now = Instant.now();
     	withdrawDepositDTO.setUpdatedTime(now);
     	withdrawDepositDTO.setStatus(3);
