@@ -282,7 +282,74 @@ public class WalletServiceImpl implements WalletService {
 	}
 
     @Override
-    public void batchintegrals(List<SetIntegralDTO> setIntegralDTOList) {
+    public void batchintegrals(SettlementWalletDTO settlementWalletDTO) {
+        Instant now = Instant.now();
+        Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
+        switch (settlementWalletDTO.getType()) {
+            case 1://1、b端收入余额
+                BigDecimal balance = wallet.getBalance();
+                BigDecimal addBalance = balance.add(settlementWalletDTO.getAmount());
+                wallet.setBalance(addBalance);
+                //添加明细记录
+                BalanceDetails balanceDetails = new BalanceDetails();
+                balanceDetails.userid(wallet.getUserid())
+                    .createdTime(now)
+                    .balance(addBalance)
+                    .addBalance(true)
+                    .type(4)
+                    .typeString("卖出商品收入")
+                    .wallet(wallet)
+                    .orderNo(settlementWalletDTO.getOrderNo());
+                balanceDetailsRepository.save(balanceDetails);
+                break;
+            case 2://2、c端获得积分
+                wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+                //添加明细记录
+                IntegralDetails integralDetails = new IntegralDetails();
+                integralDetails.userid(wallet.getUserid())
+                    .createdTime(now)
+                    .integral(settlementWalletDTO.getAmount())
+                    .addIntegral(true)
+                    .type(1)
+                    .typeString("获得积分")
+                    .wallet(wallet)
+                    .orderNo(settlementWalletDTO.getOrderNo());
+                integralDetailsRepository.save(integralDetails);
+                break;
+            case 3://3、b端获得积分
+                wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+                //添加明细记录
+                IntegralDetails integralDetails3 = new IntegralDetails();
+                integralDetails3.userid(wallet.getUserid())
+                    .createdTime(now)
+                    .integral(settlementWalletDTO.getAmount())
+                    .addIntegral(true)
+                    .type(1)
+                    .typeString("获得积分")
+                    .wallet(wallet)
+                    .orderNo(settlementWalletDTO.getOrderNo());
+                integralDetailsRepository.save(integralDetails3);
+                break;
+            case 4://4、邀请人获得积分
+                wallet.setIntegral(wallet.getIntegral().add(settlementWalletDTO.getAmount()));
+                //添加明细记录
+                IntegralDetails integralDetails4 = new IntegralDetails();
+                integralDetails4.userid(wallet.getUserid())
+                    .createdTime(now)
+                    .integral(settlementWalletDTO.getAmount())
+                    .addIntegral(true)
+                    .type(1)
+                    .typeString("获得积分")
+                    .wallet(wallet)
+                    .orderNo(settlementWalletDTO.getOrderNo());
+                integralDetailsRepository.save(integralDetails4);
+                break;
+            default:
+                return;
+        }
+        wallet.setUpdatedTime(now);
+        walletRepository.saveAndFlush(wallet);
+
 
     }
 
