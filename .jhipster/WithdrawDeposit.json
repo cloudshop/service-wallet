@@ -1,0 +1,57 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "wallet",
+            "otherEntityName": "wallet",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "cardholder",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "openingBank",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "bankcardNumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "money",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "statusString",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdTime",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "updatedTime",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "userid",
+            "fieldType": "Long"
+        }
+    ],
+    "changelogDate": "20180517061904",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "withdraw_deposit",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pager",
+    "microserviceName": "wallet",
+    "searchEngine": false
+}
