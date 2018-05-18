@@ -172,7 +172,7 @@ public class WithdrawDepositResource {
     @ApiOperation("提现通过")
     @RolesAllowed("ROLE_ADMIN")
     @PutMapping("/put-forward/adopt/{withdrawDepositID}")
-    public void putForwardAdopt(@PathVariable("withdrawDeposit") Long withdrawDepositID) {
+    public void putForwardAdopt(@PathVariable("withdrawDepositID") Long withdrawDepositID) {
     	WithdrawDepositDTO withdrawDepositDTO = withdrawDepositService.findOne(withdrawDepositID);
     	Instant now = Instant.now();
     	withdrawDepositDTO.setUpdatedTime(now);
@@ -180,6 +180,30 @@ public class WithdrawDepositResource {
     	withdrawDepositDTO.setStatusString("提现成功");
     	withdrawDepositService.save(withdrawDepositDTO);
     	pushService.sendPushByUserid(withdrawDepositDTO.getUserid().toString(), "提现成功");
+    	Optional<String> optional = SecurityUtils.getCurrentUserLogin();
+    	log.info("提现操作财务员账号："+optional.get()+",提现记录id:"+withdrawDepositDTO.getId());
+    }
+    
+    /**
+     * 提现拒绝
+     * @author 逍遥子
+     * @email 756898059@qq.com
+     * @date 2018年5月17日
+     * @version 1.0
+     * @param id
+     */
+    @ApiOperation("提现拒绝")
+    @RolesAllowed("ROLE_ADMIN")
+    @PutMapping("/put-forward/refuse/{withdrawDepositID}")
+    public void putForwardRefuse(@PathVariable("withdrawDepositID") Long withdrawDepositID,@RequestBody String content) {
+    	WithdrawDepositDTO withdrawDepositDTO = withdrawDepositService.findOne(withdrawDepositID);
+    	Instant now = Instant.now();
+    	withdrawDepositDTO.setUpdatedTime(now);
+    	withdrawDepositDTO.setStatus(2);
+    	withdrawDepositDTO.setStatusString("提现失败");
+    	withdrawDepositDTO.setDescribe(content);
+    	withdrawDepositService.save(withdrawDepositDTO);
+    	//pushService.sendPushByUserid(withdrawDepositDTO.getUserid().toString(), "提现成功");
     	Optional<String> optional = SecurityUtils.getCurrentUserLogin();
     	log.info("提现操作财务员账号："+optional.get()+",提现记录id:"+withdrawDepositDTO.getId());
     }

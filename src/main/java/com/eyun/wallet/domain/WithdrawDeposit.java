@@ -51,6 +51,9 @@ public class WithdrawDeposit implements Serializable {
     @Column(name = "userid")
     private Long userid;
 
+    @Column(name = "jhi_describe")
+    private String describe;
+
     @ManyToOne
     private Wallet wallet;
 
@@ -180,6 +183,19 @@ public class WithdrawDeposit implements Serializable {
         this.userid = userid;
     }
 
+    public String getDescribe() {
+        return describe;
+    }
+
+    public WithdrawDeposit describe(String describe) {
+        this.describe = describe;
+        return this;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
     public Wallet getWallet() {
         return wallet;
     }
@@ -227,6 +243,7 @@ public class WithdrawDeposit implements Serializable {
             ", createdTime='" + getCreatedTime() + "'" +
             ", updatedTime='" + getUpdatedTime() + "'" +
             ", userid=" + getUserid() +
+            ", describe='" + getDescribe() + "'" +
             "}";
     }
 }

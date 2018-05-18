@@ -46,6 +46,8 @@ public class WithdrawDepositCriteria implements Serializable {
 
     private LongFilter userid;
 
+    private StringFilter describe;
+
     private LongFilter walletId;
 
     public WithdrawDepositCriteria() {
@@ -131,6 +133,14 @@ public class WithdrawDepositCriteria implements Serializable {
         this.userid = userid;
     }
 
+    public StringFilter getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(StringFilter describe) {
+        this.describe = describe;
+    }
+
     public LongFilter getWalletId() {
         return walletId;
     }
@@ -152,6 +162,7 @@ public class WithdrawDepositCriteria implements Serializable {
                 (createdTime != null ? "createdTime=" + createdTime + ", " : "") +
                 (updatedTime != null ? "updatedTime=" + updatedTime + ", " : "") +
                 (userid != null ? "userid=" + userid + ", " : "") +
+                (describe != null ? "describe=" + describe + ", " : "") +
                 (walletId != null ? "walletId=" + walletId + ", " : "") +
             "}";
     }
