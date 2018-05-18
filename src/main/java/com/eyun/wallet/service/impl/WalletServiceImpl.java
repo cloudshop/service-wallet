@@ -349,6 +349,10 @@ public class WalletServiceImpl implements WalletService {
                 //增加明细
                 BalanceDetails balanceDetaList = new BalanceDetails();
                 balanceDetaList.setCreatedTime(Instant.now());
+                balanceDetaList.setUserid(wallet.getUserid());
+                balanceDetaList.wallet(wallet);
+                balanceDetaList.typeString("线下付扣除商户的资金");
+                balanceDetailsRepository.save(balanceDetaList);
                 break;
             default:
                 return;
