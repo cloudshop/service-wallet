@@ -7,6 +7,7 @@ import com.eyun.wallet.web.rest.util.HeaderUtil;
 import com.eyun.wallet.web.rest.util.PaginationUtil;
 import com.eyun.wallet.service.dto.WithdrawDepositDTO;
 import com.eyun.wallet.service.dto.PutForwardDTO;
+import com.eyun.wallet.service.dto.RefuseDTO;
 import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WithdrawDepositCriteria;
 import com.eyun.wallet.security.SecurityUtils;
@@ -194,14 +195,14 @@ public class WithdrawDepositResource {
      */
     @ApiOperation("提现拒绝")
     @RolesAllowed("ROLE_ADMIN")
-    @PutMapping("/put-forward/refuse/{withdrawDepositID}")
-    public void putForwardRefuse(@PathVariable("withdrawDepositID") Long withdrawDepositID,@RequestBody String content) {
-    	WithdrawDepositDTO withdrawDepositDTO = withdrawDepositService.findOne(withdrawDepositID);
+    @PutMapping("/put-forward/refuse")
+    public void putForwardRefuse(@RequestBody RefuseDTO refuseDTO) {
+    	WithdrawDepositDTO withdrawDepositDTO = withdrawDepositService.findOne(refuseDTO.getId());
     	Instant now = Instant.now();
     	withdrawDepositDTO.setUpdatedTime(now);
     	withdrawDepositDTO.setStatus(2);
     	withdrawDepositDTO.setStatusString("提现失败");
-    	withdrawDepositDTO.setDescribe(content);
+    	withdrawDepositDTO.setDescribe(refuseDTO.getContent());
     	withdrawDepositService.save(withdrawDepositDTO);
     	//pushService.sendPushByUserid(withdrawDepositDTO.getUserid().toString(), "提现成功");
     	Optional<String> optional = SecurityUtils.getCurrentUserLogin();
