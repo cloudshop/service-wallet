@@ -431,13 +431,15 @@ public class WalletResource {
 
     /**
      * 线下支付批量积分的添加
-     * @param setIntegralDTOList
+     * @param
      */
     @ApiOperation("线下支付批量积分的添加")
     @PutMapping("/wallet/batchintegrals")
     @Timed
-    public void Batchintegrals(@RequestBody List<SetIntegralDTO> setIntegralDTOList) {
-            walletService.batchintegrals(setIntegralDTOList);
+    public void Batchintegrals(@RequestBody List<SettlementWalletDTO> settlementWalletDTOList) {
+        for (SettlementWalletDTO settlementWalletDTO : settlementWalletDTOList) {
+            walletService.batchintegrals(settlementWalletDTO);
+           }
         }
     }
 

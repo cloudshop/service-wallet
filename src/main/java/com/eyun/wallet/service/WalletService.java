@@ -80,5 +80,5 @@ public interface WalletService {
 
     WalletDTO getwalletInfos(Long id);
 
-    void batchintegrals(List<SetIntegralDTO> setIntegralDTOList);
+    void batchintegrals(SettlementWalletDTO settlementWalletDTO);
 }
