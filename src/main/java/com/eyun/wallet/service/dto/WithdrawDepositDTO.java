@@ -33,6 +33,8 @@ public class WithdrawDepositDTO implements Serializable {
 
     private Long userid;
 
+    private String describe;
+
     private Long walletId;
 
     public Long getId() {
@@ -115,6 +117,14 @@ public class WithdrawDepositDTO implements Serializable {
         this.userid = userid;
     }
 
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
     public Long getWalletId() {
         return walletId;
     }
@@ -157,6 +167,7 @@ public class WithdrawDepositDTO implements Serializable {
             ", createdTime='" + getCreatedTime() + "'" +
             ", updatedTime='" + getUpdatedTime() + "'" +
             ", userid=" + getUserid() +
+            ", describe='" + getDescribe() + "'" +
             "}";
     }
 }

@@ -76,6 +76,9 @@ public class WithdrawDepositResourceIntTest {
     private static final Long DEFAULT_USERID = 1L;
     private static final Long UPDATED_USERID = 2L;
 
+    private static final String DEFAULT_DESCRIBE = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIBE = "BBBBBBBBBB";
+
     @Autowired
     private WithdrawDepositRepository withdrawDepositRepository;
 
@@ -131,7 +134,8 @@ public class WithdrawDepositResourceIntTest {
             .statusString(DEFAULT_STATUS_STRING)
             .createdTime(DEFAULT_CREATED_TIME)
             .updatedTime(DEFAULT_UPDATED_TIME)
-            .userid(DEFAULT_USERID);
+            .userid(DEFAULT_USERID)
+            .describe(DEFAULT_DESCRIBE);
         return withdrawDeposit;
     }
 
@@ -165,6 +169,7 @@ public class WithdrawDepositResourceIntTest {
         assertThat(testWithdrawDeposit.getCreatedTime()).isEqualTo(DEFAULT_CREATED_TIME);
         assertThat(testWithdrawDeposit.getUpdatedTime()).isEqualTo(DEFAULT_UPDATED_TIME);
         assertThat(testWithdrawDeposit.getUserid()).isEqualTo(DEFAULT_USERID);
+        assertThat(testWithdrawDeposit.getDescribe()).isEqualTo(DEFAULT_DESCRIBE);
     }
 
     @Test
@@ -206,7 +211,8 @@ public class WithdrawDepositResourceIntTest {
             .andExpect(jsonPath("$.[*].statusString").value(hasItem(DEFAULT_STATUS_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
             .andExpect(jsonPath("$.[*].updatedTime").value(hasItem(DEFAULT_UPDATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())));
+            .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
+            .andExpect(jsonPath("$.[*].describe").value(hasItem(DEFAULT_DESCRIBE.toString())));
     }
 
     @Test
@@ -228,7 +234,8 @@ public class WithdrawDepositResourceIntTest {
             .andExpect(jsonPath("$.statusString").value(DEFAULT_STATUS_STRING.toString()))
             .andExpect(jsonPath("$.createdTime").value(DEFAULT_CREATED_TIME.toString()))
             .andExpect(jsonPath("$.updatedTime").value(DEFAULT_UPDATED_TIME.toString()))
-            .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()));
+            .andExpect(jsonPath("$.userid").value(DEFAULT_USERID.intValue()))
+            .andExpect(jsonPath("$.describe").value(DEFAULT_DESCRIBE.toString()));
     }
 
     @Test
@@ -638,6 +645,45 @@ public class WithdrawDepositResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllWithdrawDepositsByDescribeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        withdrawDepositRepository.saveAndFlush(withdrawDeposit);
+
+        // Get all the withdrawDepositList where describe equals to DEFAULT_DESCRIBE
+        defaultWithdrawDepositShouldBeFound("describe.equals=" + DEFAULT_DESCRIBE);
+
+        // Get all the withdrawDepositList where describe equals to UPDATED_DESCRIBE
+        defaultWithdrawDepositShouldNotBeFound("describe.equals=" + UPDATED_DESCRIBE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWithdrawDepositsByDescribeIsInShouldWork() throws Exception {
+        // Initialize the database
+        withdrawDepositRepository.saveAndFlush(withdrawDeposit);
+
+        // Get all the withdrawDepositList where describe in DEFAULT_DESCRIBE or UPDATED_DESCRIBE
+        defaultWithdrawDepositShouldBeFound("describe.in=" + DEFAULT_DESCRIBE + "," + UPDATED_DESCRIBE);
+
+        // Get all the withdrawDepositList where describe equals to UPDATED_DESCRIBE
+        defaultWithdrawDepositShouldNotBeFound("describe.in=" + UPDATED_DESCRIBE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllWithdrawDepositsByDescribeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        withdrawDepositRepository.saveAndFlush(withdrawDeposit);
+
+        // Get all the withdrawDepositList where describe is not null
+        defaultWithdrawDepositShouldBeFound("describe.specified=true");
+
+        // Get all the withdrawDepositList where describe is null
+        defaultWithdrawDepositShouldNotBeFound("describe.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllWithdrawDepositsByWalletIsEqualToSomething() throws Exception {
         // Initialize the database
         Wallet wallet = WalletResourceIntTest.createEntity(em);
@@ -670,7 +716,8 @@ public class WithdrawDepositResourceIntTest {
             .andExpect(jsonPath("$.[*].statusString").value(hasItem(DEFAULT_STATUS_STRING.toString())))
             .andExpect(jsonPath("$.[*].createdTime").value(hasItem(DEFAULT_CREATED_TIME.toString())))
             .andExpect(jsonPath("$.[*].updatedTime").value(hasItem(DEFAULT_UPDATED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())));
+            .andExpect(jsonPath("$.[*].userid").value(hasItem(DEFAULT_USERID.intValue())))
+            .andExpect(jsonPath("$.[*].describe").value(hasItem(DEFAULT_DESCRIBE.toString())));
     }
 
     /**
@@ -713,7 +760,8 @@ public class WithdrawDepositResourceIntTest {
             .statusString(UPDATED_STATUS_STRING)
             .createdTime(UPDATED_CREATED_TIME)
             .updatedTime(UPDATED_UPDATED_TIME)
-            .userid(UPDATED_USERID);
+            .userid(UPDATED_USERID)
+            .describe(UPDATED_DESCRIBE);
         WithdrawDepositDTO withdrawDepositDTO = withdrawDepositMapper.toDto(updatedWithdrawDeposit);
 
         restWithdrawDepositMockMvc.perform(put("/api/withdraw-deposits")
@@ -734,6 +782,7 @@ public class WithdrawDepositResourceIntTest {
         assertThat(testWithdrawDeposit.getCreatedTime()).isEqualTo(UPDATED_CREATED_TIME);
         assertThat(testWithdrawDeposit.getUpdatedTime()).isEqualTo(UPDATED_UPDATED_TIME);
         assertThat(testWithdrawDeposit.getUserid()).isEqualTo(UPDATED_USERID);
+        assertThat(testWithdrawDeposit.getDescribe()).isEqualTo(UPDATED_DESCRIBE);
     }
 
     @Test

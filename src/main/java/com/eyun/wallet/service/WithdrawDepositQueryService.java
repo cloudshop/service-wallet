@@ -106,6 +106,9 @@ public class WithdrawDepositQueryService extends QueryService<WithdrawDeposit> {
             if (criteria.getUserid() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUserid(), WithdrawDeposit_.userid));
             }
+            if (criteria.getDescribe() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDescribe(), WithdrawDeposit_.describe));
+            }
             if (criteria.getWalletId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getWalletId(), WithdrawDeposit_.wallet, Wallet_.id));
             }
