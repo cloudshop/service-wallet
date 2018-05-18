@@ -344,6 +344,7 @@ public class WalletServiceImpl implements WalletService {
                     .orderNo(settlementWalletDTO.getOrderNo());
                 integralDetailsRepository.save(integralDetails4);
             case 5:
+
                 wallet.setBalance(wallet.getBalance().subtract(settlementWalletDTO.getAmount()));
                 //增加明细
                 BalanceDetails balanceDetaList = new BalanceDetails();
