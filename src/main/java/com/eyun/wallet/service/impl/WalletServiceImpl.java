@@ -435,6 +435,7 @@ public class WalletServiceImpl implements WalletService {
                 balanceDetaList.setUserid(wallet.getUserid());
                 balanceDetaList.wallet(wallet);
                 balanceDetaList.typeString("线下付扣除商户的资金");
+                balanceDetaList.setBalance(settlementWalletDTO.getAmount());
                 balanceDetailsRepository.save(balanceDetaList);
                 break;
             default:
