@@ -297,7 +297,7 @@ public class WalletServiceImpl implements WalletService {
                     .balance(addBalance)
                     .addBalance(true)
                     .type(4)
-                    .typeString("卖出商品收入")
+                    .typeString("线下卖出商品收入")
                     .wallet(wallet)
                     .orderNo(settlementWalletDTO.getOrderNo());
                 balanceDetailsRepository.save(balanceDetails);
@@ -311,7 +311,7 @@ public class WalletServiceImpl implements WalletService {
                     .integral(settlementWalletDTO.getAmount())
                     .addIntegral(true)
                     .type(1)
-                    .typeString("获得积分")
+                    .typeString("邀请人获得积分")
                     .wallet(wallet)
                     .orderNo(settlementWalletDTO.getOrderNo());
                 integralDetailsRepository.save(integralDetails);
@@ -325,7 +325,7 @@ public class WalletServiceImpl implements WalletService {
                     .integral(settlementWalletDTO.getAmount())
                     .addIntegral(true)
                     .type(1)
-                    .typeString("获得积分")
+                    .typeString("邀请人获得积分")
                     .wallet(wallet)
                     .orderNo(settlementWalletDTO.getOrderNo());
                 integralDetailsRepository.save(integralDetails3);
@@ -339,12 +339,11 @@ public class WalletServiceImpl implements WalletService {
                     .integral(settlementWalletDTO.getAmount())
                     .addIntegral(true)
                     .type(1)
-                    .typeString("获得积分")
+                    .typeString("邀请人获得积分")
                     .wallet(wallet)
                     .orderNo(settlementWalletDTO.getOrderNo());
                 integralDetailsRepository.save(integralDetails4);
             case 5:
-
                 wallet.setBalance(wallet.getBalance().subtract(settlementWalletDTO.getAmount()));
                 //增加明细
                 BalanceDetails balanceDetaList = new BalanceDetails();
