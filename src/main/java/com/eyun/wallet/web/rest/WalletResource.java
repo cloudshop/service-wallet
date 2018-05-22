@@ -44,6 +44,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -72,7 +73,7 @@ public class WalletResource {
 
     @Autowired
     private PayService payService;
-    
+
     @Autowired
     private PushService pushService;
 
@@ -268,7 +269,8 @@ public class WalletResource {
     @PostMapping("/wallets/balance/pay")
     public ResponseEntity balancePay(@RequestBody BalancePayDTO balancePayDTO) {
     	UserDTO user = uaaService.getAccount();
-    	Wallet wallet = walletService.findByUserid(user.getId());
+        System.out.println(user.getId()+"---------------------------------------------------------------->");
+        Wallet wallet = walletService.findByUserid(user.getId());
     	Long cuserid = null;
     	BigDecimal balance = new BigDecimal("0.00");
     	BigDecimal ticket = new BigDecimal("0.00");
@@ -282,8 +284,8 @@ public class WalletResource {
     		balance = body.getBalance();
     		ticket = body.getTicket();
     	}
-    	
-    	if (user.getId() != cuserid) {
+
+    	if (!Objects.equals(user.getId(), cuserid)) {
     		System.out.println(cuserid+"--------------");
     		System.out.println(user.getId() + "==============");
     		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
@@ -296,7 +298,7 @@ public class WalletResource {
     		throw new BadRequestAlertException("请设置钱包密码", "wallet", "walletPsdNull");
     	}
 		PayOrder balancePay = walletService.balancePay(wallet.getId(), balance, ticket, balancePayDTO.getOrderNo());
-		
+
 		if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
 			PayNotifyDTO payNotifyDTO = new PayNotifyDTO();
 			payNotifyDTO.setOrderNo(balancePay.getOrderNo());
@@ -306,7 +308,7 @@ public class WalletResource {
     	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
     		orderService.updateOrderStatusByOrderNo(balancePayDTO.getOrderNo());
     	}
-		
+
 		pushService.sendPushByUserid(cuserid.toString(), "支付成功");
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
