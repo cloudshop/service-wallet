@@ -199,7 +199,7 @@ public class WalletServiceImpl implements WalletService {
 	public PayOrder balancePay(Long walletId, BigDecimal balance, BigDecimal ticket, String orderNo) {
 		Wallet wallet = walletRepository.findOne(walletId);
 		Instant now = Instant.now();
-		if (balance.doubleValue() == 0.00) {
+		if (balance.doubleValue() != 0.00) {
 			BigDecimal wbalance = wallet.getBalance();
 			BigDecimal subtract = wbalance.subtract(balance);
 			if (subtract.doubleValue() < 0.00) {
@@ -219,7 +219,7 @@ public class WalletServiceImpl implements WalletService {
 				.orderNo(orderNo)
 				.wallet(wallet);
 		}
-		if (ticket.doubleValue() == 0.00) {
+		if (ticket.doubleValue() != 0.00) {
 			BigDecimal wticket = wallet.getTicket();
 			BigDecimal subtract = wticket.subtract(ticket);
 			if (subtract.doubleValue() < 0.00) {

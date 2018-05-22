@@ -284,6 +284,8 @@ public class WalletResource {
     	}
     	
     	if (user.getId() != cuserid) {
+    		System.out.println(cuserid+"--------------");
+    		System.out.println(user.getId() + "==============");
     		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
     	}
     	if (wallet.getPassword() != null) {
@@ -302,7 +304,7 @@ public class WalletResource {
 			payNotifyDTO.setPayNo(balancePay.getPayNo());
 			ResponseEntity<ProOrderDTO> resp = orderService.proOrderNotify(payNotifyDTO);
     	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
-    		//TODO 修改订单状态
+    		orderService.updateOrderStatusByOrderNo(balancePayDTO.getOrderNo());
     	}
 		
 		pushService.sendPushByUserid(cuserid.toString(), "支付成功");
