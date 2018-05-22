@@ -57,7 +57,7 @@ public interface WalletService {
 
     String giveIntegral(Long fromUserId, Long toUserId, BigDecimal integral);
 
-    PayOrder balancePay(Long long1, BigDecimal price, String orderNo);
+    PayOrder balancePay(Long walletId, BigDecimal balance, BigDecimal ticket, String orderNo);
 
     void update(Wallet wallet);
 

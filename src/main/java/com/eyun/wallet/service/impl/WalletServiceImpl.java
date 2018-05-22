@@ -196,22 +196,56 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	public PayOrder balancePay(Long id, BigDecimal price, String orderNo) {
-		Wallet wallet = walletRepository.findOne(id);
-		BigDecimal balance = wallet.getBalance();
-		BigDecimal subtract = balance.subtract(price);
-		if (subtract.doubleValue() < 0.00) {
-			throw new BadRequestAlertException("钱包余额不足", "balance", "balanceError");
+	public PayOrder balancePay(Long walletId, BigDecimal balance, BigDecimal ticket, String orderNo) {
+		Wallet wallet = walletRepository.findOne(walletId);
+		Instant now = Instant.now();
+		if (balance.doubleValue() == 0.00) {
+			BigDecimal wbalance = wallet.getBalance();
+			BigDecimal subtract = wbalance.subtract(balance);
+			if (subtract.doubleValue() < 0.00) {
+				throw new BadRequestAlertException("钱包余额不足", "balance", "balanceError");
+			}
+			wallet.balance(subtract).updatedTime(now);
+			walletRepository.save(wallet);
+			
+			//添加明细记录
+			BalanceDetails balanceDetails = new BalanceDetails();
+			balanceDetails.userid(wallet.getUserid())
+				.createdTime(now)
+				.balance(balance)
+				.addBalance(false)
+				.type(4)
+				.typeString("消费")
+				.orderNo(orderNo)
+				.wallet(wallet);
 		}
-		wallet.balance(subtract).updatedTime(Instant.now());
-		walletRepository.save(wallet);
-		//TODO 1、账户记录
+		if (ticket.doubleValue() == 0.00) {
+			BigDecimal wticket = wallet.getTicket();
+			BigDecimal subtract = wticket.subtract(ticket);
+			if (subtract.doubleValue() < 0.00) {
+				throw new BadRequestAlertException("钱包贡融卷不足", "ticket", "ticketError");
+			}
+			wallet.balance(subtract).updatedTime(now);
+			walletRepository.save(wallet);
+			
+			//添加明细记录
+			TicketDetails ticketDetails = new TicketDetails();
+			ticketDetails.userid(wallet.getUserid())
+				.createdTime(now)
+				.ticket(ticket)
+				.addTicket(false)
+				.type(4)
+				.typeString("消费")
+				.orderNo(orderNo)
+				.wallet(wallet);
+		}
 
 		//添加支付账单
 		PayOrder payOrder = new PayOrder();
 		payOrder
 			.userid(wallet.getUserid())
 			.balance(balance)
+			.ticket(ticket)
 			.wallet(wallet)
 			.payTime(Instant.now())
 			.orderNo(orderNo);

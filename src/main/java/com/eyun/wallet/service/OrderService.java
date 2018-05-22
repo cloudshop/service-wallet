@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.eyun.wallet.client.AuthorizedUserFeignClient;
+import com.eyun.wallet.service.dto.FaceOrderDTO;
 import com.eyun.wallet.service.dto.PayNotifyDTO;
 import com.eyun.wallet.service.dto.ProOrderDTO;
 
@@ -18,5 +19,7 @@ public interface OrderService {
 	
 	@PutMapping("/api/pro-order/pay/notify")
     public ResponseEntity<ProOrderDTO> proOrderNotify(@RequestBody PayNotifyDTO payNotifyDTO);
-    
+	
+	@GetMapping("/face-order/findFaceOrderByOrderNo/{orderNo}")
+    public ResponseEntity<FaceOrderDTO> findFaceOrderByOrderNo(@PathVariable String orderNo);
 }

@@ -72,6 +72,9 @@ public class WalletResource {
 
     @Autowired
     private PayService payService;
+    
+    @Autowired
+    private PushService pushService;
 
     public WalletResource(WalletService walletService, WalletQueryService walletQueryService) {
         this.walletService = walletService;
@@ -266,8 +269,21 @@ public class WalletResource {
     public ResponseEntity balancePay(@RequestBody BalancePayDTO balancePayDTO) {
     	UserDTO user = uaaService.getAccount();
     	Wallet wallet = walletService.findByUserid(user.getId());
-    	ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
-    	if (user.getId() != proOrderDTO.getcUserid()) {
+    	Long cuserid = null;
+    	BigDecimal balance = new BigDecimal("0.00");
+    	BigDecimal ticket = new BigDecimal("0.00");
+    	if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+    		ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
+    		cuserid = proOrderDTO.getcUserid();
+    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    		ResponseEntity<FaceOrderDTO> resp = orderService.findFaceOrderByOrderNo(balancePayDTO.getOrderNo());
+    		FaceOrderDTO body = resp.getBody();
+    		cuserid = body.getCuserId();
+    		balance = body.getBalance();
+    		ticket = body.getTicket();
+    	}
+    	
+    	if (user.getId() != cuserid) {
     		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
     	}
     	if (wallet.getPassword() != null) {
@@ -277,13 +293,19 @@ public class WalletResource {
     	} else {
     		throw new BadRequestAlertException("请设置钱包密码", "wallet", "walletPsdNull");
     	}
-    	PayOrder balancePay = walletService.balancePay(wallet.getId(),proOrderDTO.getPayment(),balancePayDTO.getOrderNo());
-		//TODO  调用订单服务 通知支付成功
-    	PayNotifyDTO payNotifyDTO = new PayNotifyDTO();
-    	payNotifyDTO.setOrderNo(balancePay.getOrderNo());
-    	payNotifyDTO.setPayType(1);
-    	payNotifyDTO.setPayNo(balancePay.getPayNo());
-    	ResponseEntity<ProOrderDTO> resp = orderService.proOrderNotify(payNotifyDTO);
+		PayOrder balancePay = walletService.balancePay(wallet.getId(), balance, ticket, balancePayDTO.getOrderNo());
+		
+		if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+			PayNotifyDTO payNotifyDTO = new PayNotifyDTO();
+			payNotifyDTO.setOrderNo(balancePay.getOrderNo());
+			payNotifyDTO.setPayType(1);
+			payNotifyDTO.setPayNo(balancePay.getPayNo());
+			ResponseEntity<ProOrderDTO> resp = orderService.proOrderNotify(payNotifyDTO);
+    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    		//TODO 修改订单状态
+    	}
+		
+		pushService.sendPushByUserid(cuserid.toString(), "支付成功");
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
 
