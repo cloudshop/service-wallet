@@ -392,7 +392,7 @@ public class WalletServiceImpl implements WalletService {
                     .integral(settlementWalletDTO.getAmount())
                     .addIntegral(true)
                     .type(1)
-                    .typeString("增值商户获得积分")
+                    .typeString("增值商户获2倍得积分")
                     .wallet(wallet)
                     .orderNo(settlementWalletDTO.getOrderNo());
                 integralDetailsRepository.save(integralDetails1);
@@ -433,14 +433,10 @@ public class WalletServiceImpl implements WalletService {
                 wallet.setBalance(addBalance);
                 //添加明细记录
                 BalanceDetails balanceDetails = new BalanceDetails();
-                balanceDetails.userid(wallet.getUserid())
-                    .createdTime(now)
-                    .balance(settlementWalletDTO.getAmount())
-                    .addBalance(true)
-                    .type(4)
-                    .typeString("直接邀请服务商收入")
-                    .wallet(wallet)
-                    .orderNo(settlementWalletDTO.getOrderNo());
+                balanceDetails.setUserid(wallet.getUserid());
+                balanceDetails.setBalance(settlementWalletDTO.getAmount());
+                balanceDetails.setCreatedTime(Instant.now());
+                balanceDetails.setTypeString("直接邀请服务商收入");
                 balanceDetailsRepository.save(balanceDetails);
                 break;
 
@@ -450,14 +446,10 @@ public class WalletServiceImpl implements WalletService {
                 wallet.setBalance(addBalance1);
                 //添加明细记录
                 BalanceDetails balanceDetails1 = new BalanceDetails();
-                balanceDetails1.userid(wallet.getUserid())
-                    .createdTime(now)
-                    .balance(settlementWalletDTO.getAmount())
-                    .addBalance(true)
-                    .type(4)
-                    .typeString("间接邀请服务商收入")
-                    .wallet(wallet)
-                    .orderNo(settlementWalletDTO.getOrderNo());
+                balanceDetails1.setUserid(wallet.getUserid());
+                balanceDetails1.setCreatedTime(Instant.now());
+                balanceDetails1.setTypeString("间接服务商收入");
+                balanceDetails1.setBalance(settlementWalletDTO.getAmount());
                 balanceDetailsRepository.save(balanceDetails1);
                 break;
             case 9:
