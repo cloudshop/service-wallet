@@ -286,8 +286,6 @@ public class WalletResource {
     	}
     	
     	if (user.getId() != cuserid) {
-    		System.out.println(cuserid+"--------------");
-    		System.out.println(user.getId() + "==============");
     		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
     	}
     	if (wallet.getPassword() != null) {
@@ -309,7 +307,7 @@ public class WalletResource {
     		orderService.updateOrderStatusByOrderNo(balancePayDTO.getOrderNo());
     	}
 		
-		//pushService.sendPushByUserid(cuserid.toString(), "支付成功");
+		pushService.sendPushByUserid(cuserid.toString(), "支付成功");
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
 
