@@ -279,10 +279,10 @@ public class WalletResource {
     	Long cuserid = null;
     	BigDecimal balance = new BigDecimal("0.00");
     	BigDecimal ticket = new BigDecimal("0.00");
-    	if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+    	if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("1")) {
     		ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
     		cuserid = proOrderDTO.getcUserid();
-    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    	} else if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("4")) {
     		ResponseEntity<FaceOrderDTO> resp = orderService.findFaceOrderByOrderNo(balancePayDTO.getOrderNo());
     		FaceOrderDTO body = resp.getBody();
     		cuserid = body.getCuserId();
@@ -304,13 +304,13 @@ public class WalletResource {
     	}
 		PayOrder balancePay = walletService.balancePay(wallet.getId(), balance, ticket, balancePayDTO.getOrderNo());
 
-		if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+		if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("1")) {
 			PayNotifyDTO payNotifyDTO = new PayNotifyDTO();
 			payNotifyDTO.setOrderNo(balancePay.getOrderNo());
 			payNotifyDTO.setPayType(1);
 			payNotifyDTO.setPayNo(balancePay.getPayNo());
 			ResponseEntity<ProOrderDTO> resp = orderService.proOrderNotify(payNotifyDTO);
-    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    	} else if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("4")) {
     		orderService.updateOrderStatusByOrderNo(balancePayDTO.getOrderNo());
     	}
 
