@@ -268,14 +268,16 @@ public class WalletResource {
     @PostMapping("/wallets/balance/pay")
     public ResponseEntity balancePay(@RequestBody BalancePayDTO balancePayDTO) {
     	UserDTO user = uaaService.getAccount();
+    	System.out.println("=============" + user.toString());
     	Wallet wallet = walletService.findByUserid(user.getId());
     	Long cuserid = null;
     	BigDecimal balance = new BigDecimal("0.00");
     	BigDecimal ticket = new BigDecimal("0.00");
-    	if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+    	if (balancePayDTO.getOrderNo().subSequence(0,1).equals("1")) {
     		ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
     		cuserid = proOrderDTO.getcUserid();
-    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    	} else if (balancePayDTO.getOrderNo().subSequence(0,1).equals("4")) {
+    		System.out.println(balancePayDTO.getOrderNo()+"********************************");
     		ResponseEntity<FaceOrderDTO> resp = orderService.findFaceOrderByOrderNo(balancePayDTO.getOrderNo());
     		FaceOrderDTO body = resp.getBody();
     		cuserid = body.getCuserId();
@@ -297,17 +299,17 @@ public class WalletResource {
     	}
 		PayOrder balancePay = walletService.balancePay(wallet.getId(), balance, ticket, balancePayDTO.getOrderNo());
 		
-		if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+		if (balancePayDTO.getOrderNo().subSequence(0,1).equals("1")) {
 			PayNotifyDTO payNotifyDTO = new PayNotifyDTO();
 			payNotifyDTO.setOrderNo(balancePay.getOrderNo());
 			payNotifyDTO.setPayType(1);
 			payNotifyDTO.setPayNo(balancePay.getPayNo());
 			ResponseEntity<ProOrderDTO> resp = orderService.proOrderNotify(payNotifyDTO);
-    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    	} else if (balancePayDTO.getOrderNo().subSequence(0,1).equals("4")) {
     		orderService.updateOrderStatusByOrderNo(balancePayDTO.getOrderNo());
     	}
 		
-		pushService.sendPushByUserid(cuserid.toString(), "支付成功");
+		//pushService.sendPushByUserid(cuserid.toString(), "支付成功");
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
 
