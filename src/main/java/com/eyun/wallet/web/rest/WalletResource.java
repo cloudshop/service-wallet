@@ -183,7 +183,7 @@ public class WalletResource {
     @PutMapping("/wallets/balance")
     public ResponseEntity<Wallet> updateBalance(@RequestBody BalanceDTO balanceDTO) throws JSONException {
     	switch (balanceDTO.getType()) {
-		case 1: //充值
+		case 1: //支付宝充值
 			String order = payService.queryOrder(balanceDTO.getOrderNo());
 			JSONObject jsonObject = new JSONObject(order);
 			double totalAmount = jsonObject.getJSONObject("alipay_trade_query_response").getDouble("total_amount");
@@ -196,6 +196,11 @@ public class WalletResource {
 			} else {
 				return new ResponseEntity<>(HeaderUtil.createAlert("The amount of recharge is mistaken", "money:"+balanceDTO.getMoney()), HttpStatus.BAD_REQUEST);
 			}
+		case 2: //微信充值
+			Wallet wallet = walletService.rechargeBalance(balanceDTO);
+			return ResponseEntity.ok()
+					.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, wallet.getId().toString()))
+					.body(wallet);
 		default:
 			return new ResponseEntity<>(HeaderUtil.createAlert("Type field is mistaken", "type:"+balanceDTO.getType()), HttpStatus.BAD_REQUEST);
 		}
