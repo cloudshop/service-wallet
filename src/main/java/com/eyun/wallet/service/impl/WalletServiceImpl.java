@@ -435,7 +435,7 @@ public class WalletServiceImpl implements WalletService {
                 BalanceDetails balanceDetails = new BalanceDetails();
                 balanceDetails.userid(wallet.getUserid())
                     .createdTime(now)
-                    .balance(addBalance)
+                    .balance(settlementWalletDTO.getAmount())
                     .addBalance(true)
                     .type(4)
                     .typeString("直接邀请服务商收入")
@@ -452,7 +452,7 @@ public class WalletServiceImpl implements WalletService {
                 BalanceDetails balanceDetails1 = new BalanceDetails();
                 balanceDetails1.userid(wallet.getUserid())
                     .createdTime(now)
-                    .balance(addBalance1)
+                    .balance(settlementWalletDTO.getAmount())
                     .addBalance(true)
                     .type(4)
                     .typeString("间接邀请服务商收入")
