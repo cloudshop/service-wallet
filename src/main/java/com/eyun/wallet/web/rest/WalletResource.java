@@ -190,6 +190,7 @@ public class WalletResource {
 			//if (balanceDTO.getMoney().compareTo(new BigDecimal(totalAmount)) == 0) {
 			if (balanceDTO.getMoney().doubleValue() == totalAmount) {//比较充值金额是否和支付宝账单中金额相等
 				Wallet wallet = walletService.rechargeBalance(balanceDTO);
+				pushService.sendPushByUserid(balanceDTO.getUserid()+"", "充值成功："+balanceDTO.getMoney()+"元！");
 				return ResponseEntity.ok()
 			            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, wallet.getId().toString()))
 			            .body(wallet);
@@ -198,6 +199,7 @@ public class WalletResource {
 			}
 		case 2: //微信充值
 			Wallet wallet = walletService.rechargeBalance(balanceDTO);
+			pushService.sendPushByUserid(balanceDTO.getUserid()+"", "充值成功："+balanceDTO.getMoney()+"元！");
 			return ResponseEntity.ok()
 					.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, wallet.getId().toString()))
 					.body(wallet);
