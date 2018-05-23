@@ -197,9 +197,10 @@ public class WalletServiceImpl implements WalletService {
 
 	@Override
 	public PayOrder balancePay(Long walletId, BigDecimal balance, BigDecimal ticket, String orderNo) {
+		System.out.println(walletId + " * " + balance + " * " + ticket + " * " + orderNo + "&&&&&&&&&&");
 		Wallet wallet = walletRepository.findOne(walletId);
 		Instant now = Instant.now();
-		if (balance.doubleValue() == 0.00) {
+		if (balance.doubleValue() != 0.00) {
 			BigDecimal wbalance = wallet.getBalance();
 			BigDecimal subtract = wbalance.subtract(balance);
 			if (subtract.doubleValue() < 0.00) {
@@ -207,7 +208,6 @@ public class WalletServiceImpl implements WalletService {
 			}
 			wallet.balance(subtract).updatedTime(now);
 			walletRepository.save(wallet);
-			
 			//添加明细记录
 			BalanceDetails balanceDetails = new BalanceDetails();
 			balanceDetails.userid(wallet.getUserid())
@@ -219,15 +219,14 @@ public class WalletServiceImpl implements WalletService {
 				.orderNo(orderNo)
 				.wallet(wallet);
 		}
-		if (ticket.doubleValue() == 0.00) {
+		if (ticket.doubleValue() != 0.00) {
 			BigDecimal wticket = wallet.getTicket();
 			BigDecimal subtract = wticket.subtract(ticket);
 			if (subtract.doubleValue() < 0.00) {
 				throw new BadRequestAlertException("钱包贡融卷不足", "ticket", "ticketError");
 			}
-			wallet.balance(subtract).updatedTime(now);
+			wallet.ticket(subtract).updatedTime(now);
 			walletRepository.save(wallet);
-			
 			//添加明细记录
 			TicketDetails ticketDetails = new TicketDetails();
 			ticketDetails.userid(wallet.getUserid())
@@ -436,7 +435,7 @@ public class WalletServiceImpl implements WalletService {
                 BalanceDetails balanceDetails = new BalanceDetails();
                 balanceDetails.userid(wallet.getUserid())
                     .createdTime(now)
-                    .balance(addBalance)
+                    .balance(settlementWalletDTO.getAmount())
                     .addBalance(true)
                     .type(4)
                     .typeString("直接邀请服务商收入")
@@ -453,7 +452,7 @@ public class WalletServiceImpl implements WalletService {
                 BalanceDetails balanceDetails1 = new BalanceDetails();
                 balanceDetails1.userid(wallet.getUserid())
                     .createdTime(now)
-                    .balance(addBalance1)
+                    .balance(settlementWalletDTO.getAmount())
                     .addBalance(true)
                     .type(4)
                     .typeString("间接邀请服务商收入")
