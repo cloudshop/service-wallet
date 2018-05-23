@@ -21,8 +21,9 @@ public interface OrderService {
 	@PutMapping("/api/pro-order/pay/notify")
     public ResponseEntity<ProOrderDTO> proOrderNotify(@RequestBody PayNotifyDTO payNotifyDTO);
 	
-	@GetMapping("/face-order/findFaceOrderByOrderNo/{orderNo}")
+	@GetMapping("/api/face-order/findFaceOrderByOrderNo/{orderNo}")
     public ResponseEntity<FaceOrderDTO> findFaceOrderByOrderNo(@PathVariable("orderNo") String orderNo);
-	@GetMapping("/face-order/upstateOrderStatus/{orderNo}")
+	
+	@GetMapping("/api/face-order/upstateOrderStatus/{orderNo}")
 	public FaceOrderDTO updateOrderStatusByOrderNo(@PathVariable("orderNo") String orderNo);
 }

@@ -44,7 +44,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -269,8 +268,7 @@ public class WalletResource {
     @PostMapping("/wallets/balance/pay")
     public ResponseEntity balancePay(@RequestBody BalancePayDTO balancePayDTO) {
     	UserDTO user = uaaService.getAccount();
-        System.out.println(user.getId()+"---------------------------------------------------------------->");
-        Wallet wallet = walletService.findByUserid(user.getId());
+    	Wallet wallet = walletService.findByUserid(user.getId());
     	Long cuserid = null;
     	BigDecimal balance = new BigDecimal("0.00");
     	BigDecimal ticket = new BigDecimal("0.00");
@@ -285,7 +283,7 @@ public class WalletResource {
     		ticket = body.getTicket();
     	}
 
-    	if (!Objects.equals(user.getId(), cuserid)) {
+    	if (user.getId() != cuserid) {
     		System.out.println(cuserid+"--------------");
     		System.out.println(user.getId() + "==============");
     		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");

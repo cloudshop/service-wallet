@@ -197,6 +197,7 @@ public class WalletServiceImpl implements WalletService {
 
 	@Override
 	public PayOrder balancePay(Long walletId, BigDecimal balance, BigDecimal ticket, String orderNo) {
+		System.out.println(walletId + " * " + balance + " * " + ticket + " * " + orderNo + "&&&&&&&&&&");
 		Wallet wallet = walletRepository.findOne(walletId);
 		Instant now = Instant.now();
 		if (balance.doubleValue() != 0.00) {
@@ -207,7 +208,6 @@ public class WalletServiceImpl implements WalletService {
 			}
 			wallet.balance(subtract).updatedTime(now);
 			walletRepository.save(wallet);
-			
 			//添加明细记录
 			BalanceDetails balanceDetails = new BalanceDetails();
 			balanceDetails.userid(wallet.getUserid())
@@ -225,9 +225,8 @@ public class WalletServiceImpl implements WalletService {
 			if (subtract.doubleValue() < 0.00) {
 				throw new BadRequestAlertException("钱包贡融卷不足", "ticket", "ticketError");
 			}
-			wallet.balance(subtract).updatedTime(now);
+			wallet.ticket(subtract).updatedTime(now);
 			walletRepository.save(wallet);
-			
 			//添加明细记录
 			TicketDetails ticketDetails = new TicketDetails();
 			ticketDetails.userid(wallet.getUserid())
