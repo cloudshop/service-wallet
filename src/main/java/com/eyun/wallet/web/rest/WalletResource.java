@@ -314,7 +314,7 @@ public class WalletResource {
     		orderService.updateOrderStatusByOrderNo(balancePayDTO.getOrderNo());
     	}
 
-		pushService.sendPushByUserid(cuserid.toString(), "支付成功");
+		//pushService.sendPushByUserid(cuserid.toString(), "支付成功");
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
 

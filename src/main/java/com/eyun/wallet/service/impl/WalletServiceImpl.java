@@ -225,6 +225,7 @@ public class WalletServiceImpl implements WalletService {
 			if (subtract.doubleValue() < 0.00) {
 				throw new BadRequestAlertException("钱包贡融卷不足", "ticket", "ticketError");
 			}
+			System.out.println("减少券支付" + "+++++++++++++++++++++++++++++");
 			wallet.ticket(subtract).updatedTime(now);
 			walletRepository.save(wallet);
 			//添加明细记录
