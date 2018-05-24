@@ -279,7 +279,7 @@ public class WalletResource {
     	Long cuserid = null;
     	BigDecimal balance = new BigDecimal("0.00");
     	BigDecimal ticket = new BigDecimal("0.00");
-    	if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("1")) {
+    	if (balancePayDTO.getOrderNo().subSequence(0,1).equals("1")) {
     		ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
     		cuserid = proOrderDTO.getcUserid();
     	} else if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("4")) {
