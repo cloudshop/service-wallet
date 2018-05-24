@@ -218,6 +218,9 @@ public class WalletServiceImpl implements WalletService {
 				.typeString("消费")
 				.orderNo(orderNo)
 				.wallet(wallet);
+			
+			balanceDetailsRepository.save(balanceDetails);
+			
 		}
 		if (ticket.doubleValue() != 0.00) {
 			BigDecimal wticket = wallet.getTicket();
@@ -225,7 +228,6 @@ public class WalletServiceImpl implements WalletService {
 			if (subtract.doubleValue() < 0.00) {
 				throw new BadRequestAlertException("钱包贡融卷不足", "ticket", "ticketError");
 			}
-			System.out.println("减少券支付" + "+++++++++++++++++++++++++++++");
 			wallet.ticket(subtract).updatedTime(now);
 			walletRepository.save(wallet);
 			//添加明细记录
@@ -238,6 +240,7 @@ public class WalletServiceImpl implements WalletService {
 				.typeString("消费")
 				.orderNo(orderNo)
 				.wallet(wallet);
+			ticketDetailsRepository.save(ticketDetails);
 		}
 
 		//添加支付账单

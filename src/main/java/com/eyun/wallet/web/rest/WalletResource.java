@@ -291,8 +291,6 @@ public class WalletResource {
     	}
 
     	if (user.getId() != cuserid) {
-    		System.out.println(cuserid+"--------------");
-    		System.out.println(user.getId() + "==============");
     		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
     	}
     	if (wallet.getPassword() != null) {
