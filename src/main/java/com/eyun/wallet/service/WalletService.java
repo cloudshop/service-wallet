@@ -4,10 +4,7 @@ import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
-import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
-import com.eyun.wallet.service.dto.SetIntegralDTO;
-import com.eyun.wallet.service.dto.SettlementWalletDTO;
-import com.eyun.wallet.service.dto.WalletDTO;
+import com.eyun.wallet.service.dto.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -67,7 +64,7 @@ public interface WalletService {
 
     void settlementWallet(SettlementWalletDTO settlementWalletDTO);
 
-    String commissionCash(SettlementWalletDTO settlementWalletDTO);
+    String commissionCash(CommissionDTO commissionDTO);
 
     void integralToTicket(Long id);
 

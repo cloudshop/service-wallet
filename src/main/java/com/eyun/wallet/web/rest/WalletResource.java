@@ -279,10 +279,10 @@ public class WalletResource {
     	Long cuserid = null;
     	BigDecimal balance = new BigDecimal("0.00");
     	BigDecimal ticket = new BigDecimal("0.00");
-    	if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+    	if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("1")) {
     		ProOrderDTO proOrderDTO = orderService.findOrderByOrderNo(balancePayDTO.getOrderNo());
     		cuserid = proOrderDTO.getcUserid();
-    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    	} else if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("4")) {
     		ResponseEntity<FaceOrderDTO> resp = orderService.findFaceOrderByOrderNo(balancePayDTO.getOrderNo());
     		FaceOrderDTO body = resp.getBody();
     		cuserid = body.getCuserId();
@@ -291,8 +291,6 @@ public class WalletResource {
     	}
 
     	if (user.getId() != cuserid) {
-    		System.out.println(cuserid+"--------------");
-    		System.out.println(user.getId() + "==============");
     		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
     	}
     	if (wallet.getPassword() != null) {
@@ -304,17 +302,17 @@ public class WalletResource {
     	}
 		PayOrder balancePay = walletService.balancePay(wallet.getId(), balance, ticket, balancePayDTO.getOrderNo());
 
-		if (balancePayDTO.getOrderNo().substring(1).equals("1")) {
+		if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("1")) {
 			PayNotifyDTO payNotifyDTO = new PayNotifyDTO();
 			payNotifyDTO.setOrderNo(balancePay.getOrderNo());
 			payNotifyDTO.setPayType(1);
 			payNotifyDTO.setPayNo(balancePay.getPayNo());
 			ResponseEntity<ProOrderDTO> resp = orderService.proOrderNotify(payNotifyDTO);
-    	} else if (balancePayDTO.getOrderNo().substring(1).equals("4")) {
+    	} else if (balancePayDTO.getOrderNo().subSequence(0, 1).equals("4")) {
     		orderService.updateOrderStatusByOrderNo(balancePayDTO.getOrderNo());
     	}
 
-		pushService.sendPushByUserid(cuserid.toString(), "支付成功");
+		//pushService.sendPushByUserid(cuserid.toString(), "支付成功");
     	return new ResponseEntity(null, HeaderUtil.createAlert("支付成功","orderNo:"+balancePayDTO.getOrderNo()), HttpStatus.OK);
     }
 
@@ -411,8 +409,8 @@ public class WalletResource {
      * @version 1.0
      */
     @PutMapping("/wallet/commission/cash")
-    public ResponseEntity commissionCash(@RequestBody SettlementWalletDTO settlementWalletDTO) {
-        String result = walletService.commissionCash(settlementWalletDTO);
+    public ResponseEntity commissionCash(@RequestBody CommissionDTO commissionDTO) {
+        String result = walletService.commissionCash(commissionDTO);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(result));
     }
 

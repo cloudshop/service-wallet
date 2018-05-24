@@ -12,10 +12,7 @@ import com.eyun.wallet.repository.IntegralDetailsRepository;
 import com.eyun.wallet.repository.PayOrderRepository;
 import com.eyun.wallet.repository.TicketDetailsRepository;
 import com.eyun.wallet.repository.WalletRepository;
-import com.eyun.wallet.service.dto.ServiceProviderRewardDTO;
-import com.eyun.wallet.service.dto.SetIntegralDTO;
-import com.eyun.wallet.service.dto.SettlementWalletDTO;
-import com.eyun.wallet.service.dto.WalletDTO;
+import com.eyun.wallet.service.dto.*;
 import com.eyun.wallet.service.mapper.WalletMapper;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 
@@ -218,6 +215,9 @@ public class WalletServiceImpl implements WalletService {
 				.typeString("消费")
 				.orderNo(orderNo)
 				.wallet(wallet);
+
+			balanceDetailsRepository.save(balanceDetails);
+
 		}
 		if (ticket.doubleValue() != 0.00) {
 			BigDecimal wticket = wallet.getTicket();
@@ -237,6 +237,7 @@ public class WalletServiceImpl implements WalletService {
 				.typeString("消费")
 				.orderNo(orderNo)
 				.wallet(wallet);
+			ticketDetailsRepository.save(ticketDetails);
 		}
 
 		//添加支付账单
@@ -554,24 +555,39 @@ public class WalletServiceImpl implements WalletService {
 	}
 
     @Override
-     public String commissionCash(SettlementWalletDTO settlementWalletDTO) {
+     public String commissionCash(CommissionDTO commissionDTO) {
         Instant now = Instant.now();
-        Wallet wallet = walletRepository.findByUserid(settlementWalletDTO.getUserid());
-        BigDecimal balance = wallet.getBalance();
-        BigDecimal addBalance = balance.add(settlementWalletDTO.getAmount());
-        wallet.setBalance(addBalance);
+        BigDecimal balance =null;
+        Wallet wallet = walletRepository.findByUserid(commissionDTO.getUserid());
+        if (wallet==null){
+            throw new BadRequestAlertException("无此用户钱包数据","wallet","userwalletNotFount");
+        }
+         balance = wallet.getBalance();
+        if (balance==null){
+            balance=commissionDTO.getAmount();
+        }else {
+            balance = balance.add(commissionDTO.getAmount());
+        }
+        wallet.setBalance(balance);
+        BigDecimal integral=wallet.getIntegral();
+        if (integral==null){
+            integral=commissionDTO.getIntegral();
+        }else {
+            integral=integral.add(commissionDTO.getIntegral());
+        }
+        wallet.setIntegral(integral);
         wallet.setUpdatedTime(now);
         walletRepository.saveAndFlush(wallet);
         //添加明细记录
         BalanceDetails balanceDetails = new BalanceDetails();
         balanceDetails.userid(wallet.getUserid())
             .createdTime(now)
-            .balance(addBalance)
+            .balance(commissionDTO.getAmount())
             .addBalance(true)
             .type(4)
             .typeString("卖出商品收入")
             .wallet(wallet)
-            .orderNo(settlementWalletDTO.getOrderNo());
+            .orderNo(commissionDTO.getOrderNo());
         balanceDetailsRepository.save(balanceDetails);
         return "success";
     }
