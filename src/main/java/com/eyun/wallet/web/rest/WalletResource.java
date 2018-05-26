@@ -290,9 +290,9 @@ public class WalletResource {
     		ticket = body.getTicket();
     	}
 
-    	if (user.getId() != cuserid) {
+    	if (user.getId() - cuserid != 0) {
             log.debug("user.getId(): {}, cuserid: {}", user.getId(), cuserid);
-    		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
+    //  		throw new BadRequestAlertException("订单异常,交易关闭", "order", "orderError");
     	}
     	if (wallet.getPassword() != null) {
     		if (!wallet.getPassword().equals(balancePayDTO.getPassword())) {
