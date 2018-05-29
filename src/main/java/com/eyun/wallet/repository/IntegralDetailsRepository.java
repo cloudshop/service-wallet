@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.util.List;
+
 
 /**
  * Spring Data JPA repository for the IntegralDetails entity.
@@ -14,5 +16,7 @@ import org.springframework.data.jpa.repository.*;
 public interface IntegralDetailsRepository extends JpaRepository<IntegralDetails, Long>, JpaSpecificationExecutor<IntegralDetails> {
 
     IntegralDetails findByUserid(Long id);
+
+    List<IntegralDetails> findByUseridAndType(Long userId, Integer type);
 
 }

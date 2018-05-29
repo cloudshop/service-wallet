@@ -4,6 +4,8 @@ import com.eyun.wallet.service.dto.IntegralDetailsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
+
 /**
  * Service Interface for managing IntegralDetails.
  */
@@ -39,4 +41,9 @@ public interface IntegralDetailsService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    BigDecimal integralStatistical(Long userId);
+
+
+
 }

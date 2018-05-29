@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -139,7 +140,7 @@ public class IntegralDetailsResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
      */
-    
+
     /**
      * 获取钱包积分明细
      * @author 逍遥子
@@ -161,5 +162,23 @@ public class IntegralDetailsResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/wallet/details/integral");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-    
+
+
+
+
+    @ApiOperation("邀请人获得积分累计")
+    @GetMapping("/wallet/details/getintegralStatistical")
+    @Timed
+    public ResponseEntity<BigDecimal> getintegralStatistical(){
+
+        UserDTO user = uaaService.getAccount();
+        BigDecimal bigDecimal = integralDetailsService.integralStatistical(user.getId());
+
+        return  ResponseUtil.wrapOrNotFound(Optional.ofNullable(bigDecimal));
+
+
+    }
+
+
+
 }

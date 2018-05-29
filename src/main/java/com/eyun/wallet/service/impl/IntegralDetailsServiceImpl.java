@@ -12,6 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 
 /**
  * Service Implementation for managing IntegralDetails.
@@ -82,5 +85,21 @@ public class IntegralDetailsServiceImpl implements IntegralDetailsService {
     public void delete(Long id) {
         log.debug("Request to delete IntegralDetails : {}", id);
         integralDetailsRepository.delete(id);
+    }
+
+
+    /**
+     * 邀请获得积分统计
+     * @param userId
+     * @return
+     */
+    @Override
+    public BigDecimal integralStatistical(Long userId) {
+        List<IntegralDetails> userIntegral = integralDetailsRepository.findByUseridAndType(userId, 1);
+        BigDecimal bigDecimal = new BigDecimal(0.00);
+        for (IntegralDetails integralDetails : userIntegral) {
+            bigDecimal.add(integralDetails.getIntegral());
+        }
+        return bigDecimal;
     }
 }
