@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -87,5 +88,22 @@ public class BalanceDetailsServiceImpl implements BalanceDetailsService {
     }
 
 
+    /**
+     * 邀请人获得奖励的总额的统计
+     * @param userId
+     * @return
+     */
+    @Override
+    public BigDecimal statisticalMoney(Long userId) {
 
+        List<BalanceDetails> balanceDetails =
+            balanceDetailsRepository.
+                findByUseridAndTypeAndType(userId, 2, 3);
+        BigDecimal bigDecimal = new BigDecimal(0.00);
+        balanceDetails.forEach( b -> {
+            bigDecimal.add(b.getBalance());
+        });
+
+        return bigDecimal;
+    }
 }

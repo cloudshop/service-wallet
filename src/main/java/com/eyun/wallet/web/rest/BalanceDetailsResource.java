@@ -163,6 +163,19 @@ public class BalanceDetailsResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @ApiOperation("邀请人奖励累计")
+    @GetMapping("/wallet/details/getstatisticalMoney")
+    @Timed
+    public ResponseEntity<BigDecimal> getstatisticalMoney(){
+
+        UserDTO user = uaaService.getAccount();
+        BigDecimal bigDecimal = balanceDetailsService.statisticalMoney(user.getId());
+
+        return  ResponseUtil.wrapOrNotFound(Optional.ofNullable(bigDecimal));
+
+
+    }
+
 
 
 }

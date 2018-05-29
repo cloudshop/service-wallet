@@ -438,7 +438,7 @@ public class WalletServiceImpl implements WalletService {
                     .createdTime(now)
                     .balance(settlementWalletDTO.getAmount())
                     .addBalance(true)
-                    .type(4)
+                    .type(3)
                     .typeString("直接邀请服务商收入")
                     .wallet(wallet)
                     .orderNo(settlementWalletDTO.getOrderNo());
@@ -455,7 +455,7 @@ public class WalletServiceImpl implements WalletService {
                     .createdTime(now)
                     .balance(settlementWalletDTO.getAmount())
                     .addBalance(true)
-                    .type(4)
+                    .type(3)
                     .typeString("间接邀请服务商收入")
                     .wallet(wallet)
                     .orderNo(settlementWalletDTO.getOrderNo());

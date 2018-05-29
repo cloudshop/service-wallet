@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.util.List;
+
 
 /**
  * Spring Data JPA repository for the BalanceDetails entity.
@@ -15,6 +17,7 @@ public interface BalanceDetailsRepository extends JpaRepository<BalanceDetails, 
 
 	BalanceDetails findByUseridAndTypeAndIncrBID(Long spid, int i, Long incrBID);
 
+	List<BalanceDetails> findByUseridAndTypeAndType(Long userId,Integer one,Integer two);
 
 
 

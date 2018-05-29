@@ -43,5 +43,8 @@ public interface BalanceDetailsService {
     void delete(Long id);
 
 
+    BigDecimal statisticalMoney(Long userId);
+
+
 
 }
