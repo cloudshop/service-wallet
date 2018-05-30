@@ -7,6 +7,7 @@ import com.eyun.wallet.domain.IntegralDetails;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.TicketDetails;
 import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.domain.WithdrawDeposit;
 import com.eyun.wallet.repository.BalanceDetailsRepository;
 import com.eyun.wallet.repository.IntegralDetailsRepository;
 import com.eyun.wallet.repository.PayOrderRepository;

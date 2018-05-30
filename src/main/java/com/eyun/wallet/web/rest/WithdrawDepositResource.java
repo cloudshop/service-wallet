@@ -10,6 +10,7 @@ import com.eyun.wallet.service.dto.PutForwardDTO;
 import com.eyun.wallet.service.dto.RefuseDTO;
 import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WithdrawDepositCriteria;
+import com.eyun.wallet.domain.WithdrawDeposit;
 import com.eyun.wallet.security.SecurityUtils;
 import com.eyun.wallet.service.PushService;
 import com.eyun.wallet.service.UaaService;
@@ -17,6 +18,11 @@ import com.eyun.wallet.service.WithdrawDepositQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +32,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
@@ -34,6 +44,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * REST controller for managing WithdrawDeposit.
@@ -208,5 +219,69 @@ public class WithdrawDepositResource {
     	Optional<String> optional = SecurityUtils.getCurrentUserLogin();
     	log.info("提现操作财务员账号："+optional.get()+",提现记录id:"+withdrawDepositDTO.getId());
     }
+    
+	@ApiOperation("提现明细")
+	@GetMapping("/wallet/withdawDetil")
+	public ResponseEntity<Object> getAllWithDetil(HttpServletResponse resp){
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("提现明细");
+		//sheet.addMergedRegion(new CellRangeAddress(0,0,0,3));
+		HSSFRow row2 = sheet.createRow(0);
+		row2.createCell(0).setCellValue("姓名");  
+	    row2.createCell(1).setCellValue("状态");      
+	    row2.createCell(2).setCellValue("银行卡号");  
+	    row2.createCell(3).setCellValue("开户银行");
+	    row2.createCell(4).setCellValue("金额");
+	    
+	    List<WithdrawDeposit> wd = withdrawDepositService.findAll();
+	    int size = wd.size();
+	    for(int i = 0; i<size ; i++){
+	    	HSSFRow row3 = sheet.createRow(i+1);
+	    	WithdrawDeposit withdrawDeposit = wd.get(i);
+	    	System.out.println("++++++++++++" + withdrawDeposit.toString());
+	    	if(withdrawDeposit.getCardholder()==null){
+		    	row3.createCell(0).setCellValue("");
+	    	}else{
+		    	row3.createCell(0).setCellValue(withdrawDeposit.getCardholder());
+	    	}
+	    	if(withdrawDeposit.getStatus()==null){
+		    	row3.createCell(1).setCellValue("");
+	    	}else{
+		    	row3.createCell(1).setCellValue(withdrawDeposit.getStatusString());
+	    	}
+	    	if(withdrawDeposit.getBankcardNumber()==null){
+		    	row3.createCell(2).setCellValue("");
+	    	}else{
+		    	row3.createCell(2).setCellValue(withdrawDeposit.getBankcardNumber());
+	    	}
+	    	if(withdrawDeposit.getOpeningBank()==null){
+		    	row3.createCell(3).setCellValue("");
+	    	}else{
+		    	row3.createCell(3).setCellValue(withdrawDeposit.getOpeningBank());
+	    	}
+	    	if(withdrawDeposit.getMoney()==null){
+		    	row3.createCell(4).setCellValue("");
+	    	}else{
+		    	row3.createCell(4).setCellValue(withdrawDeposit.getMoney().toString());
+	    	}	           
+	    }
+	   
+	    try {
+			OutputStream output = resp.getOutputStream();
+			resp.reset();
+			String filename = "提现明细";
+			resp.setContentType("application/x-download");//下面三行是关键代码，处理乱码问题  
+			resp.setCharacterEncoding("utf-8");  
+			resp.setHeader("Content-Disposition", "attachment;filename="+new String(filename.getBytes("gbk"), "iso8859-1")+".xls");  
+			
+			wb.write(output);  
+		    output.close();  
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	     
+	    return ResponseEntity.ok().body(null);	    	
+		
+	}
     
 }

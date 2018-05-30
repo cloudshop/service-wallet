@@ -23,6 +23,11 @@ import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -471,7 +476,6 @@ public class WalletResource {
             walletService.batchintegrals(settlementWalletDTO);
            }
         }
-    }
 
 
-
+	}

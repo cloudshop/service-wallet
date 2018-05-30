@@ -14,6 +14,7 @@ import com.eyun.wallet.service.mapper.WithdrawDepositMapper;
 import com.eyun.wallet.web.rest.errors.BadRequestAlertException;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,5 +144,11 @@ public class WithdrawDepositServiceImpl implements WithdrawDepositService {
 			.status(1)
 			.statusString("申请提现");
 		withdrawDepositRepository.save(withdrawDeposit);
+	}
+
+	@Override
+	public List<WithdrawDeposit> findAll() {
+		List<WithdrawDeposit> findAll = withdrawDepositRepository.findAll();
+		return findAll;
 	}
 }

@@ -4,6 +4,7 @@ import com.eyun.wallet.domain.BalanceDTO;
 import com.eyun.wallet.domain.GiveIntegralDTO;
 import com.eyun.wallet.domain.PayOrder;
 import com.eyun.wallet.domain.Wallet;
+import com.eyun.wallet.domain.WithdrawDeposit;
 import com.eyun.wallet.service.dto.*;
 
 import java.math.BigDecimal;
@@ -78,4 +79,5 @@ public interface WalletService {
     WalletDTO getwalletInfos(Long id);
 
     void batchintegrals(SettlementWalletDTO settlementWalletDTO);
+    
 }

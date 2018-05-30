@@ -1,8 +1,12 @@
 package com.eyun.wallet.service;
 
+import com.eyun.wallet.domain.WithdrawDeposit;
 import com.eyun.wallet.service.dto.PutForwardDTO;
 import com.eyun.wallet.service.dto.UserDTO;
 import com.eyun.wallet.service.dto.WithdrawDepositDTO;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -43,4 +47,7 @@ public interface WithdrawDepositService {
     void delete(Long id);
 
 	void putForward(PutForwardDTO putForwardDTO, UserDTO user);
+	
+    public List<WithdrawDeposit> findAll();
+
 }
