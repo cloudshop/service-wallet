@@ -167,4 +167,10 @@ public class WithdrawDepositServiceImpl implements WithdrawDepositService {
 		List<WithdrawDeposit> findSubDetil = withdrawDepositRepository.findRitDetil(first);
 		return findSubDetil;
 	}
+
+	@Override
+	public List<WithdrawDeposit> findSubDetilBypage(String first, String last, int pageNumber, int pageSize) {
+        List<WithdrawDeposit> findSubDetilByPage = withdrawDepositRepository.findSubDetilByPage(first, last, pageNumber, pageSize);
+		return findSubDetilByPage;
+	}
 }

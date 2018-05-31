@@ -55,4 +55,6 @@ public interface WithdrawDepositService {
 	public List<WithdrawDeposit> findLefDetil(String last);
 	
 	public List<WithdrawDeposit> findRigDetil(String first);
+
+	List<WithdrawDeposit> findSubDetilBypage(String first, String last, int pageNumber, int pageSize);
 }

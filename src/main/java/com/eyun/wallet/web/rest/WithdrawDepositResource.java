@@ -367,12 +367,13 @@ public class WithdrawDepositResource {
 		}
 	    return ResponseEntity.ok().body(null);	    	
 	}
-	
-	
-	
-	
-	
-	
-	
+		
+	    @GetMapping("/withdraw-deposits-sub/{first}/{last}/{page}/{size}")
+	    @Timed
+	    public ResponseEntity<List<WithdrawDeposit>> getAllWithdrawDeposits(@PathVariable("first") String first,@PathVariable("last") String last,@PathVariable("page") int page,@PathVariable("size") int size) {
+	    	
+	    	List<WithdrawDeposit> findSubDetilBypage = withdrawDepositService.findSubDetilBypage(first,last,page,size);
+	    	return new ResponseEntity<>(findSubDetilBypage,HttpStatus.OK);
+	 }	
     
 }
