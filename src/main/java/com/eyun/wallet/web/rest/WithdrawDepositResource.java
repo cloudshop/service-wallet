@@ -235,6 +235,8 @@ public class WithdrawDepositResource {
 	    row2.createCell(2).setCellValue("银行卡号");  
 	    row2.createCell(3).setCellValue("开户银行");
 	    row2.createCell(4).setCellValue("金额");
+	    row2.createCell(5).setCellValue("提现时间");
+
 	    
 	    List<WithdrawDeposit> wd = withdrawDepositService.findAll();
 	    int size = wd.size();
@@ -265,6 +267,10 @@ public class WithdrawDepositResource {
 		    	row3.createCell(4).setCellValue("");
 	    	}else{
 		    	row3.createCell(4).setCellValue(withdrawDeposit.getMoney().toString());
+	    	}	    	if(withdrawDeposit.getCreatedTime()==null){
+		    	row3.createCell(5).setCellValue("");
+	    	}else{
+			    row3.createCell(5).setCellValue(withdrawDeposit.getCreatedTime().toString());		
 	    	}	           
 	    }
 	   
