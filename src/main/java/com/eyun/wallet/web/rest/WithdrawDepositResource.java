@@ -238,7 +238,6 @@ public class WithdrawDepositResource {
 	    for(int i = 0; i<size ; i++){
 	    	HSSFRow row3 = sheet.createRow(i+1);
 	    	WithdrawDeposit withdrawDeposit = wd.get(i);
-	    	System.out.println("++++++++++++" + withdrawDeposit.toString());
 	    	if(withdrawDeposit.getCardholder()==null){
 		    	row3.createCell(0).setCellValue("");
 	    	}else{
@@ -279,9 +278,86 @@ public class WithdrawDepositResource {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	     
 	    return ResponseEntity.ok().body(null);	    	
-		
 	}
+	
+	
+	@ApiOperation("分段提现明细")
+	@GetMapping("/wallet/subwithdawDetil/{first}/{last}")
+	public ResponseEntity<Object> getSubAllWithDetil(@PathVariable("first") String first,@PathVariable("last") String last,HttpServletResponse resp){
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("提现明细");
+		//sheet.addMergedRegion(new CellRangeAddress(0,0,0,3));
+		HSSFRow row2 = sheet.createRow(0);
+		row2.createCell(0).setCellValue("姓名");  
+	    row2.createCell(1).setCellValue("状态");      
+	    row2.createCell(2).setCellValue("银行卡号");  
+	    row2.createCell(3).setCellValue("开户银行");
+	    row2.createCell(4).setCellValue("金额");
+	    System.out.println("-------------first的值" + first + "******");
+	    List<WithdrawDeposit> wd ;
+	    if(last == null || last == ""){
+		    wd = withdrawDepositService.findRigDetil(first);
+		    System.out.println("last 为空");
+	    }else if(first == null || first == ""){
+		    wd = withdrawDepositService.findLefDetil(last);
+		    System.out.println("first 为空");
+	    }else{
+		    wd = withdrawDepositService.findSubDetil(first, last);
+		    System.out.println("都不为为空");
+	    }
+	    int size = wd.size();
+	    for(int i = 0; i<size ; i++){
+	    	HSSFRow row3 = sheet.createRow(i+1);
+	    	WithdrawDeposit withdrawDeposit = wd.get(i);
+	    	if(withdrawDeposit.getCardholder()==null){
+		    	row3.createCell(0).setCellValue("");
+	    	}else{
+		    	row3.createCell(0).setCellValue(withdrawDeposit.getCardholder());
+	    	}
+	    	if(withdrawDeposit.getStatus()==null){
+		    	row3.createCell(1).setCellValue("");
+	    	}else{
+		    	row3.createCell(1).setCellValue(withdrawDeposit.getStatusString());
+	    	}
+	    	if(withdrawDeposit.getBankcardNumber()==null){
+		    	row3.createCell(2).setCellValue("");
+	    	}else{
+		    	row3.createCell(2).setCellValue(withdrawDeposit.getBankcardNumber());
+	    	}
+	    	if(withdrawDeposit.getOpeningBank()==null){
+		    	row3.createCell(3).setCellValue("");
+	    	}else{
+		    	row3.createCell(3).setCellValue(withdrawDeposit.getOpeningBank());
+	    	}
+	    	if(withdrawDeposit.getMoney()==null){
+		    	row3.createCell(4).setCellValue("");
+	    	}else{
+		    	row3.createCell(4).setCellValue(withdrawDeposit.getMoney().toString());
+	    	}	           
+	    }
+	   
+	    try {
+			OutputStream output = resp.getOutputStream();
+			resp.reset();
+			String filename = "提现明细";
+			resp.setContentType("application/x-download");//下面三行是关键代码，处理乱码问题  
+			resp.setCharacterEncoding("utf-8");  
+			resp.setHeader("Content-Disposition", "attachment;filename="+new String(filename.getBytes("gbk"), "iso8859-1")+".xls");  
+			
+			wb.write(output);  
+		    output.close();  
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    return ResponseEntity.ok().body(null);	    	
+	}
+	
+	
+	
+	
+	
+	
+	
     
 }

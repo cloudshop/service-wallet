@@ -50,4 +50,9 @@ public interface WithdrawDepositService {
 	
     public List<WithdrawDeposit> findAll();
 
+    public List<WithdrawDeposit> findSubDetil(String first,String last);
+    
+	public List<WithdrawDeposit> findLefDetil(String last);
+	
+	public List<WithdrawDeposit> findRigDetil(String first);
 }

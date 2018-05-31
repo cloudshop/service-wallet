@@ -151,4 +151,20 @@ public class WithdrawDepositServiceImpl implements WithdrawDepositService {
 		List<WithdrawDeposit> findAll = withdrawDepositRepository.findAll();
 		return findAll;
 	}
+
+	@Override
+	public List<WithdrawDeposit> findSubDetil(String first,String last) {
+		List<WithdrawDeposit> findSubDetil = withdrawDepositRepository.findSubDetil(first, last);
+		return findSubDetil;
+	}
+	
+	public List<WithdrawDeposit> findLefDetil(String last) {
+		List<WithdrawDeposit> findSubDetil = withdrawDepositRepository.findLefDetil(last);
+		return findSubDetil;
+	}
+	
+	public List<WithdrawDeposit> findRigDetil(String first) {
+		List<WithdrawDeposit> findSubDetil = withdrawDepositRepository.findRitDetil(first);
+		return findSubDetil;
+	}
 }
