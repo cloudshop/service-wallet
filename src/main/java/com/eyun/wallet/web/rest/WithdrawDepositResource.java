@@ -39,6 +39,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -294,6 +297,7 @@ public class WithdrawDepositResource {
 	    row2.createCell(2).setCellValue("银行卡号");  
 	    row2.createCell(3).setCellValue("开户银行");
 	    row2.createCell(4).setCellValue("金额");
+	    row2.createCell(5).setCellValue("提现时间");
 	    System.out.println("-------------first的值" + first + "******");
 	    List<WithdrawDeposit> wd ;
 	    if(last == null || last == ""){
@@ -334,7 +338,12 @@ public class WithdrawDepositResource {
 		    	row3.createCell(4).setCellValue("");
 	    	}else{
 		    	row3.createCell(4).setCellValue(withdrawDeposit.getMoney().toString());
-	    	}	           
+	    	}
+	    	if(withdrawDeposit.getCreatedTime()==null){
+		    	row3.createCell(5).setCellValue("");
+	    	}else{
+			    row3.createCell(5).setCellValue(withdrawDeposit.getCreatedTime().toString());		
+	    	}	
 	    }
 	   
 	    try {
