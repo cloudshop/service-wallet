@@ -43,6 +43,9 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -270,8 +273,10 @@ public class WithdrawDepositResource {
 	    	}	    	if(withdrawDeposit.getCreatedTime()==null){
 		    	row3.createCell(5).setCellValue("");
 	    	}else{
-			    row3.createCell(5).setCellValue(withdrawDeposit.getCreatedTime().toString());		
-	    	}	           
+	    		ZoneId zone = ZoneId.of("GMT");
+	    		LocalDateTime ofInstant = LocalDateTime.ofInstant(withdrawDeposit.getCreatedTime(), zone);
+			    LocalDate localDate = ofInstant.toLocalDate();
+	    		row3.createCell(5).setCellValue(localDate.toString());	    	}	           
 	    }
 	   
 	    try {
@@ -348,7 +353,10 @@ public class WithdrawDepositResource {
 	    	if(withdrawDeposit.getCreatedTime()==null){
 		    	row3.createCell(5).setCellValue("");
 	    	}else{
-			    row3.createCell(5).setCellValue(withdrawDeposit.getCreatedTime().toString());		
+	    		ZoneId zone = ZoneId.of("GMT");
+	    		LocalDateTime ofInstant = LocalDateTime.ofInstant(withdrawDeposit.getCreatedTime(), zone);
+			    LocalDate localDate = ofInstant.toLocalDate();
+	    		row3.createCell(5).setCellValue(localDate.toString());	
 	    	}	
 	    }
 	   
