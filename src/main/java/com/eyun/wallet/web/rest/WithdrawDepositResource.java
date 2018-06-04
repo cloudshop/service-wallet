@@ -46,6 +46,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -239,7 +240,6 @@ public class WithdrawDepositResource {
 	    row2.createCell(3).setCellValue("开户银行");
 	    row2.createCell(4).setCellValue("金额");
 	    row2.createCell(5).setCellValue("提现时间");
-
 	    
 	    List<WithdrawDeposit> wd = withdrawDepositService.findAll();
 	    int size = wd.size();
@@ -270,13 +270,16 @@ public class WithdrawDepositResource {
 		    	row3.createCell(4).setCellValue("");
 	    	}else{
 		    	row3.createCell(4).setCellValue(withdrawDeposit.getMoney().toString());
-	    	}	    	if(withdrawDeposit.getCreatedTime()==null){
+	    	}	    	
+	    	if(withdrawDeposit.getCreatedTime()==null){
 		    	row3.createCell(5).setCellValue("");
 	    	}else{
-	    		ZoneId zone = ZoneId.of("GMT");
-	    		LocalDateTime ofInstant = LocalDateTime.ofInstant(withdrawDeposit.getCreatedTime(), zone);
-			    LocalDate localDate = ofInstant.toLocalDate();
-	    		row3.createCell(5).setCellValue(localDate.toString());	    	}	           
+	    		LocalDateTime ofInstant = LocalDateTime.ofInstant(withdrawDeposit.getCreatedTime(), ZoneId.of("GMT"));
+	    		DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	    		String format = ofInstant.format(FORMATTER);
+	    		row3.createCell(5).setCellValue(format);	
+
+	    	}	           
 	    }
 	   
 	    try {
@@ -309,17 +312,13 @@ public class WithdrawDepositResource {
 	    row2.createCell(3).setCellValue("开户银行");
 	    row2.createCell(4).setCellValue("金额");
 	    row2.createCell(5).setCellValue("提现时间");
-	    System.out.println("-------------first的值" + first + "******");
 	    List<WithdrawDeposit> wd ;
 	    if(last == null || last == ""){
 		    wd = withdrawDepositService.findRigDetil(first);
-		    System.out.println("last 为空");
 	    }else if(first == null || first == ""){
 		    wd = withdrawDepositService.findLefDetil(last);
-		    System.out.println("first 为空");
 	    }else{
 		    wd = withdrawDepositService.findSubDetil(first, last);
-		    System.out.println("都不为为空");
 	    }
 	    int size = wd.size();
 	    for(int i = 0; i<size ; i++){
@@ -353,10 +352,13 @@ public class WithdrawDepositResource {
 	    	if(withdrawDeposit.getCreatedTime()==null){
 		    	row3.createCell(5).setCellValue("");
 	    	}else{
-	    		ZoneId zone = ZoneId.of("GMT");
+	    		/*ZoneId zone = ZoneId.of("GMT");
 	    		LocalDateTime ofInstant = LocalDateTime.ofInstant(withdrawDeposit.getCreatedTime(), zone);
-			    LocalDate localDate = ofInstant.toLocalDate();
-	    		row3.createCell(5).setCellValue(localDate.toString());	
+			    LocalDate localDate = ofInstant.toLocalDate();*/
+	    		LocalDateTime ofInstant = LocalDateTime.ofInstant(withdrawDeposit.getCreatedTime(), ZoneId.of("GMT"));
+	    		DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	    		String format = ofInstant.format(FORMATTER);
+	    		row3.createCell(5).setCellValue(format);		
 	    	}	
 	    }
 	   
